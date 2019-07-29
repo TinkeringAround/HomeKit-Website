@@ -1,5 +1,9 @@
 .Formfield {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+}
+
+.Formfield div {
+  border-bottom-color: #b0b8ce !important;
 }
 
 .Formfield label {

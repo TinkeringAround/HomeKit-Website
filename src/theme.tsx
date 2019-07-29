@@ -58,16 +58,14 @@ export default {
       height: '20px'
     }
   },
-  formField: {
-    border: {
-      color: { dark: 'green', light: 'green' }
-    }
-  },
   button: {
+    color: isDayTime ? colors.headingDark : colors.darkYellow,
+    primary: {
+      color: isDayTime ? colors.lightElement : colors.yellow
+    },
     border: {
-      radius: 25,
-      color: 'active',
-      background: 'active'
+      radius: '25px',
+      color: isDayTime ? colors.headingDark : colors.darkYellow
     }
   }
 }

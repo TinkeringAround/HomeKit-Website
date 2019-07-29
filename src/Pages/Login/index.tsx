@@ -18,9 +18,8 @@ const Login: FC = () => {
     }
   }
 
-  const isEmail = (value: string) => {
-    var emailReg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-    return emailReg.test(value) ? '' : ' '
+  const login = () => {
+    console.log('Hier weiterarbeiten.')
   }
 
   return (
@@ -42,29 +41,27 @@ const Login: FC = () => {
                 HomeKit
               </Heading>
               <Form>
-                <FormField
-                  type="email"
-                  name="email"
-                  required
-                  validate={isEmail}
-                  className="Formfield"
-                >
+                <FormField type="email" name="email" className="Formfield">
                   <TextInput placeholder="Email" />
                 </FormField>
                 <FormField type="Password" name="password" className="Formfield">
                   <TextInput placeholder="Passwort" />
                 </FormField>
-                <Button
-                  type="submit"
-                  label="Anmelden"
-                  style={{
-                    width: '50%',
-                    height: '50px',
-                    margin: '20px auto',
-                    backgroundColor: 'active',
-                    color: 'active'
-                  }}
-                />
+                <Box justify="center" align="center">
+                  <Button
+                    primary
+                    type="submit"
+                    label="Anmelden"
+                    style={{
+                      width: '50%',
+                      height: '50px',
+                      margin: '20px auto',
+                      backgroundColor: 'active',
+                      color: 'active'
+                    }}
+                    onClick={login}
+                  />
+                </Box>
               </Form>
             </Box>
           </Box>
