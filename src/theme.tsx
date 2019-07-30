@@ -65,7 +65,7 @@ export default {
     },
     border: {
       radius: '25px',
-      color: isDayTime ? colors.headingDark : colors.darkYellow
+      color: 'transparent'
     }
   }
 }

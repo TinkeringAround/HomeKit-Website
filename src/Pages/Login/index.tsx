@@ -1,14 +1,24 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useContext } from 'react'
 import { Box, ResponsiveContext, Form, FormField, Button, Heading, TextInput } from 'grommet'
+import firebase, { FirebaseError, User } from 'firebase'
 
 //Stylesheet
 import './login.css'
+
+// AppContext
+import AppContext from '../../appContext'
 
 // Custom Components
 import Background from '../../Components/Background'
 
 //----------------------------------------------------
 const Login: FC = () => {
+  const { setUser } = useContext(AppContext)
+  const [data, setData] = useState<{ email: string; password: string }>({
+    email: '',
+    password: ''
+  })
+
   const wrapper = {
     background: 'bgInverse',
     margin: 'auto',
@@ -18,8 +28,26 @@ const Login: FC = () => {
     }
   }
 
-  const login = () => {
-    console.log('Hier weiterarbeiten.')
+  const performLogin = (event: any) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(event.value.email, event.value.password)
+      .then(response => {
+        if (setUser) setUser(response.user)
+      })
+      .catch((error: FirebaseError) => console.log(error))
+  }
+
+  const changeValue = (target: any) => {
+    target.type === 'text'
+      ? setData({
+          ...data,
+          email: target.value
+        })
+      : setData({
+          ...data,
+          password: target.value
+        })
   }
 
   return (
@@ -27,25 +55,32 @@ const Login: FC = () => {
       <ResponsiveContext.Consumer>
         {size => (
           <Box
-            width={size === 'small' ? '85%' : '50%'}
-            height={size === 'small' ? '75%' : '60%'}
+            width={size.includes('small') ? '85%' : '50%'}
+            height={size.includes('small') ? '75%' : '60%'}
             {...wrapper}
           >
             {/* Test */}
             <Box
-              width={size === 'small' ? '95%' : '80%'}
-              height={size === 'small' ? '100%' : '90%'}
+              width={size.includes('small') ? '80%' : '80%'}
+              height={size.includes('small') ? '85%' : '90%'}
               margin="auto"
             >
               <Heading level={1} responsive size="medium" textAlign="center" color="heading">
                 HomeKit
               </Heading>
-              <Form>
+              <Form onSubmit={performLogin} value={data}>
                 <FormField type="email" name="email" className="Formfield">
-                  <TextInput placeholder="Email" />
+                  <TextInput
+                    placeholder="Email"
+                    onChange={(event: any) => changeValue(event.target)}
+                  />
                 </FormField>
-                <FormField type="Password" name="password" className="Formfield">
-                  <TextInput placeholder="Passwort" />
+                <FormField type="password" name="password" className="Formfield">
+                  <TextInput
+                    type="password"
+                    placeholder="Passwort"
+                    onChange={(event: any) => changeValue(event.target)}
+                  />
                 </FormField>
                 <Box justify="center" align="center">
                   <Button
@@ -53,13 +88,12 @@ const Login: FC = () => {
                     type="submit"
                     label="Anmelden"
                     style={{
-                      width: '50%',
+                      width: size.includes('small') ? '100%' : '50%',
                       height: '50px',
                       margin: '20px auto',
                       backgroundColor: 'active',
                       color: 'active'
                     }}
-                    onClick={login}
                   />
                 </Box>
               </Form>
