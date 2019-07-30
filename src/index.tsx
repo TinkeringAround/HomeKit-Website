@@ -16,6 +16,7 @@ import AppContext from './appContext'
 
 // Pages
 import Login from './Pages/Login/'
+import Home from './Pages/Home/'
 
 //----------------------------------------------------------
 // Firebase App Setup
@@ -41,9 +42,7 @@ const App: FC = () => {
 
   return (
     <Grommet theme={theme} full>
-      <AppContext.Provider value={appContext}>
-        {!user ? <Login /> : <div>Du bist eingeloggt.</div>}
-      </AppContext.Provider>
+      <AppContext.Provider value={appContext}>{user ? <Login /> : <Home />}</AppContext.Provider>
     </Grommet>
   )
 }

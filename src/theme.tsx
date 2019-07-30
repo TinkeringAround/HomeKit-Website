@@ -1,5 +1,5 @@
 //const hours = new Date().getHours()
-const isDayTime = false //hours > 7 && hours < 20
+const isDayTime = true //hours > 7 && hours < 20
 
 const colors = {
   // Background Colors
@@ -45,7 +45,8 @@ export default {
 
       // Text Colors
       formular: colors.paragraph,
-      heading: isDayTime ? colors.white : colors.headingDark,
+      heading: isDayTime ? colors.headingDark : colors.white,
+      headingInverse: isDayTime ? colors.white : colors.headingDark,
       paragraph: isDayTime ? colors.darkYellow : colors.paragraph,
 
       // Element Colors
