@@ -5,6 +5,8 @@ const colors = {
   // Background Colors
   white: '#FFF',
   dark: '#3E4555',
+  light: '#DFE2EA',
+  middleDark: '#606777',
 
   // Text Colors
   headingDark: '#343842',
@@ -44,9 +46,20 @@ export default {
       bgInverse: isDayTime ? colors.dark : colors.white,
 
       // Text Colors
-      formular: colors.paragraph,
       heading: isDayTime ? colors.headingDark : colors.white,
       headingInverse: isDayTime ? colors.white : colors.headingDark,
+
+      // IoT
+      iotActive: isDayTime ? colors.yellow : colors.white,
+      iotInactive: isDayTime ? colors.lightElement : colors.darkElement,
+
+      iconWrapperActive: isDayTime ? colors.darkYellow : colors.yellow,
+      iconWrapperInactive: isDayTime ? colors.light : colors.middleDark,
+
+      iconActive: isDayTime ? colors.white : colors.darkYellow,
+      iconInactive: colors.middleDark,
+
+      // TODO: Bis hierher richtige Farben....
       paragraph: isDayTime ? colors.darkYellow : colors.paragraph,
 
       // Element Colors

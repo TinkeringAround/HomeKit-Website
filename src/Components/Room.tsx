@@ -2,7 +2,34 @@ import React from 'react'
 import { Box, Heading } from 'grommet'
 
 // Custom Components
-import Sensor from './Sensor'
+import IoT from './IoT'
+
+// Dummy Data
+const data = [
+  {
+    id: '1',
+    name: 'Sensor',
+    type: 'sensor',
+    values: [
+      {
+        variable: 'temperatur',
+        value: '28',
+        unit: 'celsius'
+      },
+      {
+        variable: 'humidity',
+        value: '65',
+        unit: 'percent'
+      }
+    ]
+  },
+  {
+    id: '2',
+    name: 'Sensor',
+    type: 'sensor',
+    values: []
+  }
+]
 
 //-------------------------------------------
 interface Props {
@@ -16,11 +43,10 @@ const Room: React.FC<Props> = ({ name }) => {
         {name}
       </Heading>
       <Box wrap direction="row">
-        <Sensor isSensor active />
-        <Sensor isSensor active />
-        <Sensor isSensor active={false} />
-        <Sensor isSensor active={false} />
-        <Sensor isSensor={false} />
+        {data.map((iot, index) => {
+          return <IoT key={'IoT-' + iot.id + '-' + index} isSensor data={iot} />
+        })}
+        <IoT isSensor={false} />
       </Box>
     </Box>
   )

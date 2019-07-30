@@ -12,7 +12,7 @@ const names = ['Wohnzimmer', 'Küche', 'Schlafzimmer']
 const Home: FC = () => {
   return (
     <Background>
-      <Box flex="grow" justify="end">
+      <Box height="100%" width="100%" justify="end">
         <Box width="100%" height="90%" direction="row" wrap={false} style={{ overflowX: 'auto' }}>
           {names.map(roomname => (
             <Room name={roomname} />
