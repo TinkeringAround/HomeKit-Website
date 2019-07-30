@@ -50,7 +50,7 @@ export default {
       paragraph: isDayTime ? colors.darkYellow : colors.paragraph,
 
       // Element Colors
-      active: isDayTime ? colors.white : colors.yellow,
+      active: isDayTime ? colors.yellow : colors.white,
       inactive: isDayTime ? colors.lightElement : colors.darkElement
     },
     font: {

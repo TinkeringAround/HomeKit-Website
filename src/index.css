@@ -3,3 +3,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.Hover {
+  transform: scale(1);
+  transition: 0.2s all;
+  box-shadow: none;
+}
+
+.Hover:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+}
