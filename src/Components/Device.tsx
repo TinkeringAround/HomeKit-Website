@@ -1,7 +1,12 @@
 import React, { FC } from 'react'
 import { Box, Text } from 'grommet'
-import { Sensor, Plus } from '../../Atoms/icons'
 import * as moment from 'moment'
+
+// Atoms
+import { Sensor, Plus, Temperature, Humidity } from '../Atoms/icons'
+
+// Custom Components
+import Variable from './Variable'
 
 // Dummy Data
 const data: Array<DeviceDataProps> = [
@@ -49,8 +54,12 @@ type DeviceDataProps = {
   id: number
   type: string
   lastUpdated: string
-  values: Array<object>
-  // Ergänzen
+  values: Array<VariableProps>
+}
+
+type VariableProps = {
+  variable: string
+  value: string
 }
 
 interface DeviceProps {
@@ -65,7 +74,7 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
   // 2. Initalize
   let iotType: string | null = null
   const active =
-    -moment.unix(parseInt(deviceData ? deviceData.lastUpdated : '')).diff(moment.now(), 'hours') < 1
+    -moment.unix(parseInt(deviceData ? deviceData.lastUpdated : '')).diff(moment.now(), 'hours') < 2
       ? true
       : false
 
@@ -76,22 +85,53 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
     }
   }
 
-  const IoT: FC = () => {
+  const Content: FC = () => {
     return (
       <Box width="100%" height="35%" align="center" margin="5% 0 0 0">
-        <Text
-          size="medium"
-          truncate
-          textAlign="center"
-          color={active ? 'headingActive' : 'headingInactive'}
-          style={{
-            width: '90%'
-          }}
-        >
-          {name}
-        </Text>
-        <Box background="red" direction="row" justify="evenly">
-          {/* data values - type dependant */}
+        <Box width="90%">
+          <Text
+            size="medium"
+            truncate
+            textAlign="center"
+            color={active ? 'headingActive' : 'headingInactive'}
+          >
+            {name}
+          </Text>
+        </Box>
+        <Box direction="row" justify="evenly" height="50%" width="90%">
+          {deviceData &&
+            deviceData.values.map((variable: VariableProps, index) => {
+              const MiniIcon: FC = () => {
+                switch (variable.variable) {
+                  case 'temperature':
+                    return (
+                      <Temperature
+                        active={active}
+                        mini
+                        width={12.5 / deviceData.values.length + '%'}
+                        height="60%"
+                      />
+                    )
+                  case 'humidity':
+                    return (
+                      <Humidity
+                        active={active}
+                        mini
+                        width={12.5 / deviceData.values.length + '%'}
+                        height="60%"
+                      />
+                    )
+                }
+                return <React.Fragment />
+              }
+
+              return (
+                <Box direction="row" justify="center">
+                  <MiniIcon />
+                  <Text size="xsmall">{variable.value}</Text>
+                </Box>
+              )
+            })}
         </Box>
       </Box>
     )
@@ -120,7 +160,7 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
         >
           <Icon />
         </Box>
-        {id && <IoT />}
+        {id && <Content />}
       </Box>
     </Box>
   )

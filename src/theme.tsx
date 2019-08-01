@@ -1,5 +1,5 @@
-//const hours = new Date().getHours()
-const isDayTime = true //hours > 7 && hours < 20
+const hours = new Date().getHours()
+const isDayTime = hours > 7 && hours < 20
 
 const colors = {
   // Background Colors
