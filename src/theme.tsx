@@ -1,9 +1,9 @@
 const hours = new Date().getHours()
 const isDayTime = hours > 7 && hours < 20
 
-const colors = {
+export const colors = {
   // Background Colors
-  white: '#FFF',
+  white: '#fff',
   dark: '#3E4555',
   light: '#DFE2EA',
   middleDark: '#606777',
@@ -19,7 +19,7 @@ const colors = {
   darkElement: '#333844'
 }
 
-export default {
+export const theme = {
   global: {
     breakpoints: {
       xsmall: {
@@ -50,8 +50,8 @@ export default {
       headingInverse: isDayTime ? colors.white : colors.headingDark,
 
       // IoT
-      iotActive: isDayTime ? colors.yellow : colors.white,
-      iotInactive: isDayTime ? colors.lightElement : colors.darkElement,
+      deviceActive: isDayTime ? colors.yellow : colors.white,
+      deviceInactive: isDayTime ? colors.lightElement : colors.darkElement,
 
       iconWrapperActive: isDayTime ? colors.darkYellow : colors.yellow,
       iconWrapperInactive: isDayTime ? colors.light : colors.middleDark,

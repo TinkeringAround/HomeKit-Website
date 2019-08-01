@@ -9,7 +9,7 @@ import { Grommet } from 'grommet'
 import './index.css'
 
 // Theme
-import theme from './theme'
+import { theme } from './theme'
 
 // Context
 import AppContext from './appContext'

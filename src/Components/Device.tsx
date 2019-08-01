@@ -1,12 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Box, Text } from 'grommet'
-import * as moment from 'moment'
 
 // Atoms
-import { Sensor, Plus, Temperature, Humidity } from '../Atoms/icons'
+import { Icon } from '../Atoms/Icons'
 
 // Custom Components
 import Variable from './Variable'
+
+// Utility
+import { deviceIsActive, hexToRGBA } from '../Utility'
+import { theme } from '../theme'
 
 // Dummy Data
 const data: Array<DeviceDataProps> = [
@@ -68,22 +71,14 @@ interface DeviceProps {
 }
 
 const Device: FC<DeviceProps> = ({ id, name }) => {
+  const [hover, setHover] = useState(false)
   // 1. fetch device data
   const deviceData: DeviceDataProps | undefined = data.find(dataItem => dataItem.id === id)
 
   // 2. Initalize
-  let iotType: string | null = null
-  const active =
-    -moment.unix(parseInt(deviceData ? deviceData.lastUpdated : '')).diff(moment.now(), 'hours') < 2
-      ? true
-      : false
-
-  if (deviceData) {
-    switch (deviceData.type) {
-      case 'sensor':
-        iotType = 'sensor'
-    }
-  }
+  const type = id && deviceData ? deviceData.type : null
+  const active = deviceIsActive(deviceData ? deviceData.lastUpdated : '')
+  const color = id && active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive
 
   const Content: FC = () => {
     return (
@@ -101,35 +96,15 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
         <Box direction="row" justify="evenly" height="50%" width="90%">
           {deviceData &&
             deviceData.values.map((variable: VariableProps, index) => {
-              const MiniIcon: FC = () => {
-                switch (variable.variable) {
-                  case 'temperature':
-                    return (
-                      <Temperature
-                        active={active}
-                        mini
-                        width={12.5 / deviceData.values.length + '%'}
-                        height="60%"
-                      />
-                    )
-                  case 'humidity':
-                    return (
-                      <Humidity
-                        active={active}
-                        mini
-                        width={12.5 / deviceData.values.length + '%'}
-                        height="60%"
-                      />
-                    )
-                }
-                return <React.Fragment />
-              }
-
               return (
-                <Box direction="row" justify="center">
-                  <MiniIcon />
-                  <Text size="xsmall">{variable.value}</Text>
-                </Box>
+                <Variable
+                  key={'Device-' + id + '-Variable-' + index}
+                  type={variable.variable}
+                  value={variable.value}
+                  active={active}
+                  count={deviceData.values.length}
+                  index={index}
+                />
               )
             })}
         </Box>
@@ -137,28 +112,35 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
     )
   }
 
-  const Icon: FC = () => {
-    if (iotType) {
-      switch (iotType) {
-        case 'sensor':
-          return <Sensor active={active} />
-      }
-    }
-    return <Plus active={false} />
-  }
-
   return (
-    <Box className="hover square" background={id && active ? 'iotActive' : 'iotInactive'}>
+    <Box
+      className="square"
+      background={id && active ? 'deviceActive' : 'deviceInactive'}
+      style={{
+        transition: '0.2s all',
+        transform: hover ? 'scale(1.01)' : 'scale(1)',
+        boxShadow: hover ? '0px 0px 5px 1px ' + hexToRGBA(color, '0.2') : 'none'
+      }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onTouchStart={() => setHover(true)}
+      onTouchEnd={() => setHover(false)}
+    >
       <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
         <Box
           width="30%"
           height="30%"
           justify="center"
           align="center"
-          background={iotType && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
+          background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
           style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
         >
-          <Icon />
+          <Icon
+            type={type}
+            active={active}
+            width={type ? '80%' : '40%'}
+            height={type ? '80%' : '40%'}
+          />
         </Box>
         {id && <Content />}
       </Box>

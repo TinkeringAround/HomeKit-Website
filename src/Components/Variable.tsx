@@ -1,41 +1,28 @@
-import React, { FC, Fragment } from 'react'
+import React, { FC } from 'react'
 import { Box, Text } from 'grommet'
 
 // Atoms
-import { Temperature, Humidity } from '../Atoms/icons'
+import { Icon } from '../Atoms/Icons'
 
-//---------------------------------------------
+// Utility
+import { typeToUnit } from '../Utility'
+
+//---------------------------------------
 interface Props {
-  variable: string
+  type: string
+  active: boolean
   value: string
-  active?: boolean
-  count?: number
+  count: number
+  index: number
 }
 
-const Variable: React.FC<Props> = ({ variable, value, active = true, count = 1 }) => {
-  const Icon: FC = () => {
-    switch (variable) {
-      case 'temperature':
-        return <Temperature active={active} mini width={100.0 / count + '%'} height="60%" />
-      case 'humidity':
-        return <Humidity active={active} mini width={100.0 / count + '%'} height="60%" />
-    }
-    return <Fragment />
-  }
-
-  return (
-    <>
-      <Icon />
-      <Text size="xsmall">{value}</Text>
-    </>
-  )
-}
+const Variable: FC<Props> = ({ type, active, value, count, index }) => (
+  <Box direction="row" justify={index % 2 !== 0 ? 'start' : 'center'} align="center">
+    <Icon type={type} active={active} mini width={count > 1 ? '40%' : '15%'} height="50%" />
+    <Text size="xsmall" color={active ? 'headingActive' : 'headingInactive'}>
+      {value + typeToUnit(type)}
+    </Text>
+  </Box>
+)
 
 export default Variable
-
-/*
-    <Box width={100.0 / count + '%'} height="100%" direction="row" justify="center" align="center">
-      <Icon />
-      <Text size="xsmall">{value}</Text>
-    </Box>
-    */
