@@ -41,8 +41,8 @@ const Home: FC = () => {
     <Background>
       <Box height="100%" width="100%" justify="end">
         <Box width="100%" height="90%" direction="row" wrap={false} style={{ overflowX: 'auto' }}>
-          {rooms.map(room => (
-            <Room name={room.name} devices={room.devices} />
+          {rooms.map((room, index) => (
+            <Room key={'Room-' + index} name={room.name} devices={room.devices} />
           ))}
         </Box>
       </Box>

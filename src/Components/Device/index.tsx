@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
 import { Box, Text } from 'grommet'
 import { Sensor, Plus } from '../../Atoms/icons'
+import * as moment from 'moment'
 
 // Dummy Data
 const data: Array<DeviceDataProps> = [
   {
     id: 211,
     type: 'sensor',
-    lastUpdated: '1564646038',
+    lastUpdated: '1564663178',
     values: [
       {
         variable: 'temperature',
@@ -33,7 +34,7 @@ const data: Array<DeviceDataProps> = [
   {
     id: 233,
     type: 'sensor',
-    lastUpdated: '1564646038',
+    lastUpdated: '1564663178',
     values: [
       {
         variable: 'humidity',
@@ -63,7 +64,11 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
 
   // 2. Initalize
   let iotType: string | null = null
-  let active = true // check activity status by timestamp
+  const active =
+    -moment.unix(parseInt(deviceData ? deviceData.lastUpdated : '')).diff(moment.now(), 'hours') < 1
+      ? true
+      : false
+
   if (deviceData) {
     switch (deviceData.type) {
       case 'sensor':

@@ -22,8 +22,8 @@ const Room: React.FC<Props> = ({ name, devices }) => {
         {name}
       </Heading>
       <Box wrap direction="row">
-        {devices.map(device => {
-          return <Device id={device.id} name={device.name} />
+        {devices.map((device, index) => {
+          return <Device key={'Device-' + index} id={device.id} name={device.name} />
         })}
         <Device id={null} />
       </Box>
