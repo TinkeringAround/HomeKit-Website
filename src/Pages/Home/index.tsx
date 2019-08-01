@@ -6,7 +6,34 @@ import Background from '../../Components/Background'
 import Room from '../../Components/Room'
 
 // Dummy Data
-const names = ['Wohnzimmer', 'Küche', 'Schlafzimmer']
+const rooms = [
+  {
+    name: 'Wohnzimmer',
+    devices: [
+      {
+        name: 'Temp & Feuchtigkeit',
+        id: 211
+      },
+      {
+        name: 'Temperatur',
+        id: 222
+      }
+    ]
+  },
+  {
+    name: 'Küche',
+    devices: [
+      {
+        name: 'Feuchtigkeit',
+        id: 233
+      }
+    ]
+  },
+  {
+    name: 'Bad',
+    devices: []
+  }
+]
 
 //---------------------------------------------
 const Home: FC = () => {
@@ -14,8 +41,8 @@ const Home: FC = () => {
     <Background>
       <Box height="100%" width="100%" justify="end">
         <Box width="100%" height="90%" direction="row" wrap={false} style={{ overflowX: 'auto' }}>
-          {names.map(roomname => (
-            <Room name={roomname} />
+          {rooms.map(room => (
+            <Room name={room.name} devices={room.devices} />
           ))}
         </Box>
       </Box>
