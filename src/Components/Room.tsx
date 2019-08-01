@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Heading } from 'grommet'
 
 // Custom Components
-import IoT from './IoT'
+import IoT from './IoT/'
 
 // Dummy Data
 const data = [
@@ -43,10 +43,10 @@ const Room: React.FC<Props> = ({ name }) => {
         {name}
       </Heading>
       <Box wrap direction="row">
-        {data.map((iot, index) => {
-          return <IoT key={'IoT-' + iot.id + '-' + index} isSensor data={iot} />
+        {data.map(data => {
+          return <IoT data={data} />
         })}
-        <IoT isSensor={false} />
+        <IoT data={null} />
       </Box>
     </Box>
   )

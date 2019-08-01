@@ -1,5 +1,5 @@
 import React, { FC, useState, useContext } from 'react'
-import { Box, ResponsiveContext, Form, FormField, Button, Heading, TextInput } from 'grommet'
+import { Box, ResponsiveContext, Form, FormField, Heading, TextInput, ThemeContext } from 'grommet'
 import { auth, FirebaseError } from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 
@@ -9,14 +9,16 @@ import './login.css'
 // AppContext
 import AppContext from '../../appContext'
 
+// Atoms
+import Button from '../../Atoms/Button'
+
 // Custom Components
 import Background from '../../Components/Background'
-import theme from '../../theme'
 
 //----------------------------------------------------
 const Login: FC = () => {
   const { setUser } = useContext(AppContext)
-  const [data, setData] = useState<{ email: string; password: string }>({
+  const [credentials, setCredentials] = useState<{ email: string; password: string }>({
     email: '',
     password: ''
   })
@@ -31,10 +33,10 @@ const Login: FC = () => {
     }
   }
 
-  const performLogin = (event: any) => {
+  const login = () => {
     setTimeout(() => {
       auth()
-        .signInWithEmailAndPassword(event.value.email, event.value.password)
+        .signInWithEmailAndPassword(credentials.email, credentials.password)
         .then(response => {
           if (setUser) setUser(response.user)
         })
@@ -48,12 +50,12 @@ const Login: FC = () => {
 
   const changeValue = (target: any) => {
     target.type === 'text'
-      ? setData({
-          ...data,
+      ? setCredentials({
+          ...credentials,
           email: target.value
         })
-      : setData({
-          ...data,
+      : setCredentials({
+          ...credentials,
           password: target.value
         })
   }
@@ -63,23 +65,19 @@ const Login: FC = () => {
       <ResponsiveContext.Consumer>
         {size => (
           <Box
-            width={size.includes('small') ? '85%' : '50%'}
-            height={size.includes('small') ? '75%' : '60%'}
+            width={size.includes('small') ? '85%' : '500px'}
+            height={size.includes('small') ? '70%' : '500px'}
             justify="center"
             align="center"
             {...wrapper}
           >
-            <Box
-              width={size.includes('small') ? '80%' : '80%'}
-              height={size.includes('small') ? '85%' : '90%'}
-              justify="between"
-            >
+            <Box width="80%" height="90%" justify="between">
               <Heading level={1} responsive size="medium" textAlign="center" color="headingInverse">
                 HomeKit
               </Heading>
               <Box flex="grow" justify="center" align="center">
                 {!loading ? (
-                  <Form onSubmit={performLogin} value={data} style={{ width: '85%' }}>
+                  <Form onSubmit={login} style={{ width: '100%' }}>
                     <FormField type="email" name="email" className="Formfield">
                       <TextInput
                         placeholder="Email"
@@ -94,21 +92,16 @@ const Login: FC = () => {
                       />
                     </FormField>
                     <Box justify="center" align="center">
-                      <Button
-                        primary
-                        type="submit"
-                        label="Anmelden"
-                        style={{
-                          width: '100%',
-                          height: '50px',
-                          margin: '20px 0',
-                          fontWeight: 'bold'
-                        }}
-                      />
+                      <Button props={{ type: 'submit', label: 'Anmelden' }} />
                     </Box>
                   </Form>
                 ) : (
-                  <CircleSpinner size={75} color={theme.global.colors.darkYellow} />
+                  <ThemeContext.Consumer>
+                    {theme => {
+                      //@ts-ignore
+                      return <CircleSpinner size={75} color={theme.global.colors.darkYellow} />
+                    }}
+                  </ThemeContext.Consumer>
                 )}
               </Box>
             </Box>

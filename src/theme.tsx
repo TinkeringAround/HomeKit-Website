@@ -1,5 +1,5 @@
 //const hours = new Date().getHours()
-const isDayTime = true //hours > 7 && hours < 20
+const isDayTime = false //hours > 7 && hours < 20
 
 const colors = {
   // Background Colors
@@ -57,10 +57,13 @@ export default {
       iconWrapperInactive: isDayTime ? colors.light : colors.middleDark,
 
       iconActive: isDayTime ? colors.white : colors.darkYellow,
-      iconInactive: colors.middleDark,
+      iconInactive: colors.paragraph,
+
+      headingActive: isDayTime ? colors.darkYellow : colors.middleDark,
+      headingInactive: isDayTime ? colors.paragraph : colors.white,
 
       // TODO: Bis hierher richtige Farben....
-      paragraph: isDayTime ? colors.darkYellow : colors.paragraph,
+      paragraph: isDayTime ? colors.darkYellow : colors.headingDark,
 
       // Element Colors
       active: isDayTime ? colors.yellow : colors.white,
