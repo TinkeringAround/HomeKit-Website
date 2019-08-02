@@ -2,6 +2,7 @@
   "name": "homekit",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
@@ -19,7 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:docker": "docker run --rm -d -p 8080:80 --name HomeKit homekit",
+    "stop:docker": "docker container rm -f HomeKit",
     "build": "react-scripts build",
+    "build:docker": "docker build -t homekit .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && firebase deploy"

@@ -21,13 +21,13 @@ import Home from './Pages/Home/'
 //----------------------------------------------------------
 // Firebase App Setup
 const firebaseConfig = {
-  apiKey: 'AIzaSyAaigf3dUFY8BH2e_5MtwbPiznTd_71D4o',
-  authDomain: 'tinkeringaround-homekit.firebaseapp.com',
-  databaseURL: 'https://tinkeringaround-homekit.firebaseio.com',
-  projectId: 'tinkeringaround-homekit',
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: '',
-  messagingSenderId: '1082565869648',
-  appId: '1:1082565869648:web:5342c05a145b4a1f'
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_ID
 }
 firebaseApp.initializeApp(firebaseConfig)
 
