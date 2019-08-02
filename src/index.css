@@ -4,6 +4,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.rotate {
+  transition: 5s all;
+}
+
+.rotate:hover {
+  -webkit-transform: rotate(360deg);
+  transform: rotate(720deg);
+}
+
 .square {
   position: relative;
   width: 40%;
