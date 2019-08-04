@@ -11,9 +11,11 @@ import { theme } from '../theme'
 import { hexToRGBA } from '../Utility/'
 
 //--------------------------------------
-interface Props {}
+interface Props {
+  onClick?: any
+}
 
-const Settings: React.FC<Props> = () => {
+const Settings: React.FC<Props> = ({ onClick = null }) => {
   const [hover, setHover] = useState(false)
 
   return (
@@ -38,6 +40,7 @@ const Settings: React.FC<Props> = () => {
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
       onTouchEnd={() => setHover(false)}
+      onClick={onClick}
     >
       <Icon type="settings" active={false} width="60%" height="60%" />
     </Box>
