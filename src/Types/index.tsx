@@ -4,6 +4,6 @@ export type TRoom = {
 }
 
 export type TDevice = {
-  id: number
+  id: string
   name: string
 }

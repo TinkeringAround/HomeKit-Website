@@ -8,6 +8,7 @@ export const Input = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: 2vw;
   border: none;
+  border-radius: 10px;
   width: 100%;
   height: 50px;
   padding: 0px;
@@ -21,30 +22,6 @@ export const Input = styled.input`
   :focus {
     outline: none;
   }
-`
-export const NameInput = styled.input`
-  font-family: 'Roboto', sans-serif;
-  font-size: 2vw;
-  font-weight: bold;
-  border: none;
-  width: 50%;
-  padding: 0px;
-  color: ${theme.global.colors.iconInactive};
-  background-color: ${theme.global.colors.deviceInactive};
-
-  ::placeholder {
-    color: ${theme.global.colors.iconInactive};
-  }
-
-  :focus {
-    outline: none;
-  }
-`
-
-export const Column = styled.div`
-  width: 100%;
-  height: auto;
-  overflow-y: auto;
 `
 
 export const Container = styled.div`

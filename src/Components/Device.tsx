@@ -14,7 +14,7 @@ import { theme } from '../theme'
 // Dummy Data
 const data: Array<DeviceDataProps> = [
   {
-    id: 211,
+    id: '211',
     type: 'sensor',
     lastUpdated: '1564663178',
     values: [
@@ -29,7 +29,7 @@ const data: Array<DeviceDataProps> = [
     ]
   },
   {
-    id: 222,
+    id: '222',
     type: 'sensor',
     lastUpdated: '1564646038',
     values: [
@@ -40,7 +40,7 @@ const data: Array<DeviceDataProps> = [
     ]
   },
   {
-    id: 233,
+    id: '233',
     type: 'sensor',
     lastUpdated: '1564663178',
     values: [
@@ -54,7 +54,7 @@ const data: Array<DeviceDataProps> = [
 
 //--------------------------------------------
 type DeviceDataProps = {
-  id: number
+  id: string
   type: string
   lastUpdated: string
   values: Array<VariableProps>
@@ -66,7 +66,7 @@ type VariableProps = {
 }
 
 interface DeviceProps {
-  id: number | null
+  id: string | null
   name?: string
 }
 

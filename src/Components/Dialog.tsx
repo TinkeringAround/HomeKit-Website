@@ -64,7 +64,7 @@ const Dialog: FC<Props> = ({ open, closeDialog, children }) => {
           {open && (
             <DialogContent key="Dialog" style={dialogContent}>
               {/* Close Icon */}
-              <Box width="90%" height="90%" margin="0">
+              <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
                 {children}
               </Box>
             </DialogContent>

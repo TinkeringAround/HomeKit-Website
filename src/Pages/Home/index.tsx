@@ -1,55 +1,33 @@
 import React, { FC, useState, useEffect } from 'react'
 import { Box } from 'grommet'
 import firebase from 'firebase'
+import { CircleSpinner } from 'react-spinners-kit'
 
 // Types
-import { TRoom } from '../../Types/'
+import { TRoom, TDevice } from '../../Types/'
+
+// Theme
+import { theme } from '../../theme'
 
 // Custom Components
 import Background from '../../Components/Background'
 import Room from '../../Components/Room'
 import Settings from '../../Components/Settings'
 import Dialog from '../../Components/Dialog'
-import RoomManagement from '../../Components/RoomManagement'
-
-// Dummy Data
-/*const roomNames = [
-  {
-    name: 'Wohnzimmer',
-    devices: [
-      {
-        name: 'Temp & Feuchtigkeit',
-        id: 211
-      },
-      {
-        name: 'Temperatur',
-        id: 222
-      }
-    ]
-  },
-  {
-    name: 'Küche',
-    devices: [
-      {
-        name: 'Feuchtigkeit',
-        id: 233
-      }
-    ]
-  },
-  {
-    name: 'Bad',
-    devices: []
-  }
-]*/
+import RoomManagement from '../../Components/RoomManagement/'
+import SwitchIcon from '../../Components/Switch'
+import DeviceManagement from '../../Components/DeviceManagement'
 
 //---------------------------------------------
 const Home: FC = () => {
-  const [open, setOpen] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
+  const [open, setOpen] = useState<boolean>(false)
+  const [mode, setMode] = useState<string>('room')
   const [rooms, setRooms] = useState<Array<TRoom>>([])
+  const [devices, setDevices] = useState<Array<TDevice>>([])
 
   useEffect(() => {
-    if (loading && rooms.length === 0) {
+    if (loading && rooms.length === 0 && devices.length === 0) {
       firebase
         .database()
         .ref('/rooms')
@@ -72,9 +50,38 @@ const Home: FC = () => {
 
             setRooms(rooms)
           }
+
+          firebase
+            .database()
+            .ref('/devices')
+            .once('value')
+            .then(snapshot => {
+              if (snapshot.hasChildren()) {
+                var devices: Array<TDevice> = []
+
+                snapshot.forEach(device => {
+                  console.log('Device: ' + device.key)
+                  console.log(device.val())
+                  devices = [
+                    ...devices,
+                    {
+                      id: device.key ? device.key : '',
+                      name: device.val()
+                    }
+                  ]
+                })
+
+                setDevices(devices)
+              }
+            })
+
           setLoading(false)
         })
-    } else {
+    }
+  })
+
+  useEffect(() => {
+    if (!loading) {
       var updates: any = {}
       rooms.forEach(room => {
         updates['rooms/' + room.name] = room.devices
@@ -86,7 +93,21 @@ const Home: FC = () => {
     }
   }, [rooms])
 
-  const updateRooms = (event: any) => {
+  useEffect(() => {
+    if (!loading) {
+      var updates: any = {}
+      devices.forEach(device => {
+        updates['devices/' + device.id] = device.name
+      })
+      firebase
+        .database()
+        .ref()
+        .update(updates)
+    }
+  }, [devices])
+
+  // Room Handlers
+  const addRoom = (event: any) => {
     if (event && event.key === 'Enter') {
       if (event.target.value !== '') {
         const name = event.target.value
@@ -101,11 +122,26 @@ const Home: FC = () => {
       }
     }
   }
+  const updateRoomName = (oldName: string, newName: string) => {
+    const room = rooms.find((room: TRoom) => room.name === oldName)
+    if (room) {
+      const index = rooms.indexOf(room)
+      var tmpRooms = rooms
+      tmpRooms[index].name = newName
+      setRooms(tmpRooms)
+    }
+  }
+  const deleteRoom = (index: number) => {
+    rooms.splice(index, 1)
+    setRooms(rooms)
+  }
 
   return (
     <Background>
       {loading ? (
-        <div />
+        <Box height="100%" width="100%" justify="center" align="center">
+          <CircleSpinner size={150} color={theme.global.colors.darkYellow} />
+        </Box>
       ) : (
         <>
           <Settings onClick={() => setOpen(true)} />
@@ -123,7 +159,22 @@ const Home: FC = () => {
             </Box>
           </Box>
           <Dialog open={open} closeDialog={() => setOpen(false)}>
-            <RoomManagement updateRooms={updateRooms} rooms={rooms} />
+            {mode === 'room' ? (
+              <>
+                <SwitchIcon icon="circleEmpty" onClick={() => setMode('sensor')} />
+                <RoomManagement
+                  addRoom={addRoom}
+                  updateRoomName={updateRoomName}
+                  deleteRoom={deleteRoom}
+                  rooms={rooms}
+                />
+              </>
+            ) : (
+              <>
+                <SwitchIcon icon="circleFull" onClick={() => setMode('room')} />
+                <DeviceManagement devices={devices} />
+              </>
+            )}
           </Dialog>
         </>
       )}
