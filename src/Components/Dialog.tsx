@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Box } from 'grommet'
+import { Grommet, Box } from 'grommet'
 import posed, { PoseGroup } from 'react-pose'
 import { Portal } from 'react-portal'
 
@@ -59,19 +59,21 @@ const Dialog: FC<Props> = ({ open, closeDialog, children }) => {
 
   return (
     <Portal>
-      <PoseGroup preEnterPose="exit">
-        {open && (
-          <DialogContent key="Dialog" style={dialogContent}>
-            {/* Close Icon */}
-            <Box width="90%" height="90%" margin="0">
-              {children}
-            </Box>
-          </DialogContent>
-        )}
-        {open && (
-          <Background key="Dialog-Background" style={dialogBackground} onClick={closeDialog} />
-        )}
-      </PoseGroup>
+      <Grommet theme={theme}>
+        <PoseGroup preEnterPose="exit">
+          {open && (
+            <DialogContent key="Dialog" style={dialogContent}>
+              {/* Close Icon */}
+              <Box width="90%" height="90%" margin="0">
+                {children}
+              </Box>
+            </DialogContent>
+          )}
+          {open && (
+            <Background key="Dialog-Background" style={dialogBackground} onClick={closeDialog} />
+          )}
+        </PoseGroup>
+      </Grommet>
     </Portal>
   )
 }

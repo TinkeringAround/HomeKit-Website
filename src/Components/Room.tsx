@@ -4,15 +4,13 @@ import { Box, Heading } from 'grommet'
 // Custom Components
 import Device from './Device'
 
-//-------------------------------------------
-type DeviceProps = {
-  id: number
-  name: string
-}
+// Types
+import { TDevice } from '../Types'
 
+//-------------------------------------------
 interface Props {
   name: string
-  devices: Array<DeviceProps>
+  devices: Array<TDevice>
 }
 
 const Room: React.FC<Props> = ({ name, devices }) => {
