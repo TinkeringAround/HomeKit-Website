@@ -21,6 +21,7 @@ const Switch: FC<Props> = ({ onClick = null, icon }) => {
 
   return (
     <Box
+      className="clickable"
       background="iconWrapperInactive"
       justify="center"
       align="center"

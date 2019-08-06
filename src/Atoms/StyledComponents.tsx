@@ -17,6 +17,7 @@ export const Input = styled.input`
   padding: 0px;
   color: ${theme.global.colors.headingInactive};
   background-color: ${theme.global.colors.background};
+  text-overflow: ellipsis;
 
   ::placeholder {
     color: ${theme.global.colors.iconWrapperInactive};
@@ -36,6 +37,7 @@ export const NameInput = styled.input`
   padding: 0px;
   color: ${theme.global.colors.iconInactive};
   background-color: ${theme.global.colors.deviceInactive};
+  text-overflow: ellipsis;
 
   ::placeholder {
     color: ${theme.global.colors.iconInactive};
@@ -57,7 +59,8 @@ export const Container = styled.div`
   margin: ${(props: TStyled) => (props.margin ? props.margin : '20px 0px')};
   padding: 10px 30px;
   border-radius: 10px;
-  background-color: ${theme.global.colors.deviceInactive};
+  background-color: ${props =>
+    props.active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive};
 
   display: flex;
   justify-content: space-between;

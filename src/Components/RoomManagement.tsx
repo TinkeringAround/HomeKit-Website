@@ -66,7 +66,7 @@ const RoomManagement: FC<Props> = ({
                     >
                       <NameInput placeholder={room.name} onKeyPress={onRoomNameChanged} />
                       <Text size="small" color="iconInactive">
-                        {room.devices.length + ' Devices'}
+                        {'Devices: ' + room.devices.length}
                       </Text>
                     </Container>
                   )}

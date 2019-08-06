@@ -1,6 +1,6 @@
 export type TRoom = {
   name: string
-  devices: Array<TDevice>
+  devices: Array<string>
 }
 
 export type TDevice = {
@@ -10,4 +10,5 @@ export type TDevice = {
 
 export type TStyled = {
   margin?: string
+  active?: boolean
 }

@@ -20,6 +20,7 @@ const Settings: React.FC<Props> = ({ onClick = null }) => {
 
   return (
     <Box
+      className="clickable"
       background="iconWrapperInactive"
       justify="center"
       align="center"

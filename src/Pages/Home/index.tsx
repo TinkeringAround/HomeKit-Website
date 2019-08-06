@@ -26,6 +26,7 @@ const Home: FC = () => {
   const [rooms, setRooms] = useState<Array<TRoom>>([])
   const [devices, setDevices] = useState<Array<TDevice>>([])
 
+  // Life Cycle
   useEffect(() => {
     if (loading && rooms.length === 0 && devices.length === 0) {
       firebase
@@ -37,13 +38,11 @@ const Home: FC = () => {
             var rooms: Array<TRoom> = []
 
             snapshot.forEach(room => {
-              console.log('Room: ' + room.key)
-              console.log(room.val())
               rooms = [
                 ...rooms,
                 {
                   name: room.key ? room.key : '',
-                  devices: room.val()
+                  devices: room.val().devices
                 }
               ]
             })
@@ -60,8 +59,6 @@ const Home: FC = () => {
                 var devices: Array<TDevice> = []
 
                 snapshot.forEach(device => {
-                  console.log('Device: ' + device.key)
-                  console.log(device.val())
                   devices = [
                     ...devices,
                     {
@@ -84,7 +81,7 @@ const Home: FC = () => {
     if (!loading) {
       var updates: any = {}
       rooms.forEach(room => {
-        updates['rooms/' + room.name] = room.devices
+        updates['rooms/' + room.name] = { devices: room.devices }
       })
       console.log('Room Updates: ', updates)
       firebase
@@ -147,15 +144,22 @@ const Home: FC = () => {
       setRooms(newRooms)
     }
   }
+  const updateRooms = (index: number, newDevices: Array<string>) => {
+    const newRooms = Array.from(rooms)
+    newRooms[index].devices = newDevices
+    setRooms(newRooms)
+  }
   const deleteRoom = (index: number) => {
-    rooms.splice(index, 1)
-    setRooms(rooms)
+    const newRooms = Array.from(rooms)
+    newRooms.splice(index, 1)
+    setRooms(newRooms)
   }
   const reorderRooms = (source: number, destination: number) => {
     const room = rooms[source]
-    rooms.splice(source, 1)
-    rooms.splice(destination, 0, room)
-    setRooms(rooms)
+    const newRooms = Array.from(rooms)
+    newRooms.splice(source, 1)
+    newRooms.splice(destination, 0, room)
+    setRooms(newRooms)
   }
   const updateDeviceName = (oldName: string, newName: string) => {
     const device = devices.find((device: TDevice) => device.name === oldName)
@@ -176,10 +180,10 @@ const Home: FC = () => {
     const newDevices = Array.from(devices)
     newDevices.splice(source, 1)
     newDevices.splice(destination, 0, device)
-    console.log('New Devices after reorder: ', newDevices)
     setDevices(newDevices)
   }
 
+  //-----------------------------------------------------------------
   return (
     <Background>
       {loading ? (
@@ -198,7 +202,14 @@ const Home: FC = () => {
               style={{ overflowX: 'auto' }}
             >
               {rooms.map((room: TRoom, index: number) => (
-                <Room key={'Room-' + index} name={room.name} devices={room.devices} />
+                <Room
+                  key={'Room-' + index}
+                  name={room.name}
+                  index={index}
+                  roomDevices={room.devices}
+                  devices={devices}
+                  updateRooms={updateRooms}
+                />
               ))}
             </Box>
           </Box>

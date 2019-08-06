@@ -65,12 +65,13 @@ type VariableProps = {
   value: string
 }
 
-interface DeviceProps {
+interface Props {
   id: string | null
   name?: string
+  onClick?: any
 }
 
-const Device: FC<DeviceProps> = ({ id, name }) => {
+const Device: FC<Props> = ({ id, name, onClick = null }) => {
   const [hover, setHover] = useState(false)
   // 1. fetch device data
   const deviceData: DeviceDataProps | undefined = data.find(dataItem => dataItem.id === id)
@@ -112,9 +113,14 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
     )
   }
 
+  // Handlers
+  const reload = () => {
+    // reload data
+  }
+
   return (
     <Box
-      className="square"
+      className="square clickable"
       background={id && active ? 'deviceActive' : 'deviceInactive'}
       style={{
         transition: '0.2s all',
@@ -125,6 +131,7 @@ const Device: FC<DeviceProps> = ({ id, name }) => {
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
       onTouchEnd={() => setHover(false)}
+      onClick={onClick ? onClick : reload}
     >
       <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
         <Box
