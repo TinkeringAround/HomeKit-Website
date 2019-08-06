@@ -42,7 +42,7 @@ const App: FC = () => {
 
   return (
     <Grommet theme={theme} full>
-      <AppContext.Provider value={appContext}>{user ? <Login /> : <Home />}</AppContext.Provider>
+      <AppContext.Provider value={appContext}>{!user ? <Login /> : <Home />}</AppContext.Provider>
     </Grommet>
   )
 }
