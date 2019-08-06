@@ -1,31 +1,41 @@
 import React, { FC } from 'react'
-import { Text, Heading, TextInput } from 'grommet'
+import { Text, Heading } from 'grommet'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 // Types
-import { TRoom } from '../../Types'
+import { TRoom } from '../Types'
 
 // Custom Components
-import { Input, Column, Container, NameInput } from './components'
+import { Input, Column, Container, NameInput } from '../Atoms/StyledComponents'
 
 //----------------------------------------------
 interface Props {
   rooms: Array<TRoom>
   addRoom: any
   updateRoomName: any
+  reorderRooms: any
   deleteRoom: any
 }
 
-const RoomManagement: FC<Props> = ({ rooms, addRoom, updateRoomName, deleteRoom }) => {
+const RoomManagement: FC<Props> = ({
+  rooms,
+  addRoom,
+  updateRoomName,
+  reorderRooms,
+  deleteRoom
+}) => {
+  // Handlers
   const onDragEnd = (result: DropResult) => {
-    console.log(result)
-    if (!result.destination) {
-      deleteRoom(result.source.index)
-    } else {
-      // reorder rooms
+    if (rooms.length === 0) deleteRoom(result.source.index)
+    else {
+      if (!result.destination) {
+        deleteRoom(result.source.index)
+      } else {
+        if (result.destination.index !== result.source.index)
+          reorderRooms(result.source.index, result.destination.index)
+      }
     }
   }
-
   const onRoomNameChanged = (event: any) => {
     const oldName = event.target.placeholder
     const newName = event.target.value
@@ -38,7 +48,7 @@ const RoomManagement: FC<Props> = ({ rooms, addRoom, updateRoomName, deleteRoom 
 
   return (
     <>
-      <Heading level="3" size="large" color="headingInactive" margin="50px 0px 0px 0px">
+      <Heading level="3" size="large" color="headingInactive" margin="50px 0px 10px 0px">
         Räume
       </Heading>
       <Input type="text" placeholder="Raum hinzufügen..." onKeyPress={addRoom} />
@@ -56,7 +66,7 @@ const RoomManagement: FC<Props> = ({ rooms, addRoom, updateRoomName, deleteRoom 
                     >
                       <NameInput placeholder={room.name} onKeyPress={onRoomNameChanged} />
                       <Text size="small" color="iconInactive">
-                        {room.devices.length + ' Devices angeschlossen'}
+                        {room.devices.length + ' Devices'}
                       </Text>
                     </Container>
                   )}

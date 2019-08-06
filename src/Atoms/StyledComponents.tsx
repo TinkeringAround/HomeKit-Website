@@ -1,13 +1,17 @@
 import styled from 'styled-components'
 
+// Types
+import { TStyled } from '../Types/'
+
 // Theme
-import { theme } from '../../theme'
+import { theme } from '../theme'
 
 // Components
 export const Input = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: 2vw;
   border: none;
+  border-radius: 10px;
   width: 100%;
   height: 50px;
   padding: 0px;
@@ -22,6 +26,7 @@ export const Input = styled.input`
     outline: none;
   }
 `
+
 export const NameInput = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: 2vw;
@@ -49,7 +54,7 @@ export const Column = styled.div`
 
 export const Container = styled.div`
   height: 60px;
-  margin: 20px 0px;
+  margin: ${(props: TStyled) => (props.margin ? props.margin : '20px 0px')};
   padding: 10px 30px;
   border-radius: 10px;
   background-color: ${theme.global.colors.deviceInactive};

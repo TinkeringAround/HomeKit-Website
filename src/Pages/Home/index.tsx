@@ -14,7 +14,7 @@ import Background from '../../Components/Background'
 import Room from '../../Components/Room'
 import Settings from '../../Components/Settings'
 import Dialog from '../../Components/Dialog'
-import RoomManagement from '../../Components/RoomManagement/'
+import RoomManagement from '../../Components/RoomManagement'
 import SwitchIcon from '../../Components/Switch'
 import DeviceManagement from '../../Components/DeviceManagement'
 
@@ -66,7 +66,7 @@ const Home: FC = () => {
                     ...devices,
                     {
                       id: device.key ? device.key : '',
-                      name: device.val()
+                      name: device.val().name
                     }
                   ]
                 })
@@ -86,10 +86,18 @@ const Home: FC = () => {
       rooms.forEach(room => {
         updates['rooms/' + room.name] = room.devices
       })
+      console.log('Room Updates: ', updates)
       firebase
         .database()
         .ref()
-        .update(updates)
+        .child('rooms')
+        .remove()
+        .then(() => {
+          firebase
+            .database()
+            .ref()
+            .update(updates)
+        })
     }
   }, [rooms])
 
@@ -97,16 +105,24 @@ const Home: FC = () => {
     if (!loading) {
       var updates: any = {}
       devices.forEach(device => {
-        updates['devices/' + device.id] = device.name
+        updates['devices/' + device.id] = { name: device.name }
       })
+      console.log('Device Updates: ', updates)
       firebase
         .database()
         .ref()
-        .update(updates)
+        .child('devices')
+        .remove()
+        .then(() => {
+          firebase
+            .database()
+            .ref()
+            .update(updates)
+        })
     }
   }, [devices])
 
-  // Room Handlers
+  // Handlers
   const addRoom = (event: any) => {
     if (event && event.key === 'Enter') {
       if (event.target.value !== '') {
@@ -126,14 +142,42 @@ const Home: FC = () => {
     const room = rooms.find((room: TRoom) => room.name === oldName)
     if (room) {
       const index = rooms.indexOf(room)
-      var tmpRooms = rooms
-      tmpRooms[index].name = newName
-      setRooms(tmpRooms)
+      var newRooms = Array.from(rooms)
+      newRooms[index].name = newName
+      setRooms(newRooms)
     }
   }
   const deleteRoom = (index: number) => {
     rooms.splice(index, 1)
     setRooms(rooms)
+  }
+  const reorderRooms = (source: number, destination: number) => {
+    const room = rooms[source]
+    rooms.splice(source, 1)
+    rooms.splice(destination, 0, room)
+    setRooms(rooms)
+  }
+  const updateDeviceName = (oldName: string, newName: string) => {
+    const device = devices.find((device: TDevice) => device.name === oldName)
+    if (device) {
+      const index = devices.indexOf(device)
+      var newDevices = Array.from(devices)
+      newDevices[index].name = newName
+      setDevices(newDevices)
+    }
+  }
+  const deleteDevice = (index: number) => {
+    const newDevices = Array.from(devices)
+    newDevices.splice(index, 1)
+    setDevices(newDevices)
+  }
+  const reorderDevices = (source: number, destination: number) => {
+    const device = devices[source]
+    const newDevices = Array.from(devices)
+    newDevices.splice(source, 1)
+    newDevices.splice(destination, 0, device)
+    console.log('New Devices after reorder: ', newDevices)
+    setDevices(newDevices)
   }
 
   return (
@@ -161,10 +205,11 @@ const Home: FC = () => {
           <Dialog open={open} closeDialog={() => setOpen(false)}>
             {mode === 'room' ? (
               <>
-                <SwitchIcon icon="circleEmpty" onClick={() => setMode('sensor')} />
+                <SwitchIcon icon="circleEmpty" onClick={() => setMode('device')} />
                 <RoomManagement
                   addRoom={addRoom}
                   updateRoomName={updateRoomName}
+                  reorderRooms={reorderRooms}
                   deleteRoom={deleteRoom}
                   rooms={rooms}
                 />
@@ -172,7 +217,12 @@ const Home: FC = () => {
             ) : (
               <>
                 <SwitchIcon icon="circleFull" onClick={() => setMode('room')} />
-                <DeviceManagement devices={devices} />
+                <DeviceManagement
+                  updateDeviceName={updateDeviceName}
+                  deleteDevice={deleteDevice}
+                  reorderDevices={reorderDevices}
+                  devices={devices}
+                />
               </>
             )}
           </Dialog>
