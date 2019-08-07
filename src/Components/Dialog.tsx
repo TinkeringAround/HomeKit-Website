@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Grommet, Box } from 'grommet'
+import { Grommet, Box, ResponsiveContext } from 'grommet'
 import posed, { PoseGroup } from 'react-pose'
 import { Portal } from 'react-portal'
 
@@ -38,9 +38,6 @@ const Dialog: FC<Props> = ({ open, closeDialog, children }) => {
     position: 'absolute',
     zIndex: 701,
     backgroundColor: hexToRGBA(theme.global.colors.background, '1'),
-    width: '50%',
-    height: '80%',
-    left: '25%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -60,19 +57,36 @@ const Dialog: FC<Props> = ({ open, closeDialog, children }) => {
   return (
     <Portal>
       <Grommet theme={theme}>
-        <PoseGroup preEnterPose="exit">
-          {open && (
-            <DialogContent key="Dialog" style={dialogContent}>
-              {/* Close Icon */}
-              <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
-                {children}
-              </Box>
-            </DialogContent>
-          )}
-          {open && (
-            <Background key="Dialog-Background" style={dialogBackground} onClick={closeDialog} />
-          )}
-        </PoseGroup>
+        <ResponsiveContext.Consumer>
+          {size => {
+            const isMobile = size.includes('small')
+            const width = isMobile ? '90%' : '50%'
+            const height = isMobile ? '85%' : '80%'
+            const left = isMobile ? '5%' : '25%'
+            return (
+              <PoseGroup preEnterPose="exit">
+                {open && (
+                  <DialogContent
+                    key="Dialog"
+                    style={{ ...dialogContent, width: width, height: height, left: left }}
+                  >
+                    {/* Close Icon */}
+                    <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
+                      {children}
+                    </Box>
+                  </DialogContent>
+                )}
+                {open && (
+                  <Background
+                    key="Dialog-Background"
+                    style={dialogBackground}
+                    onClick={closeDialog}
+                  />
+                )}
+              </PoseGroup>
+            )
+          }}
+        </ResponsiveContext.Consumer>
       </Grommet>
     </Portal>
   )

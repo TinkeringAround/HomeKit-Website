@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Heading } from 'grommet'
+import { Heading, ResponsiveContext } from 'grommet'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 // Types
@@ -45,34 +45,49 @@ const DeviceManagement: FC<Props> = ({
   }
 
   return (
-    <>
-      <Heading level="3" size="large" color="headingInactive" margin="50px 0px 10px 0px">
-        Geräte und Sensoren
-      </Heading>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="Column">
-          {provided => (
-            <Column {...provided.droppableProps} ref={provided.innerRef}>
-              {devices.map((device: TDevice, index: number) => (
-                <Draggable key={'DraggableDevice-' + index} draggableId={device.name} index={index}>
-                  {provided => (
-                    <Container
-                      margin="20px 0px 0px 0px"
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <NameInput placeholder={device.name} onKeyPress={onDeviceNameChanged} />
-                    </Container>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Column>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </>
+    <ResponsiveContext.Consumer>
+      {size => {
+        const isMobile = size.includes('small')
+        return (
+          <>
+            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
+              Geräte und Sensoren
+            </Heading>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="Column">
+                {provided => (
+                  <Column {...provided.droppableProps} ref={provided.innerRef}>
+                    {devices.map((device: TDevice, index: number) => (
+                      <Draggable
+                        key={'DraggableDevice-' + index}
+                        draggableId={device.name}
+                        index={index}
+                      >
+                        {provided => (
+                          <Container
+                            margin="20px 0px 0px 0px"
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <NameInput
+                              fontSize={isMobile ? '1em' : '1.5em'}
+                              placeholder={device.name}
+                              onKeyPress={onDeviceNameChanged}
+                            />
+                          </Container>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </Column>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </>
+        )
+      }}
+    </ResponsiveContext.Consumer>
   )
 }
 

@@ -16,6 +16,7 @@ export type TDevice = {
 export type TStyled = {
   margin?: string
   active?: boolean
+  fontSize?: string
 }
 
 export type TDeviceData = {

@@ -15,8 +15,9 @@ import Room from '../../Components/Room'
 import Settings from '../../Components/Settings'
 import Dialog from '../../Components/Dialog'
 import RoomManagement from '../../Components/RoomManagement'
-import SwitchIcon from '../../Components/Switch'
 import DeviceManagement from '../../Components/DeviceManagement'
+import Switch from '../../Components/Switch'
+import Reload from '../../Components/Reload'
 
 //---------------------------------------------
 const Home: FC = () => {
@@ -27,49 +28,7 @@ const Home: FC = () => {
 
   // Life Cycle
   useEffect(() => {
-    if (loading && !data) {
-      firebase
-        .database()
-        .ref('/')
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.hasChildren()) {
-            console.log('Snapshot: ', snapshot.val())
-            const tmpDatabase = snapshot.val()
-            var rooms: Array<TRoom> = []
-            var devices: Array<TDevice> = []
-
-            const roomKeys = Object.keys(tmpDatabase.rooms)
-            roomKeys.forEach(key => {
-              rooms = [
-                ...rooms,
-                {
-                  name: key,
-                  devices: tmpDatabase.rooms[key].devices
-                }
-              ]
-            })
-
-            const deviceKeys = Object.keys(tmpDatabase.devices)
-            deviceKeys.forEach(key => {
-              devices = [
-                ...devices,
-                {
-                  id: key,
-                  name: tmpDatabase.devices[key].name
-                }
-              ]
-            })
-
-            const data: TDatabase = {
-              rooms: rooms,
-              devices: devices
-            }
-
-            setData(data)
-          }
-        })
-    }
+    if (!data) fetchData()
   })
 
   useEffect(() => {
@@ -80,6 +39,50 @@ const Home: FC = () => {
   }, [data])
 
   // Firebase Updater Methods
+  const fetchData = () => {
+    setLoading(true)
+    firebase
+      .database()
+      .ref('/')
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.hasChildren()) {
+          console.log('Snapshot: ', snapshot.val())
+          const tmpDatabase = snapshot.val()
+          var rooms: Array<TRoom> = []
+          var devices: Array<TDevice> = []
+
+          const roomKeys = Object.keys(tmpDatabase.rooms)
+          roomKeys.forEach(key => {
+            rooms = [
+              ...rooms,
+              {
+                name: key,
+                devices: tmpDatabase.rooms[key].devices
+              }
+            ]
+          })
+
+          const deviceKeys = Object.keys(tmpDatabase.devices)
+          deviceKeys.forEach(key => {
+            devices = [
+              ...devices,
+              {
+                id: key,
+                name: tmpDatabase.devices[key].name
+              }
+            ]
+          })
+
+          const data: TDatabase = {
+            rooms: rooms,
+            devices: devices
+          }
+
+          setData(data)
+        }
+      })
+  }
   const updateRooms = (newRooms: Array<TRoom>) => {
     if (data) {
       var updates: any = {}
@@ -220,6 +223,7 @@ const Home: FC = () => {
         </Box>
       ) : (
         <>
+          <Reload onClick={fetchData} />
           <Settings onClick={() => setOpen(true)} />
           <Box height="100%" width="100%" justify="end">
             <Box
@@ -247,7 +251,7 @@ const Home: FC = () => {
               <>
                 {mode === 'room' ? (
                   <>
-                    <SwitchIcon icon="circleEmpty" onClick={() => setMode('device')} />
+                    <Switch icon="circleEmpty" onClick={() => setMode('device')} />
                     <RoomManagement
                       addRoom={addRoom}
                       updateRoomName={updateRoomName}
@@ -258,7 +262,7 @@ const Home: FC = () => {
                   </>
                 ) : (
                   <>
-                    <SwitchIcon icon="circleFull" onClick={() => setMode('room')} />
+                    <Switch icon="circleFull" onClick={() => setMode('room')} />
                     <DeviceManagement
                       updateDeviceName={updateDeviceName}
                       deleteDevice={deleteDevice}

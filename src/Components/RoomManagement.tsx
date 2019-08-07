@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Text, Heading } from 'grommet'
+import { Text, Heading, ResponsiveContext } from 'grommet'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 // Types
@@ -47,37 +47,52 @@ const RoomManagement: FC<Props> = ({
   }
 
   return (
-    <>
-      <Heading level="3" size="large" color="headingInactive" margin="50px 0px 10px 0px">
-        Räume
-      </Heading>
-      <Input type="text" placeholder="Raum hinzufügen..." onKeyPress={addRoom} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="Column">
-          {provided => (
-            <Column {...provided.droppableProps} ref={provided.innerRef}>
-              {rooms.map((room: TRoom, index: number) => (
-                <Draggable key={'DraggableRoom-' + index} draggableId={room.name} index={index}>
-                  {provided => (
-                    <Container
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <NameInput placeholder={room.name} onKeyPress={onRoomNameChanged} />
-                      <Text size="small" color="iconInactive">
-                        {'Devices: ' + room.devices.length}
-                      </Text>
-                    </Container>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Column>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </>
+    <ResponsiveContext.Consumer>
+      {size => {
+        const isMobile = size.includes('small')
+        return (
+          <>
+            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
+              Räume
+            </Heading>
+            <Input type="text" placeholder="Raum hinzufügen..." onKeyPress={addRoom} />
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="Column">
+                {provided => (
+                  <Column {...provided.droppableProps} ref={provided.innerRef}>
+                    {rooms.map((room: TRoom, index: number) => (
+                      <Draggable
+                        key={'DraggableRoom-' + index}
+                        draggableId={room.name}
+                        index={index}
+                      >
+                        {provided => (
+                          <Container
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <NameInput
+                              fontSize={isMobile ? '1em' : '1.5em'}
+                              placeholder={room.name}
+                              onKeyPress={onRoomNameChanged}
+                            />
+                            <Text size="0.75em" color="iconInactive">
+                              {'Devices: ' + room.devices.length}
+                            </Text>
+                          </Container>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </Column>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </>
+        )
+      }}
+    </ResponsiveContext.Consumer>
   )
 }
 

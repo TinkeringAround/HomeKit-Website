@@ -9,7 +9,7 @@ import { theme } from '../theme'
 // Components
 export const Input = styled.input`
   font-family: 'Roboto', sans-serif;
-  font-size: 2vw;
+  font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.25em')};
   border: none;
   border-radius: 10px;
   width: 100%;
@@ -30,10 +30,10 @@ export const Input = styled.input`
 
 export const NameInput = styled.input`
   font-family: 'Roboto', sans-serif;
-  font-size: 2vw;
+  font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.5em')};
   font-weight: bold;
   border: none;
-  width: 50%;
+  width: 75%;
   padding: 0px;
   color: ${theme.global.colors.iconInactive};
   background-color: ${theme.global.colors.deviceInactive};
@@ -57,7 +57,7 @@ export const Column = styled.div`
 export const Container = styled.div`
   height: 60px;
   margin: ${(props: TStyled) => (props.margin ? props.margin : '20px 0px')};
-  padding: 10px 30px;
+  padding: 10px 20px;
   border-radius: 10px;
   background-color: ${props =>
     props.active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive};

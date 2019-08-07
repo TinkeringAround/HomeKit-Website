@@ -12,17 +12,20 @@ import { hexToRGBA } from '../Utility/'
 
 //--------------------------------------
 interface Props {
-  onClick: any
-  icon: string
+  onClick?: any
 }
 
-const Switch: FC<Props> = ({ onClick = null, icon }) => {
+const Reload: FC<Props> = ({ onClick = null }) => {
   const [hover, setHover] = useState(false)
 
   return (
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
+        const wrapperSize = isMobile ? 40 : 50
+        const iconSize = isMobile ? 25 : 30
+        const top = isMobile ? 20 : 30
+        const right = isMobile ? 30 + wrapperSize : 50 + wrapperSize
         return (
           <Box
             className="clickable"
@@ -30,10 +33,10 @@ const Switch: FC<Props> = ({ onClick = null, icon }) => {
             justify="center"
             align="center"
             style={{
-              top: isMobile ? -20 : -10,
-              right: isMobile ? 0 : -10,
-              width: 40,
-              height: 40,
+              top: top,
+              right: right,
+              width: wrapperSize,
+              height: wrapperSize,
               position: 'absolute',
               borderRadius: 10,
               transition: '0.2s all',
@@ -48,7 +51,7 @@ const Switch: FC<Props> = ({ onClick = null, icon }) => {
             onTouchEnd={() => setHover(false)}
             onClick={onClick}
           >
-            <Icon type={icon} active={false} width="60%" height="60%" />
+            <Icon type="reload" active={false} width={iconSize + 'px'} height={iconSize + 'px'} />
           </Box>
         )
       }}
@@ -56,4 +59,4 @@ const Switch: FC<Props> = ({ onClick = null, icon }) => {
   )
 }
 
-export default Switch
+export default Reload
