@@ -49,7 +49,7 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
       </Box>
       <Dialog open={open} closeDialog={() => setOpen(false)}>
         <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
-          Geräteverwaltung
+          Raumverwaltung
         </Heading>
         {devices.map((device: TDevice, index: number) => {
           const active = roomDevices.find(roomDeviceID => roomDeviceID === device.id) ? true : false

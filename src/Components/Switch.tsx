@@ -30,7 +30,7 @@ const Switch: FC<Props> = ({ onClick = null, icon }) => {
             justify="center"
             align="center"
             style={{
-              top: isMobile ? -20 : -10,
+              top: isMobile ? -10 : -10,
               right: isMobile ? 0 : -10,
               width: 40,
               height: 40,
