@@ -1,3 +1,8 @@
+export type TCredential = {
+  email: string
+  password: string
+}
+
 export type TDatabase = {
   rooms: Array<TRoom>
   devices: Array<TDevice>

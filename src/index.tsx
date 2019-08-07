@@ -2,7 +2,7 @@
 import React, { FC, useState } from 'react'
 import ReactDOM from 'react-dom'
 import * as serviceWorker from './serviceWorker'
-import firebaseApp from 'firebase/app'
+import firebase, { User } from 'firebase/app'
 import { Grommet } from 'grommet'
 
 // Styles
@@ -10,9 +10,6 @@ import './index.css'
 
 // Theme
 import { theme } from './theme'
-
-// Context
-import AppContext from './appContext'
 
 // Pages
 import Login from './Pages/Login/'
@@ -29,20 +26,22 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_ID
 }
-firebaseApp.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig)
 
 //----------------------------------------------------------
 const App: FC = () => {
-  const [user, setUser] = useState<firebase.User | null>(null)
+  const [authenticated, setAuthenticated] = useState<boolean>(false)
 
-  const appContext = {
-    user: user,
-    setUser: (user: firebase.User | null) => setUser(user)
-  }
+  firebase.auth().onAuthStateChanged((user: User | null) => {
+    if (user && !authenticated) {
+      console.log('Authenticated User: ', user)
+      setAuthenticated(true)
+    }
+  })
 
   return (
     <Grommet theme={theme} full>
-      <AppContext.Provider value={appContext}>{user ? <Login /> : <Home />}</AppContext.Provider>
+      {!authenticated ? <Login /> : <Home />}
     </Grommet>
   )
 }

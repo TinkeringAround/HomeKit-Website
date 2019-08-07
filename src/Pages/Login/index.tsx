@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from 'react'
+import React, { FC, useState } from 'react'
 import { Box, ResponsiveContext, Form, FormField, Heading, TextInput, ThemeContext } from 'grommet'
 import { auth, FirebaseError } from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
@@ -6,8 +6,8 @@ import { CircleSpinner } from 'react-spinners-kit'
 //Stylesheet
 import './login.css'
 
-// AppContext
-import AppContext from '../../appContext'
+// Types
+import { TCredential } from '../../Types'
 
 // Atoms
 import Button from '../../Atoms/Button'
@@ -17,8 +17,7 @@ import Background from '../../Components/Background'
 
 //----------------------------------------------------
 const Login: FC = () => {
-  const { setUser } = useContext(AppContext)
-  const [credentials, setCredentials] = useState<{ email: string; password: string }>({
+  const [credentials, setCredentials] = useState<TCredential>({
     email: '',
     password: ''
   })
@@ -33,16 +32,16 @@ const Login: FC = () => {
     }
   }
 
-  const login = () => {
+  const performLogin = () => {
     setTimeout(() => {
       auth()
-        .signInWithEmailAndPassword(credentials.email, credentials.password)
-        .then(response => {
-          if (setUser) setUser(response.user)
-        })
-        .catch((error: FirebaseError) => {
-          setLoading(false)
-          console.log(error)
+        .setPersistence(auth.Auth.Persistence.SESSION)
+        .then(() => {
+          auth()
+            .signInWithEmailAndPassword(credentials.email, credentials.password)
+            .catch((error: FirebaseError) => {
+              console.log(error)
+            })
         })
     }, 2000)
     setLoading(true)
@@ -72,12 +71,12 @@ const Login: FC = () => {
             {...wrapper}
           >
             <Box width="80%" height="90%" justify="between">
-              <Heading level={1} responsive size="medium" textAlign="center" color="headingInverse">
+              <Heading level="1" responsive size="medium" textAlign="center" color="headingInverse">
                 HomeKit
               </Heading>
               <Box flex="grow" justify="center" align="center">
                 {!loading ? (
-                  <Form onSubmit={login} style={{ width: '100%' }}>
+                  <Form onSubmit={performLogin} style={{ width: '100%' }}>
                     <FormField type="email" name="email" className="Formfield">
                       <TextInput
                         placeholder="Email"
