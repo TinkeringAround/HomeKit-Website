@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Box, Heading, Text } from 'grommet'
 
 // Custom Components
@@ -17,10 +17,10 @@ interface Props {
   index: number
   devices: Array<TDevice>
   roomDevices: Array<string>
-  updateRooms: any
+  updateRoomDevices: any
 }
 
-const Room: React.FC<Props> = ({ name, index, devices, roomDevices, updateRooms }) => {
+const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices }) => {
   const [open, setOpen] = useState(false)
 
   const selectDevice = (deviceIndex: number, status: boolean) => {
@@ -28,7 +28,7 @@ const Room: React.FC<Props> = ({ name, index, devices, roomDevices, updateRooms 
     if (status) newRoomDevices.splice(deviceIndex, 1)
     else newRoomDevices.push(devices[deviceIndex].id)
     setOpen(false)
-    updateRooms(index, newRoomDevices)
+    updateRoomDevices(index, newRoomDevices)
   }
 
   return (
@@ -39,7 +39,7 @@ const Room: React.FC<Props> = ({ name, index, devices, roomDevices, updateRooms 
         </Heading>
         <Box wrap direction="row">
           {roomDevices.map((deviceID, index) => {
-            const device = devices.find(device => device.id == deviceID)
+            const device = devices.find(device => device.id === deviceID)
             return (
               device && <Device key={'RoomDevice-' + index} id={device.id} name={device.name} />
             )

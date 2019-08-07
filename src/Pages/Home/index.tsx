@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 
 // Types
-import { TRoom, TDevice } from '../../Types/'
+import { TRoom, TDevice, TDatabase } from '../../Types/'
 
 // Theme
 import { theme } from '../../theme'
@@ -23,64 +23,67 @@ const Home: FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [open, setOpen] = useState<boolean>(false)
   const [mode, setMode] = useState<string>('room')
-  const [rooms, setRooms] = useState<Array<TRoom>>([])
-  const [devices, setDevices] = useState<Array<TDevice>>([])
+  const [data, setData] = useState<TDatabase>()
 
   // Life Cycle
   useEffect(() => {
-    if (loading && rooms.length === 0 && devices.length === 0) {
+    if (loading && !data) {
       firebase
         .database()
-        .ref('/rooms')
+        .ref('/')
         .once('value')
         .then(snapshot => {
           if (snapshot.hasChildren()) {
+            console.log('Snapshot: ', snapshot.val())
+            const tmpDatabase = snapshot.val()
             var rooms: Array<TRoom> = []
+            var devices: Array<TDevice> = []
 
-            snapshot.forEach(room => {
+            const roomKeys = Object.keys(tmpDatabase.rooms)
+            roomKeys.forEach(key => {
               rooms = [
                 ...rooms,
                 {
-                  name: room.key ? room.key : '',
-                  devices: room.val().devices
+                  name: key,
+                  devices: tmpDatabase.rooms[key].devices
                 }
               ]
             })
 
-            setRooms(rooms)
-          }
-
-          firebase
-            .database()
-            .ref('/devices')
-            .once('value')
-            .then(snapshot => {
-              if (snapshot.hasChildren()) {
-                var devices: Array<TDevice> = []
-
-                snapshot.forEach(device => {
-                  devices = [
-                    ...devices,
-                    {
-                      id: device.key ? device.key : '',
-                      name: device.val().name
-                    }
-                  ]
-                })
-
-                setDevices(devices)
-              }
+            const deviceKeys = Object.keys(tmpDatabase.devices)
+            deviceKeys.forEach(key => {
+              devices = [
+                ...devices,
+                {
+                  id: key,
+                  name: tmpDatabase.devices[key].name
+                }
+              ]
             })
 
-          setLoading(false)
+            const data: TDatabase = {
+              rooms: rooms,
+              devices: devices
+            }
+
+            setData(data)
+          }
         })
     }
   })
 
   useEffect(() => {
-    if (!loading) {
+    if (loading && data) {
+      console.log('Data: ', data)
+      setLoading(false)
+    }
+  }, [data])
+
+  // Firebase Updater Methods
+  const updateRooms = (newRooms: Array<TRoom>) => {
+    if (data) {
       var updates: any = {}
-      rooms.forEach(room => {
+      newRooms.forEach(room => {
         updates['rooms/' + room.name] = { devices: room.devices }
       })
       console.log('Room Updates: ', updates)
@@ -94,14 +97,19 @@ const Home: FC = () => {
             .database()
             .ref()
             .update(updates)
+            .then(() => {
+              setData({
+                devices: data.devices,
+                rooms: newRooms
+              })
+            })
         })
     }
-  }, [rooms])
-
-  useEffect(() => {
-    if (!loading) {
+  }
+  const updateDevices = (newDevices: Array<TDevice>) => {
+    if (data) {
       var updates: any = {}
-      devices.forEach(device => {
+      newDevices.forEach(device => {
         updates['devices/' + device.id] = { name: device.name }
       })
       console.log('Device Updates: ', updates)
@@ -115,18 +123,24 @@ const Home: FC = () => {
             .database()
             .ref()
             .update(updates)
+            .then(() => {
+              setData({
+                devices: newDevices,
+                rooms: data.rooms
+              })
+            })
         })
     }
-  }, [devices])
+  }
 
-  // Handlers
+  //#region Component Callbacks...
   const addRoom = (event: any) => {
-    if (event && event.key === 'Enter') {
+    if (data && event && event.key === 'Enter') {
       if (event.target.value !== '') {
         const name = event.target.value
         event.target.value = ''
-        setRooms([
-          ...rooms,
+        updateRooms([
+          ...data.rooms,
           {
             name: name,
             devices: []
@@ -136,52 +150,66 @@ const Home: FC = () => {
     }
   }
   const updateRoomName = (oldName: string, newName: string) => {
-    const room = rooms.find((room: TRoom) => room.name === oldName)
-    if (room) {
-      const index = rooms.indexOf(room)
-      var newRooms = Array.from(rooms)
-      newRooms[index].name = newName
-      setRooms(newRooms)
+    if (data) {
+      const index = data.rooms.findIndex((room: TRoom) => room.name === oldName)
+      if (index >= 0) {
+        var newRooms = Array.from(data.rooms)
+        newRooms[index].name = newName
+        updateRooms(newRooms)
+      }
     }
   }
-  const updateRooms = (index: number, newDevices: Array<string>) => {
-    const newRooms = Array.from(rooms)
-    newRooms[index].devices = newDevices
-    setRooms(newRooms)
+  const updateRoomDevices = (index: number, newDevices: Array<string>) => {
+    if (data) {
+      const newRooms = Array.from(data.rooms)
+      newRooms[index].devices = newDevices
+      updateRooms(newRooms)
+    }
   }
   const deleteRoom = (index: number) => {
-    const newRooms = Array.from(rooms)
-    newRooms.splice(index, 1)
-    setRooms(newRooms)
+    if (data) {
+      const newRooms = Array.from(data.rooms)
+      newRooms.splice(index, 1)
+      updateRooms(newRooms)
+    }
   }
   const reorderRooms = (source: number, destination: number) => {
-    const room = rooms[source]
-    const newRooms = Array.from(rooms)
-    newRooms.splice(source, 1)
-    newRooms.splice(destination, 0, room)
-    setRooms(newRooms)
+    if (data) {
+      const room = data.rooms[source]
+      const newRooms = Array.from(data.rooms)
+      newRooms.splice(source, 1)
+      newRooms.splice(destination, 0, room)
+      updateRooms(newRooms)
+    }
   }
+  // for Devices
   const updateDeviceName = (oldName: string, newName: string) => {
-    const device = devices.find((device: TDevice) => device.name === oldName)
-    if (device) {
-      const index = devices.indexOf(device)
-      var newDevices = Array.from(devices)
-      newDevices[index].name = newName
-      setDevices(newDevices)
+    if (data) {
+      const index = data.devices.findIndex((device: TDevice) => device.name === oldName)
+      if (index) {
+        var newDevices = Array.from(data.devices)
+        newDevices[index].name = newName
+        updateDevices(newDevices)
+      }
     }
   }
   const deleteDevice = (index: number) => {
-    const newDevices = Array.from(devices)
-    newDevices.splice(index, 1)
-    setDevices(newDevices)
+    if (data) {
+      const newDevices = Array.from(data.devices)
+      newDevices.splice(index, 1)
+      updateDevices(newDevices)
+    }
   }
   const reorderDevices = (source: number, destination: number) => {
-    const device = devices[source]
-    const newDevices = Array.from(devices)
-    newDevices.splice(source, 1)
-    newDevices.splice(destination, 0, device)
-    setDevices(newDevices)
+    if (data) {
+      const device = data.devices[source]
+      const newDevices = Array.from(data.devices)
+      newDevices.splice(source, 1)
+      newDevices.splice(destination, 0, device)
+      updateDevices(newDevices)
+    }
   }
+  //#endregion
 
   //-----------------------------------------------------------------
   return (
@@ -201,39 +229,44 @@ const Home: FC = () => {
               wrap={false}
               style={{ overflowX: 'auto' }}
             >
-              {rooms.map((room: TRoom, index: number) => (
-                <Room
-                  key={'Room-' + index}
-                  name={room.name}
-                  index={index}
-                  roomDevices={room.devices}
-                  devices={devices}
-                  updateRooms={updateRooms}
-                />
-              ))}
+              {data &&
+                data.rooms.map((room: TRoom, index: number) => (
+                  <Room
+                    key={'Room-' + index}
+                    name={room.name}
+                    index={index}
+                    roomDevices={room.devices}
+                    devices={data.devices}
+                    updateRoomDevices={updateRoomDevices}
+                  />
+                ))}
             </Box>
           </Box>
           <Dialog open={open} closeDialog={() => setOpen(false)}>
-            {mode === 'room' ? (
+            {data && (
               <>
-                <SwitchIcon icon="circleEmpty" onClick={() => setMode('device')} />
-                <RoomManagement
-                  addRoom={addRoom}
-                  updateRoomName={updateRoomName}
-                  reorderRooms={reorderRooms}
-                  deleteRoom={deleteRoom}
-                  rooms={rooms}
-                />
-              </>
-            ) : (
-              <>
-                <SwitchIcon icon="circleFull" onClick={() => setMode('room')} />
-                <DeviceManagement
-                  updateDeviceName={updateDeviceName}
-                  deleteDevice={deleteDevice}
-                  reorderDevices={reorderDevices}
-                  devices={devices}
-                />
+                {mode === 'room' ? (
+                  <>
+                    <SwitchIcon icon="circleEmpty" onClick={() => setMode('device')} />
+                    <RoomManagement
+                      addRoom={addRoom}
+                      updateRoomName={updateRoomName}
+                      reorderRooms={reorderRooms}
+                      deleteRoom={deleteRoom}
+                      rooms={data.rooms}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <SwitchIcon icon="circleFull" onClick={() => setMode('room')} />
+                    <DeviceManagement
+                      updateDeviceName={updateDeviceName}
+                      deleteDevice={deleteDevice}
+                      reorderDevices={reorderDevices}
+                      devices={data.devices}
+                    />
+                  </>
+                )}
               </>
             )}
           </Dialog>
