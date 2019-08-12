@@ -15,7 +15,7 @@ interface Props {
   onClick?: any
 }
 
-const Reload: FC<Props> = ({ onClick = null }) => {
+const Signout: FC<Props> = ({ onClick = null }) => {
   const [hover, setHover] = useState(false)
 
   return (
@@ -25,7 +25,7 @@ const Reload: FC<Props> = ({ onClick = null }) => {
         const wrapperSize = isMobile ? 40 : 50
         const iconSize = isMobile ? 25 : 30
         const top = isMobile ? 20 : 30
-        const right = isMobile ? 20 + wrapperSize : 40 + wrapperSize
+        const right = isMobile ? 30 + 2 * wrapperSize : 50 + 2 * wrapperSize
         return (
           <Box
             className="clickable"
@@ -51,7 +51,7 @@ const Reload: FC<Props> = ({ onClick = null }) => {
             onTouchEnd={() => setHover(false)}
             onClick={onClick}
           >
-            <Icon type="reload" active={false} width={iconSize + 'px'} height={iconSize + 'px'} />
+            <Icon type="signout" active={false} width={iconSize + 'px'} height={iconSize + 'px'} />
           </Box>
         )
       }}
@@ -59,4 +59,4 @@ const Reload: FC<Props> = ({ onClick = null }) => {
   )
 }
 
-export default Reload
+export default Signout

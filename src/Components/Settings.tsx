@@ -25,7 +25,7 @@ const Settings: FC<Props> = ({ onClick = null }) => {
         const wrapperSize = isMobile ? 40 : 50
         const iconSize = isMobile ? 30 : 35
         const top = isMobile ? 20 : 30
-        const right = isMobile ? 20 : 30
+        const right = isMobile ? 10 : 30
         return (
           <Box
             className="clickable"

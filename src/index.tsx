@@ -36,6 +36,9 @@ const App: FC = () => {
     if (user && !authenticated) {
       console.log('Authenticated User: ', user)
       setAuthenticated(true)
+    } else if (!user && authenticated) {
+      console.log('User logout!')
+      setAuthenticated(false)
     }
   })
 

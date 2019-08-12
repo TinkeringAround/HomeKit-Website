@@ -18,6 +18,7 @@ import RoomManagement from '../../Components/RoomManagement'
 import DeviceManagement from '../../Components/DeviceManagement'
 import Switch from '../../Components/Switch'
 import Reload from '../../Components/Reload'
+import Signout from '../../Components/Signout'
 
 //---------------------------------------------
 const Home: FC = () => {
@@ -47,32 +48,37 @@ const Home: FC = () => {
       .once('value')
       .then(snapshot => {
         if (snapshot.hasChildren()) {
-          console.log('Snapshot: ', snapshot.val())
           const tmpDatabase = snapshot.val()
           var rooms: Array<TRoom> = []
           var devices: Array<TDevice> = []
 
-          const roomKeys = Object.keys(tmpDatabase.rooms)
-          roomKeys.forEach(key => {
-            rooms = [
-              ...rooms,
-              {
-                name: key,
-                devices: tmpDatabase.rooms[key].devices
-              }
-            ]
-          })
+          if (tmpDatabase.hasOwnProperty('rooms')) {
+            console.log('Rooms: ', tmpDatabase.rooms)
+            const roomKeys = Object.keys(tmpDatabase.rooms)
+            roomKeys.forEach(key => {
+              rooms = [
+                ...rooms,
+                {
+                  name: key,
+                  devices: tmpDatabase.rooms[key].devices
+                }
+              ]
+            })
+          }
 
-          const deviceKeys = Object.keys(tmpDatabase.devices)
-          deviceKeys.forEach(key => {
-            devices = [
-              ...devices,
-              {
-                id: key,
-                name: tmpDatabase.devices[key].name
-              }
-            ]
-          })
+          if (tmpDatabase.hasOwnProperty('devices')) {
+            console.log('Devices: ', tmpDatabase.devices)
+            const deviceKeys = Object.keys(tmpDatabase.devices)
+            deviceKeys.forEach(key => {
+              devices = [
+                ...devices,
+                {
+                  id: key,
+                  name: tmpDatabase.devices[key].name
+                }
+              ]
+            })
+          }
 
           const data: TDatabase = {
             rooms: rooms,
@@ -223,6 +229,7 @@ const Home: FC = () => {
         </Box>
       ) : (
         <>
+          <Signout onClick={() => firebase.auth().signOut()} />
           <Reload onClick={fetchData} />
           <Settings onClick={() => setOpen(true)} />
           <Box height="100%" width="100%" justify="end">
@@ -251,7 +258,7 @@ const Home: FC = () => {
               <>
                 {mode === 'room' ? (
                   <>
-                    <Switch icon="circleEmpty" onClick={() => setMode('device')} />
+                    <Switch icon="circleEmpty" text="Geräten" onClick={() => setMode('device')} />
                     <RoomManagement
                       addRoom={addRoom}
                       updateRoomName={updateRoomName}
@@ -262,7 +269,7 @@ const Home: FC = () => {
                   </>
                 ) : (
                   <>
-                    <Switch icon="circleFull" onClick={() => setMode('room')} />
+                    <Switch icon="circleFull" text="Räumen" onClick={() => setMode('room')} />
                     <DeviceManagement
                       updateDeviceName={updateDeviceName}
                       deleteDevice={deleteDevice}

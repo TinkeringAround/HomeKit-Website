@@ -27,6 +27,7 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
     var newRoomDevices = Array.from(roomDevices)
     if (status) newRoomDevices.splice(deviceIndex, 1)
     else newRoomDevices.push(devices[deviceIndex].id)
+
     setOpen(false)
     updateRoomDevices(index, newRoomDevices)
   }
@@ -48,25 +49,73 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
         </Box>
       </Box>
       <Dialog open={open} closeDialog={() => setOpen(false)}>
-        <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
+        <Heading level="3" size="2em" color="headingInactive" margin="30px 0px">
           Raumverwaltung
         </Heading>
-        {devices.map((device: TDevice, index: number) => {
-          const active = roomDevices.find(roomDeviceID => roomDeviceID === device.id) ? true : false
-          return (
-            <Container
-              key={'RoomDevice-Dialog-' + index}
-              className="clickable"
-              margin="20px 0px 0px 0px"
-              onClick={() => selectDevice(index, active)}
-              active={active}
+        {roomDevices.length > 0 && (
+          <Box margin="0px 0px 40px 0px">
+            <Text size="1em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
+              Geräte entfernen:
+            </Text>
+            <Box style={{ overflowY: roomDevices.length > 3 ? 'auto' : 'visible' }}>
+              {roomDevices.map((deviceID: string, index: number) => {
+                const device: TDevice | undefined = devices.find(
+                  (device: TDevice) => device.id === deviceID
+                )
+                  ? devices.find((device: TDevice) => device.id === deviceID)
+                  : undefined
+                return (
+                  device && (
+                    <Container
+                      key={'RoomDevice-Dialog-' + index}
+                      className="clickable"
+                      margin="0px 0px 10px 0px"
+                      onClick={() => selectDevice(index, true)}
+                      active={false}
+                    >
+                      <Text size="large" weight="bold" color="headingInactive">
+                        {device.name}
+                      </Text>
+                    </Container>
+                  )
+                )
+              })}
+            </Box>
+          </Box>
+        )}
+
+        {devices.length > roomDevices.length && (
+          <Box>
+            <Text size="1em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
+              Geräte hinzufügen:
+            </Text>
+
+            <Box
+              style={{ overflowY: devices.length - roomDevices.length > 3 ? 'auto' : 'visible' }}
             >
-              <Text size="large" weight="bold" color={active ? 'headingActive' : 'headingInactive'}>
-                {device.name}
-              </Text>
-            </Container>
-          )
-        })}
+              {devices.map((device: TDevice, index: number) => {
+                const isRoomDevice = roomDevices.find(roomDeviceID => roomDeviceID === device.id)
+                  ? true
+                  : false
+                return (
+                  !isRoomDevice && (
+                    <Container
+                      key={'RoomDevice-Dialog-' + index}
+                      className="clickable"
+                      margin="0px 0px 10px 0px"
+                      onClick={() => selectDevice(index, isRoomDevice)}
+                      active={false}
+                    >
+                      <Text size="large" weight="bold" color="headingInactive">
+                        {device.name}
+                      </Text>
+                    </Container>
+                  )
+                )
+              })}
+            </Box>
+          </Box>
+        )}
       </Dialog>
     </>
   )
