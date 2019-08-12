@@ -16,6 +16,7 @@ export type TRoom = {
 export type TDevice = {
   id: string
   name: string
+  lastActive: string
 }
 
 export type TStyled = {

@@ -33,7 +33,7 @@ export const NameInput = styled.input`
   font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.5em')};
   font-weight: bold;
   border: none;
-  width: 75%;
+  width: 65%;
   padding: 0px;
   color: ${theme.global.colors.iconInactive};
   background-color: ${theme.global.colors.deviceInactive};

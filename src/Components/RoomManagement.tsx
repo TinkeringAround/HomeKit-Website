@@ -73,11 +73,15 @@ const RoomManagement: FC<Props> = ({
                             ref={provided.innerRef}
                           >
                             <NameInput
-                              fontSize={isMobile ? '1em' : '1.5em'}
+                              fontSize={isMobile ? '0.9em' : '1.2em'}
                               placeholder={room.name}
                               onKeyPress={onRoomNameChanged}
                             />
-                            <Text size="0.75em" color="iconInactive">
+                            <Text
+                              size={isMobile ? '0.5em' : '0.65em'}
+                              color="iconInactive"
+                              textAlign="end"
+                            >
                               {'Devices: ' + room.devices.length}
                             </Text>
                           </Container>

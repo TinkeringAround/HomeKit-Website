@@ -50,11 +50,16 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
       </Box>
       <Dialog open={open} closeDialog={() => setOpen(false)}>
         <Heading level="3" size="2em" color="headingInactive" margin="30px 0px">
-          Raumverwaltung
+          {name}
         </Heading>
         {roomDevices.length > 0 && (
           <Box margin="0px 0px 40px 0px">
-            <Text size="1em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
+            <Text
+              size="0.75em"
+              color="headingInactive"
+              margin="10px 0px"
+              style={{ paddingLeft: 5 }}
+            >
               Geräte entfernen:
             </Text>
             <Box style={{ overflowY: roomDevices.length > 3 ? 'auto' : 'visible' }}>
@@ -73,7 +78,7 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
                       onClick={() => selectDevice(index, true)}
                       active={false}
                     >
-                      <Text size="large" weight="bold" color="headingInactive">
+                      <Text size="1em" weight="bold" color="headingInactive">
                         {device.name}
                       </Text>
                     </Container>

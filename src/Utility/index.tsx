@@ -1,4 +1,5 @@
-import * as moment from 'moment'
+import moment from 'moment'
+import 'moment/locale/de'
 
 //-----------------------------------------------
 export const hexToRGBA = (hexColor: string, opacity: string) => {
@@ -37,4 +38,23 @@ export const typeToUnit = (type: string) => {
 export const deviceIsActive = (timestamp: string) => {
   if (timestamp === '') return false
   return -moment.unix(parseInt(timestamp)).diff(moment.now(), 'hours') < 1 ? true : false
+}
+
+export const isToday = (timestamp: string) => {
+  if (timestamp === '') return false
+  return moment.unix(parseInt(timestamp)).isSame(moment(), 'days')
+}
+
+export const deviceLastActiveTime = (timestamp: string) => {
+  if (timestamp === '') return ''
+
+  moment.locale('de')
+  return moment.unix(parseInt(timestamp)).format('h.mm') + ' Uhr'
+}
+
+export const deviceLastActiveDate = (timestamp: string) => {
+  if (timestamp === '') return ''
+
+  moment.locale('de')
+  return moment.unix(parseInt(timestamp)).format('Do MMMM')
 }

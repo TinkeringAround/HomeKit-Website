@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Heading, ResponsiveContext } from 'grommet'
+import { Heading, ResponsiveContext, Text } from 'grommet'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 // Types
@@ -7,6 +7,9 @@ import { TDevice } from '../Types'
 
 // Custom Components
 import { Column, Container, NameInput } from '../Atoms/StyledComponents'
+
+// Utilities
+import { deviceLastActiveTime, isToday, deviceLastActiveDate } from '../Utility'
 
 //----------------------------------------------
 interface Props {
@@ -71,10 +74,24 @@ const DeviceManagement: FC<Props> = ({
                             ref={provided.innerRef}
                           >
                             <NameInput
-                              fontSize={isMobile ? '1em' : '1.5em'}
+                              fontSize={isMobile ? '0.9em' : '1.2em'}
                               placeholder={device.name}
                               onKeyPress={onDeviceNameChanged}
                             />
+                            <Text
+                              size={isMobile ? '0.5em' : '0.65em'}
+                              color="iconInactive"
+                              textAlign="end"
+                            >
+                              {'Letzte Aktivität'}
+                              <br />
+                              {isToday(device.lastActive) &&
+                                'heute, ' + deviceLastActiveTime(device.lastActive)}
+                              {!isToday(device.lastActive) &&
+                                deviceLastActiveDate(device.lastActive) +
+                                  ', ' +
+                                  deviceLastActiveTime(device.lastActive)}
+                            </Text>
                           </Container>
                         )}
                       </Draggable>

@@ -74,7 +74,8 @@ const Home: FC = () => {
                 ...devices,
                 {
                   id: key,
-                  name: tmpDatabase.devices[key].name
+                  name: tmpDatabase.devices[key].name,
+                  lastActive: tmpDatabase.devices[key].lastActive
                 }
               ]
             })
