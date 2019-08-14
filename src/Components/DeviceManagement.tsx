@@ -74,6 +74,7 @@ const DeviceManagement: FC<Props> = ({
                             ref={provided.innerRef}
                           >
                             <NameInput
+                              type="text"
                               fontSize={isMobile ? '0.9em' : '1.2em'}
                               placeholder={device.name}
                               onKeyPress={onDeviceNameChanged}

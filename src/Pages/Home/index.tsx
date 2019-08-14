@@ -120,7 +120,7 @@ const Home: FC = () => {
     if (data) {
       var updates: any = {}
       newDevices.forEach(device => {
-        updates['devices/' + device.id] = { name: device.name }
+        updates['devices/' + device.id] = { name: device.name, lastActive: device.lastActive }
       })
       console.log('Device Updates: ', updates)
       firebase
@@ -196,7 +196,7 @@ const Home: FC = () => {
   const updateDeviceName = (oldName: string, newName: string) => {
     if (data) {
       const index = data.devices.findIndex((device: TDevice) => device.name === oldName)
-      if (index) {
+      if (index >= 0) {
         var newDevices = Array.from(data.devices)
         newDevices[index].name = newName
         updateDevices(newDevices)

@@ -26,15 +26,17 @@ const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
         const isMobile = size.includes('small')
         return (
           <>
-            <Text
+            <Box
               className="animated"
-              size="0.8em"
-              color="headingInactive"
+              direction="row"
+              align="center"
               style={{ position: 'absolute', top: '0.2em', right: isMobile ? 50 : 40 }}
             >
-              {'Zu den ' + text}
+              <Text size="0.8em" color="headingInactive" margin="0px 5px">
+                {'Zu den ' + text}
+              </Text>
               <Icon type="arrowRight" active={false} height="0.8em" width="1em" />
-            </Text>
+            </Box>
             <Box
               className="clickable"
               background="iconWrapperInactive"
