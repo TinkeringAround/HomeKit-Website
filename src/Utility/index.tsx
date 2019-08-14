@@ -49,7 +49,7 @@ export const deviceLastActiveTime = (timestamp: string) => {
   if (timestamp === '') return ''
 
   moment.locale('de')
-  return moment.unix(parseInt(timestamp)).format('h.mm') + ' Uhr'
+  return moment.unix(parseInt(timestamp)).format('HH.mm') + ' Uhr'
 }
 
 export const deviceLastActiveDate = (timestamp: string) => {
