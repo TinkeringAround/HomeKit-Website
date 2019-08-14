@@ -70,7 +70,7 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
 
   //#region Content Component
   const type = id && data ? data.type : null
-  const active = deviceIsActive(data ? data.lastUpdated : '')
+  const active = deviceIsActive(data ? data.type : '', data ? data.lastUpdated : '')
   const spinnerColor =
     id && active ? theme.global.colors.iconActive : theme.global.colors.iconInactive
   const color = id && active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive

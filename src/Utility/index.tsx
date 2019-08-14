@@ -35,9 +35,19 @@ export const typeToUnit = (type: string) => {
 }
 
 //-----------------------------------------------
-export const deviceIsActive = (timestamp: string) => {
-  if (timestamp === '') return false
-  return -moment.unix(parseInt(timestamp)).diff(moment.now(), 'hours') < 1 ? true : false
+export const deviceIsActive = (type: string, timestamp: string) => {
+  if (type === '' || timestamp === '') return false
+
+  if (isToday(timestamp)) {
+    switch (type) {
+      case 'sensor':
+        return (
+          moment.unix(parseInt(timestamp)).diff(moment.now(), 'hours') === 0 &&
+          -moment.unix(parseInt(timestamp)).diff(moment.now(), 'minutes') < 30
+        )
+    }
+  }
+  return false
 }
 
 export const isToday = (timestamp: string) => {
