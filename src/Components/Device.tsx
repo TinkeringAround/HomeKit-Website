@@ -1,8 +1,9 @@
 import React, { FC, useState, useEffect } from 'react'
-import { Box, Text } from 'grommet'
+import { Box, Text, Heading } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 import ClickNHold from 'react-click-n-hold'
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 // Theme
 import { theme } from '../theme'
@@ -15,12 +16,15 @@ import { Icon } from '../Atoms/Icons'
 
 // Custom Components
 import Variable from './Variable'
+import Overlay from './Overlay'
 
 // Utility
 import { deviceIsActive, hexToRGBA } from '../Utility'
 
-//--------------------------------------------
+// TODO: REMOVE DUMMY DATA
+const dummyData = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }]
 
+//--------------------------------------------
 interface Props {
   id: string | null
   name?: string
@@ -29,6 +33,7 @@ interface Props {
 
 const Device: FC<Props> = ({ id, name, onClick = null }) => {
   const [hover, setHover] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false)
   const [data, setData] = useState<TDeviceData>()
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -112,54 +117,73 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
 
   const showDetails = () => {
     console.log('Click N Hold...')
-    // TODO: Show Charts
+    setShow(true)
   }
 
   //--------------------------------------------------------------
   return (
-    <Box
-      className="square clickable"
-      background={id && active ? 'deviceActive' : 'deviceInactive'}
-      style={{
-        transition: '0.2s all',
-        transform: hover ? 'scale(1.01)' : 'scale(1)',
-        boxShadow: hover ? '0px 0px 5px 1px ' + hexToRGBA(color, '0.2') : 'none'
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onTouchStart={() => setHover(true)}
-      onTouchEnd={() => setHover(false)}
-      onClick={onClick ? onClick : reload}
-    >
-      <ClickNHold time={0.5} onClickNHold={showDetails}>
-        <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
-          {loading ? (
-            <Box width="100%" height="100%" justify="center" align="center">
-              <CircleSpinner color={spinnerColor} />
-            </Box>
-          ) : (
-            <>
-              <Box
-                width="30%"
-                height="30%"
-                justify="center"
-                align="center"
-                background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
-                style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
-              >
-                <Icon
-                  type={type}
-                  active={active}
-                  width={type ? '80%' : '40%'}
-                  height={type ? '80%' : '40%'}
-                />
+    <>
+      <Box
+        className="square clickable"
+        background={id && active ? 'deviceActive' : 'deviceInactive'}
+        style={{
+          transition: '0.2s all',
+          transform: hover ? 'scale(1.01)' : 'scale(1)',
+          boxShadow: hover ? '0px 0px 5px 1px ' + hexToRGBA(color, '0.2') : 'none'
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onTouchStart={() => setHover(true)}
+        onTouchEnd={() => setHover(false)}
+        onClick={onClick ? onClick : reload}
+      >
+        <ClickNHold time={0.5} onClickNHold={showDetails}>
+          <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
+            {loading ? (
+              <Box width="100%" height="100%" justify="center" align="center">
+                <CircleSpinner color={spinnerColor} />
               </Box>
-              {id && <Content />}
-            </>
-          )}
+            ) : (
+              <>
+                <Box
+                  width="30%"
+                  height="30%"
+                  justify="center"
+                  align="center"
+                  background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
+                  style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
+                >
+                  <Icon
+                    type={type}
+                    active={active}
+                    width={type ? '80%' : '40%'}
+                    height={type ? '80%' : '40%'}
+                  />
+                </Box>
+                {id && <Content />}
+              </>
+            )}
+          </Box>
+        </ClickNHold>
+      </Box>
+      <Overlay open={data !== undefined && show} closeDialog={() => setShow(false)}>
+        <Heading level="2" margin="0px" size="3em">
+          {name}
+        </Heading>
+        <Box width="100%" justify="center" align="start">
+          <LineChart
+            width={window.innerWidth * 0.9}
+            height={window.innerHeight * 0.3}
+            data={dummyData}
+          >
+            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+            <CartesianGrid stroke="#ccc" />
+            <XAxis dataKey="name" />
+            <YAxis />
+          </LineChart>
         </Box>
-      </ClickNHold>
-    </Box>
+      </Overlay>
+    </>
   )
 }
 
