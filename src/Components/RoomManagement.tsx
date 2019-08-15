@@ -68,6 +68,7 @@ const RoomManagement: FC<Props> = ({
                       >
                         {provided => (
                           <Container
+                            margin="0px 0px 10px 0px"
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}

@@ -12,6 +12,7 @@ export const Input = styled.input`
   font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.25em')};
   border: none;
   border-radius: 10px;
+  margin-bottom: 10px;
   width: 100%;
   height: 50px;
   padding: 0px;

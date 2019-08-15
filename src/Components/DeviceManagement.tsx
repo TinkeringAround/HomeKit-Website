@@ -53,7 +53,7 @@ const DeviceManagement: FC<Props> = ({
         const isMobile = size.includes('small')
         return (
           <>
-            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
+            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 20px 0px">
               Geräte und Sensoren
             </Heading>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -68,7 +68,7 @@ const DeviceManagement: FC<Props> = ({
                       >
                         {provided => (
                           <Container
-                            margin="20px 0px 0px 0px"
+                            margin="0px 0px 10px 0px"
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}

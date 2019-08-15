@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react'
 import { Box, Text } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
+import ClickNHold from 'react-click-n-hold'
 
 // Theme
 import { theme } from '../theme'
@@ -109,6 +110,11 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
   // Handlers
   const reload = () => setLoading(true)
 
+  const showDetails = () => {
+    console.log('Click N Hold...')
+    // TODO: Show Charts
+  }
+
   //--------------------------------------------------------------
   return (
     <Box
@@ -125,32 +131,34 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
       onTouchEnd={() => setHover(false)}
       onClick={onClick ? onClick : reload}
     >
-      <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
-        {loading ? (
-          <Box width="100%" height="100%" justify="center" align="center">
-            <CircleSpinner color={spinnerColor} />
-          </Box>
-        ) : (
-          <>
-            <Box
-              width="30%"
-              height="30%"
-              justify="center"
-              align="center"
-              background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
-              style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
-            >
-              <Icon
-                type={type}
-                active={active}
-                width={type ? '80%' : '40%'}
-                height={type ? '80%' : '40%'}
-              />
+      <ClickNHold time={0.5} onClickNHold={showDetails}>
+        <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
+          {loading ? (
+            <Box width="100%" height="100%" justify="center" align="center">
+              <CircleSpinner color={spinnerColor} />
             </Box>
-            {id && <Content />}
-          </>
-        )}
-      </Box>
+          ) : (
+            <>
+              <Box
+                width="30%"
+                height="30%"
+                justify="center"
+                align="center"
+                background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
+                style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
+              >
+                <Icon
+                  type={type}
+                  active={active}
+                  width={type ? '80%' : '40%'}
+                  height={type ? '80%' : '40%'}
+                />
+              </Box>
+              {id && <Content />}
+            </>
+          )}
+        </Box>
+      </ClickNHold>
     </Box>
   )
 }

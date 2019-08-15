@@ -49,7 +49,7 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
         </Box>
       </Box>
       <Dialog open={open} closeDialog={() => setOpen(false)}>
-        <Heading level="3" size="2em" color="headingInactive" margin="30px 5px">
+        <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
           {name}
         </Heading>
         {roomDevices.length > 0 && (
