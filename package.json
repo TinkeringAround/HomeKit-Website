@@ -4,14 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/node": "^12.6.8",
-    "@types/react": "^16.8.23",
-    "@types/react-beautiful-dnd": "^11.0.2",
-    "@types/react-dom": "^16.8.5",
-    "@types/react-portal": "^4.0.2",
-    "@types/recharts": "^1.1.20",
-    "@types/styled-components": "^4.1.18",
+    "@nivo/line": "^0.59.3",
     "firebase": "^6.3.3",
     "grommet": "^2.7.4",
     "moment": "^2.24.0",
@@ -23,8 +16,16 @@
     "react-pose": "^4.0.8",
     "react-scripts": "3.0.1",
     "react-spinners-kit": "^1.9.0",
-    "recharts": "^1.7.1",
-    "styled-components": "^4.3.2",
+    "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
+    "@types/react": "^16.8.23",
+    "@types/react-beautiful-dnd": "^11.0.2",
+    "@types/react-dom": "^16.8.5",
+    "@types/react-portal": "^4.0.2",
+    "@types/styled-components": "^4.1.18",
     "typescript": "^3.5.3"
   },
   "scripts": {

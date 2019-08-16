@@ -36,3 +36,19 @@ export type TVariable = {
   variable: string
   value: string
 }
+
+export type THistory = {
+  legend: string
+  steps: string
+  lines: Array<any>
+}
+
+export type TMeasurement = {
+  timestamp: string
+  value: string
+}
+
+export type TChartData = {
+  x: string
+  y: string
+}

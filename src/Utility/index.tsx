@@ -52,7 +52,7 @@ export const deviceIsActive = (type: string, timestamp: string) => {
 
 export const isToday = (timestamp: string) => {
   if (timestamp === '') return false
-  return moment.unix(parseInt(timestamp)).isSame(moment(), 'days')
+  return moment.unix(parseInt(timestamp)).isSame(moment.now(), 'days')
 }
 
 export const deviceLastActiveTime = (timestamp: string) => {
@@ -67,4 +67,37 @@ export const deviceLastActiveDate = (timestamp: string) => {
 
   moment.locale('de')
   return moment.unix(parseInt(timestamp)).format('Do MMMM')
+}
+
+export const timestampToDate = (timestamp: string) => {
+  if (timestamp === '') return ''
+
+  moment.locale('de')
+  return moment.unix(parseInt(timestamp)).format('DD.MM.YYYY')
+}
+
+export const timestampToTime = (timestamp: string) => {
+  if (timestamp === '') return ''
+
+  moment.locale('de')
+  return moment.unix(parseInt(timestamp)).format('HH.mm')
+}
+
+export const timestampsToArea = (start: string, end: string) => {
+  if (start === '' || end === '') return ''
+
+  moment.locale('de')
+  const startDate = timestampToDate(start)
+  const endDate = timestampToDate(end)
+
+  if (moment.unix(parseInt(start)).isSame(moment.unix(parseInt(end)), 'day')) return startDate
+  else return startDate + ' - ' + endDate
+}
+
+export const valueCountToSteps = (count: number): string => {
+  if (count < 10) return 'every 5 minutes'
+  else if (count >= 10 && count < 50) return 'every hour'
+  else if (count >= 50 && count < 150) return 'every 3 hours'
+  else if (count >= 150 && count < 1000) return 'every day'
+  else return 'every 3 days'
 }
