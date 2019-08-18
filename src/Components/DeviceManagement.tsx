@@ -25,6 +25,7 @@ const DeviceManagement: FC<Props> = ({
   deleteDevice,
   reorderDevices
 }) => {
+  // Handler Methods
   const onDragEnd = (result: DropResult) => {
     if (devices.length === 0) deleteDevice(result.source.index)
     else {
@@ -36,7 +37,6 @@ const DeviceManagement: FC<Props> = ({
       }
     }
   }
-
   const onDeviceNameChanged = (event: any) => {
     const oldName = event.target.placeholder
     const newName = event.target.value
@@ -86,12 +86,12 @@ const DeviceManagement: FC<Props> = ({
                             >
                               {'Letzte Aktivität'}
                               <br />
-                              {isToday(device.lastActive) &&
-                                'heute, ' + deviceLastActiveTime(device.lastActive)}
-                              {!isToday(device.lastActive) &&
-                                deviceLastActiveDate(device.lastActive) +
+                              {isToday(device.lastUpdated) &&
+                                'heute, ' + deviceLastActiveTime(device.lastUpdated)}
+                              {!isToday(device.lastUpdated) &&
+                                deviceLastActiveDate(device.lastUpdated) +
                                   ', ' +
-                                  deviceLastActiveTime(device.lastActive)}
+                                  deviceLastActiveTime(device.lastUpdated)}
                             </Text>
                           </Container>
                         )}

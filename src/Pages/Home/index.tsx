@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 
 // Types
-import { TRoom, TDevice, TDatabase } from '../../Types/'
+import { TRoom, TDevice, TDatabase, TVariable } from '../../Types/'
 
 // Theme
 import { theme } from '../../theme'
@@ -70,12 +70,26 @@ const Home: FC = () => {
             console.log('Devices: ', tmpDatabase.devices)
             const deviceKeys = Object.keys(tmpDatabase.devices)
             deviceKeys.forEach(key => {
+              var values: Array<TVariable> = []
+              Object.keys(tmpDatabase.devices[key].values).forEach(deviceKey => {
+                values = [
+                  ...values,
+                  {
+                    variable: deviceKey,
+                    value: tmpDatabase.devices[key].values[deviceKey]
+                  }
+                ]
+              })
+
               devices = [
                 ...devices,
                 {
                   id: key,
                   name: tmpDatabase.devices[key].name,
-                  lastActive: tmpDatabase.devices[key].lastActive
+                  lastUpdated: tmpDatabase.devices[key].lastUpdated,
+                  type: tmpDatabase.devices[key].type,
+                  battery: tmpDatabase.devices[key].battery,
+                  values: values
                 }
               ]
             })
@@ -120,7 +134,21 @@ const Home: FC = () => {
     if (data) {
       var updates: any = {}
       newDevices.forEach(device => {
-        updates['devices/' + device.id] = { name: device.name, lastActive: device.lastActive }
+        var values = {}
+        device.values.forEach((variable: TVariable) => {
+          values = {
+            ...values,
+            [variable.variable]: variable.value
+          }
+        })
+
+        updates['devices/' + device.id] = {
+          name: device.name,
+          lastUpdated: device.lastUpdated,
+          battery: device.battery,
+          type: device.type,
+          values: values
+        }
       })
       console.log('Device Updates: ', updates)
       firebase

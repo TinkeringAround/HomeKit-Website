@@ -3,12 +3,13 @@ import { Box, Text, Heading, ResponsiveContext } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 import ClickNHold from 'react-click-n-hold'
+import Line from './Charts/Line'
 
 // Theme
 import { theme } from '../theme'
 
 // Types
-import { TDeviceData, TVariable } from '../Types'
+import { TVariable, TDevice } from '../Types'
 
 // Atoms
 import { Icon } from '../Atoms/Icons'
@@ -19,27 +20,25 @@ import Overlay from './Overlay'
 
 // Utility
 import { deviceIsActive, hexToRGBA } from '../Utility'
-import Line from './Charts/Line'
 
 //--------------------------------------------
 interface Props {
   id: string | null
-  name?: string
+  data: TDevice | undefined
   onClick?: any
 }
 
-const Device: FC<Props> = ({ id, name, onClick = null }) => {
+const Device: FC<Props> = ({ id, data, onClick = null }) => {
   const [hover, setHover] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(false)
-  const [data, setData] = useState<TDeviceData>()
-  const [loading, setLoading] = useState<boolean>(true)
+  const [deviceData, setDeviceData] = useState<TDevice | undefined>(data)
 
   // Life Cycle
   useEffect(() => {
-    if (id && (!data || loading)) {
+    if (id && deviceData === undefined) {
       firebase
         .database()
-        .ref('/data/' + id)
+        .ref('/devices/' + id)
         .once('value')
         .then(snapshot => {
           if (snapshot.hasChildren()) {
@@ -55,31 +54,32 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
               ]
             })
 
-            const deviceData: TDeviceData = {
+            const newDeviceData: TDevice = {
               id: snapshot.key ? snapshot.key : '',
+              name: tmpDatabase.name,
               type: tmpDatabase.type,
               lastUpdated: tmpDatabase.lastUpdated,
+              battery: tmpDatabase.battery,
               values: values
             }
-            setData(deviceData)
+            setDeviceData(newDeviceData)
           }
         })
-    } else setLoading(false)
-  })
-
-  useEffect(() => {
-    if (data && loading) setLoading(false)
-  }, [data])
+    }
+  }, [deviceData])
 
   //#region Content Component
-  const type = id && data ? data.type : null
-  const active = deviceIsActive(data ? data.type : '', data ? data.lastUpdated : '')
+  const type = id && deviceData !== undefined ? deviceData.type : null
+  const active = deviceIsActive(
+    deviceData !== undefined ? deviceData.type : '',
+    deviceData !== undefined ? deviceData.lastUpdated : ''
+  )
   const spinnerColor =
     id && active ? theme.global.colors.iconActive : theme.global.colors.iconInactive
   const color = id && active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive
 
   const Content: FC = () => {
-    return (
+    return deviceData !== undefined ? (
       <Box width="100%" height="35%" align="center" margin="5% 0 0 0">
         <Box width="90%">
           <Text
@@ -88,29 +88,30 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
             textAlign="center"
             color={active ? 'headingActive' : 'headingInactive'}
           >
-            {name}
+            {deviceData.name}
           </Text>
         </Box>
         <Box direction="row" justify="evenly" height="50%" width="90%">
-          {data &&
-            data.values.map((variable: TVariable, index: number) => (
-              <Variable
-                key={'Device-' + id + '-Variable-' + index}
-                type={variable.variable}
-                value={variable.value}
-                active={active}
-                count={data.values.length}
-                index={index}
-              />
-            ))}
+          {deviceData.values.map((variable: TVariable, index: number) => (
+            <Variable
+              key={'Device-' + id + '-Variable-' + index}
+              type={variable.variable}
+              value={variable.value}
+              active={active}
+              count={deviceData.values.length}
+              index={index}
+            />
+          ))}
         </Box>
       </Box>
+    ) : (
+      <></>
     )
   }
   //#endregion
 
   // Handlers
-  const reload = () => setLoading(true)
+  const reload = () => setDeviceData(undefined)
   const showDetails = () => setShow(true)
 
   //--------------------------------------------------------------
@@ -136,7 +137,7 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
             >
               <ClickNHold time={0.5} onClickNHold={showDetails}>
                 <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
-                  {loading ? (
+                  {id !== null && deviceData === undefined ? (
                     <Box width="100%" height="100%" justify="center" align="center">
                       <CircleSpinner color={spinnerColor} />
                     </Box>
@@ -164,12 +165,21 @@ const Device: FC<Props> = ({ id, name, onClick = null }) => {
               </ClickNHold>
             </Box>
             <Overlay open={data !== undefined && show} closeDialog={() => setShow(false)}>
-              <Heading level="2" margin="0px" size="3em">
-                {name}
-              </Heading>
-              <Box width="100%" height={isMobile ? '80%' : '50%'} justify="center" align="start">
-                {data !== undefined && show && <Line id={id} />}
-              </Box>
+              {deviceData !== undefined && (
+                <>
+                  <Heading level="2" margin="0px" size="3em">
+                    {deviceData.name}
+                  </Heading>
+                  <Box
+                    width="100%"
+                    height={isMobile ? '80%' : '50%'}
+                    justify="center"
+                    align="start"
+                  >
+                    {show && <Line id={id} />}
+                  </Box>
+                </>
+              )}
             </Overlay>
           </>
         )

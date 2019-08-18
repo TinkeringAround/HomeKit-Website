@@ -1,8 +1,10 @@
+// Login
 export type TCredential = {
   email: string
   password: string
 }
 
+// Home
 export type TDatabase = {
   rooms: Array<TRoom>
   devices: Array<TDevice>
@@ -16,19 +18,9 @@ export type TRoom = {
 export type TDevice = {
   id: string
   name: string
-  lastActive: string
-}
-
-export type TStyled = {
-  margin?: string
-  active?: boolean
-  fontSize?: string
-}
-
-export type TDeviceData = {
-  id: string
-  type: string
   lastUpdated: string
+  battery: number
+  type: string
   values: Array<TVariable>
 }
 
@@ -37,6 +29,14 @@ export type TVariable = {
   value: string
 }
 
+// Styled Atoms
+export type TStyled = {
+  margin?: string
+  active?: boolean
+  fontSize?: string
+}
+
+// Charts
 export type THistory = {
   legend: string
   steps: string
