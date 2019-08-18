@@ -167,12 +167,12 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
             <Overlay open={data !== undefined && show} closeDialog={() => setShow(false)}>
               {deviceData !== undefined && (
                 <>
-                  <Heading level="2" margin="0px" size="3em">
+                  <Heading level="2" margin="0px" size="3em" color="headingInactive">
                     {deviceData.name}
                   </Heading>
                   <Box
                     width="100%"
-                    height={isMobile ? '80%' : '50%'}
+                    height={isMobile ? '90%' : '90%'}
                     justify="center"
                     align="start"
                   >

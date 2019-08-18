@@ -1,3 +1,5 @@
+import { ColorSchemeId } from '@nivo/colors'
+
 // Login
 export type TCredential = {
   email: string
@@ -37,10 +39,21 @@ export type TStyled = {
 }
 
 // Charts
-export type THistory = {
-  legend: string
+export type TDataStream = {
   steps: string
-  lines: Array<any>
+  lines: Array<TLine>
+}
+
+export type TLine = {
+  id: string
+  color: ColorSchemeId
+  scale: TScale
+  data: Array<TChartData>
+}
+
+export type TScale = {
+  min: number | 'auto'
+  max: number | 'auto'
 }
 
 export type TMeasurement = {

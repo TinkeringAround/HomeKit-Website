@@ -1,5 +1,23 @@
 import moment from 'moment'
 import 'moment/locale/de'
+import { ColorSchemeId } from '@nivo/colors'
+
+// Types
+import { TScale } from '../Types'
+
+//-----------------------------------------------
+export const typeToLegend = (type: string): string => {
+  switch (type) {
+    case 'temperature':
+      return 'Temperatur in ' + typeToUnit(type)
+    case 'humidity':
+      return 'Feuchtigkeit in ' + typeToUnit(type)
+    case 'battery':
+      return 'Batteriespannung in ' + typeToUnit(type)
+    default:
+      return ''
+  }
+}
 
 //-----------------------------------------------
 export const hexToRGBA = (hexColor: string, opacity: string) => {
@@ -22,6 +40,19 @@ export const hexToRGBA = (hexColor: string, opacity: string) => {
   return rgba
 }
 
+export const typeToColor = (type: string): ColorSchemeId => {
+  switch (type) {
+    case 'temperature':
+      return 'pastel1'
+    case 'humidity':
+      return 'pastel2'
+    case 'battery':
+      return 'category10'
+    default:
+      return 'greys'
+  }
+}
+
 //-----------------------------------------------
 export const typeToUnit = (type: string) => {
   switch (type) {
@@ -29,9 +60,29 @@ export const typeToUnit = (type: string) => {
       return '°C'
     case 'humidity':
       return '%'
+    case 'battery':
+      return 'V'
     default:
       return ''
   }
+}
+
+export const typeToScale = (type: string): TScale => {
+  switch (type) {
+    case 'temperature':
+      return { min: 0, max: 35 }
+    case 'humidity':
+      return { min: 0, max: 80 }
+    case 'battery':
+      return { min: 2, max: 3.8 }
+    default:
+      return { min: 'auto', max: 'auto' }
+  }
+}
+
+export const parseMeasurement = (type: string, value: string): string => {
+  if (type === 'battery') return (parseInt(value) / 1000).toString()
+  else return value
 }
 
 //-----------------------------------------------
@@ -55,6 +106,7 @@ export const isToday = (timestamp: string) => {
   return moment.unix(parseInt(timestamp)).isSame(moment.now(), 'days')
 }
 
+//-------------------------------------------------------------
 export const deviceLastActiveTime = (timestamp: string) => {
   if (timestamp === '') return ''
 
@@ -69,29 +121,15 @@ export const deviceLastActiveDate = (timestamp: string) => {
   return moment.unix(parseInt(timestamp)).format('Do MMMM')
 }
 
-export const timestampToDate = (timestamp: string) => {
-  if (timestamp === '') return ''
-
-  moment.locale('de')
-  return moment.unix(parseInt(timestamp)).format('DD.MM.YYYY')
-}
-
+//-------------------------------------------------------------
 export const timestampToTime = (timestamp: string) => {
   if (timestamp === '') return ''
 
   moment.locale('de')
-  return moment.unix(parseInt(timestamp)).format('HH.mm')
-}
-
-export const timestampsToArea = (start: string, end: string) => {
-  if (start === '' || end === '') return ''
-
-  moment.locale('de')
-  const startDate = timestampToDate(start)
-  const endDate = timestampToDate(end)
-
-  if (moment.unix(parseInt(start)).isSame(moment.unix(parseInt(end)), 'day')) return startDate
-  else return startDate + ' - ' + endDate
+  return moment
+    .unix(parseInt(timestamp))
+    .subtract(1, 'hour')
+    .format('HH.mm')
 }
 
 export const valueCountToSteps = (count: number): string => {
