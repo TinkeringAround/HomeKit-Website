@@ -6,6 +6,9 @@ import { Box, ResponsiveContext, Heading } from 'grommet'
 // Types
 import { TMeasurement, TChartData, TDataStream, TLine } from '../../Types'
 
+// Theme
+import { theme } from '../../theme'
+
 // Utility
 import {
   timestampToTime,
@@ -13,8 +16,40 @@ import {
   typeToScale,
   parseMeasurement,
   typeToColor,
-  typeToLegend
+  typeToLegend,
+  valueCountToFormat,
+  valueCountToAxisBottom
 } from '../../Utility'
+
+// Consts
+const chartTheme = {
+  axis: {
+    domain: {
+      line: {
+        stroke: theme.global.colors.headingInactive
+      }
+    },
+    ticks: {
+      line: {
+        stroke: theme.global.colors.headingInactive
+      },
+      text: {
+        fill: theme.global.colors.headingInactive
+      }
+    }
+  },
+  grid: {
+    line: {
+      stroke: theme.global.colors.iconWrapperInactive,
+      strokeWidth: 1
+    }
+  },
+  tooltip: {
+    basic: {
+      color: theme.global.colors.dark
+    }
+  }
+}
 
 //--------------------------------------------------------------
 export interface Props {
@@ -34,7 +69,9 @@ const LineChart: FC<Props> = ({ id }) => {
           const measurements = snapshot.val()
           let newData: TDataStream = {
             steps: '',
-            lines: []
+            lines: [],
+            format: '',
+            axisBottom: ''
           }
 
           // Parse Data
@@ -43,7 +80,7 @@ const LineChart: FC<Props> = ({ id }) => {
             const data: Array<TChartData> = []
             measurements[key].forEach((measurement: TMeasurement) => {
               data.push({
-                x: timestampToTime(measurement.timestamp),
+                x: timestampToTime(measurement.timestamp, measurements[key].length),
                 y: parseMeasurement(key, measurement.value)
               })
             })
@@ -61,7 +98,9 @@ const LineChart: FC<Props> = ({ id }) => {
           const elements: Array<TMeasurement> = measurements[keys[0]]
           newData = {
             ...newData,
-            steps: valueCountToSteps(elements.length)
+            steps: valueCountToSteps(elements.length),
+            format: valueCountToFormat(elements.length),
+            axisBottom: valueCountToAxisBottom(elements.length)
           }
 
           console.log('Lines: ', newData)
@@ -80,7 +119,7 @@ const LineChart: FC<Props> = ({ id }) => {
             {data !== null ? (
               data.lines.map((line: TLine, index: number) => {
                 const height = 100 / data.lines.length
-                const headingMargin = isMobile ? '20px 0px -20px 20px' : '30px 0px -40px 40px'
+                const headingMargin = isMobile ? '20px 0px -20px 30px' : '30px 0px -40px 50px'
                 const margin = isMobile ? 30 : 50
 
                 return (
@@ -98,10 +137,10 @@ const LineChart: FC<Props> = ({ id }) => {
                       margin={{ top: margin, right: margin, bottom: margin, left: margin }}
                       xScale={{
                         type: 'time',
-                        format: '%H.%M',
+                        format: data.format,
                         precision: 'minute'
                       }}
-                      xFormat="time:%H.%M"
+                      xFormat={'time:' + data.format}
                       yScale={{
                         type: 'linear',
                         stacked: false,
@@ -109,24 +148,21 @@ const LineChart: FC<Props> = ({ id }) => {
                         max: line.scale.max
                       }}
                       axisBottom={{
-                        format: '%H:%M',
+                        format: data.axisBottom,
                         tickValues: data.steps,
                         tickSize: 2
                       }}
                       axisLeft={{
                         orient: 'left',
-                        legend: '',
                         tickSize: 2,
                         tickPadding: 5,
                         tickValues: 3
                       }}
                       lineWidth={3}
                       colors={{ scheme: line.color, size: 9 }}
-                      pointSize={5}
-                      pointColor={{ theme: 'background' }}
-                      pointBorderWidth={2}
-                      pointBorderColor={{ from: 'serieColor' }}
+                      pointSize={6}
                       useMesh={true}
+                      theme={chartTheme}
                     />
                   </Box>
                 )

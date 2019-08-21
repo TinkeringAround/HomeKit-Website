@@ -122,20 +122,32 @@ export const deviceLastActiveDate = (timestamp: string) => {
 }
 
 //-------------------------------------------------------------
-export const timestampToTime = (timestamp: string) => {
+export const timestampToTime = (timestamp: string, count: number) => {
   if (timestamp === '') return ''
+
+  const format = count < 50 ? 'HH.mm' : 'DD.MM.YYYY'
 
   moment.locale('de')
   return moment
     .unix(parseInt(timestamp))
     .subtract(1, 'hour')
-    .format('HH.mm')
+    .format(format)
 }
 
 export const valueCountToSteps = (count: number): string => {
-  if (count < 10) return 'every 5 minutes'
-  else if (count >= 10 && count < 50) return 'every hour'
-  else if (count >= 50 && count < 150) return 'every 3 hours'
-  else if (count >= 150 && count < 1000) return 'every day'
-  else return 'every 3 days'
+  if (count < 10) return 'every hour'
+  else if (count >= 10 && count < 50) return 'every 6 hours'
+  else if (count >= 50 && count < 150) return 'every day'
+  else if (count >= 150 && count < 1000) return 'every 2 days'
+  else return 'every 5 days'
+}
+
+export const valueCountToFormat = (count: number): string => {
+  if (count < 50) return '%H.%M'
+  else return '%d.%m.%Y'
+}
+
+export const valueCountToAxisBottom = (count: number): string => {
+  if (count < 50) return '%H.%M Uhr'
+  else return '%d.%m.%Y'
 }

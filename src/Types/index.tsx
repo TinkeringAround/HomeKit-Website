@@ -40,8 +40,10 @@ export type TStyled = {
 
 // Charts
 export type TDataStream = {
-  steps: string
   lines: Array<TLine>
+  steps: string
+  format: string
+  axisBottom: string
 }
 
 export type TLine = {
