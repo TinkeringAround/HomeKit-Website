@@ -31,6 +31,7 @@ interface Props {
 const Device: FC<Props> = ({ id, data, onClick = null }) => {
   const [hover, setHover] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(false)
+  const [showCharts, setShowCharts] = useState<boolean>(false)
   const [deviceData, setDeviceData] = useState<TDevice | undefined>(data)
 
   // Life Cycle
@@ -67,6 +68,14 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
         })
     }
   }, [deviceData])
+
+  useEffect(() => {
+    if (show) {
+      setTimeout(() => {
+        setShowCharts(true)
+      }, 1500)
+    } else setShowCharts(false)
+  }, [show])
 
   //#region Content Component
   const type = id && deviceData !== undefined ? deviceData.type : null
@@ -176,7 +185,15 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
                     justify="center"
                     align="start"
                   >
-                    {show && <Line id={id} />}
+                    {!showCharts && (
+                      <Box width="100%" height="100%" justify="center" align="center">
+                        <CircleSpinner
+                          size={isMobile ? 100 : 150}
+                          color={theme.global.colors.darkYellow}
+                        />
+                      </Box>
+                    )}
+                    {showCharts && <Line id={id} isMobile={isMobile} />}
                   </Box>
                 </>
               )}

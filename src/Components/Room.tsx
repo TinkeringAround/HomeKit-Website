@@ -87,7 +87,12 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
 
         {devices.length > roomDevices.length && (
           <Box>
-            <Text size="1em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
+            <Text
+              size="0.75em"
+              color="headingInactive"
+              margin="10px 0px"
+              style={{ paddingLeft: 5 }}
+            >
               Geräte hinzufügen:
             </Text>
 
