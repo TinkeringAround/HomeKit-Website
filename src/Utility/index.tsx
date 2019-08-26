@@ -105,6 +105,8 @@ export const isToday = (timestamp: string) => {
   return moment.unix(parseInt(timestamp)).isSame(moment.now(), 'days')
 }
 
+export const deviceHasLowBattery = (battery: number) => battery < 2400
+
 //-------------------------------------------------------------
 export const deviceLastActiveTime = (timestamp: string) => {
   if (timestamp === '') return ''
