@@ -13,12 +13,12 @@ import { theme } from '../../theme'
 import Background from '../../Components/Background'
 import Room from '../../Components/Room'
 import Settings from '../../Components/Settings'
-import Dialog from '../../Components/Dialog'
 import RoomManagement from '../../Components/RoomManagement'
 import DeviceManagement from '../../Components/DeviceManagement'
 import Switch from '../../Components/Switch'
 import Reload from '../../Components/Reload'
 import Signout from '../../Components/Signout'
+import ResponsiveDialog from '../../Components/ResponsiveDialog'
 
 //---------------------------------------------
 const Home: FC = () => {
@@ -282,7 +282,7 @@ const Home: FC = () => {
                 ))}
             </Box>
           </Box>
-          <Dialog open={open} closeDialog={() => setOpen(false)}>
+          <ResponsiveDialog open={open} closeDialog={() => setOpen(false)}>
             {data && (
               <>
                 {mode === 'room' ? (
@@ -309,7 +309,7 @@ const Home: FC = () => {
                 )}
               </>
             )}
-          </Dialog>
+          </ResponsiveDialog>
         </>
       )}
     </Background>

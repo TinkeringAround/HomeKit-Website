@@ -117,6 +117,37 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
       <></>
     )
   }
+
+  const Chart: FC = () => (
+    <ResponsiveContext.Consumer>
+      {(size: string) => {
+        const isMobile = size.includes('small')
+        return (
+          <>
+            {deviceData !== undefined && (
+              <>
+                <Heading level="2" margin="0px" size="3em" color="headingInactive">
+                  {deviceData.name}
+                </Heading>
+                <Box width="100%" height={isMobile ? '90%' : '90%'} justify="center" align="start">
+                  {show && !showCharts && (
+                    <Box width="100%" height="100%" justify="center" align="center">
+                      <CircleSpinner
+                        size={isMobile ? 100 : 150}
+                        color={theme.global.colors.darkYellow}
+                      />
+                    </Box>
+                  )}
+                  {show && showCharts && <Line id={id} isMobile={isMobile} />}
+                </Box>
+              </>
+            )}
+          </>
+        )
+      }}
+    </ResponsiveContext.Consumer>
+  )
+
   //#endregion
 
   // Handlers
@@ -125,83 +156,54 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
 
   //--------------------------------------------------------------
   return (
-    <ResponsiveContext.Consumer>
-      {(size: string) => {
-        const isMobile = size.includes('small')
-        return (
-          <>
-            <Box
-              className="square clickable"
-              background={id && active ? 'deviceActive' : 'deviceInactive'}
-              style={{
-                transition: '0.2s all',
-                transform: hover ? 'scale(1.01)' : 'scale(1)',
-                boxShadow: hover ? '0px 0px 5px 1px ' + hexToRGBA(color, '0.2') : 'none'
-              }}
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
-              onTouchStart={() => setHover(true)}
-              onTouchEnd={() => setHover(false)}
-              onClick={onClick ? onClick : reload}
-            >
-              <ClickNHold time={0.5} onClickNHold={showDetails}>
-                <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
-                  {id !== null && deviceData === undefined ? (
-                    <Box width="100%" height="100%" justify="center" align="center">
-                      <CircleSpinner color={spinnerColor} />
-                    </Box>
-                  ) : (
-                    <>
-                      <Box
-                        width="30%"
-                        height="30%"
-                        justify="center"
-                        align="center"
-                        background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
-                        style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
-                      >
-                        <Icon
-                          type={type}
-                          active={active}
-                          width={type ? '80%' : '40%'}
-                          height={type ? '80%' : '40%'}
-                        />
-                      </Box>
-                      {id && <Content />}
-                    </>
-                  )}
+    <>
+      <Box
+        className="square clickable"
+        background={id && active ? 'deviceActive' : 'deviceInactive'}
+        style={{
+          transition: '0.2s all',
+          transform: hover ? 'scale(1.01)' : 'scale(1)',
+          boxShadow: hover ? '0px 0px 5px 1px ' + hexToRGBA(color, '0.2') : 'none'
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onTouchStart={() => setHover(true)}
+        onTouchEnd={() => setHover(false)}
+        onClick={onClick ? onClick : reload}
+      >
+        <ClickNHold time={0.5} onClickNHold={showDetails}>
+          <Box className="square-content" align="center" justify={id ? 'start' : 'center'}>
+            {id !== null && deviceData === undefined ? (
+              <Box width="100%" height="100%" justify="center" align="center">
+                <CircleSpinner color={spinnerColor} />
+              </Box>
+            ) : (
+              <>
+                <Box
+                  width="30%"
+                  height="30%"
+                  justify="center"
+                  align="center"
+                  background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
+                  style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
+                >
+                  <Icon
+                    type={type}
+                    active={active}
+                    width={type ? '80%' : '40%'}
+                    height={type ? '80%' : '40%'}
+                  />
                 </Box>
-              </ClickNHold>
-            </Box>
-            <Overlay open={data !== undefined && show} closeDialog={() => setShow(false)}>
-              {deviceData !== undefined && (
-                <>
-                  <Heading level="2" margin="0px" size="3em" color="headingInactive">
-                    {deviceData.name}
-                  </Heading>
-                  <Box
-                    width="100%"
-                    height={isMobile ? '90%' : '90%'}
-                    justify="center"
-                    align="start"
-                  >
-                    {!showCharts && (
-                      <Box width="100%" height="100%" justify="center" align="center">
-                        <CircleSpinner
-                          size={isMobile ? 100 : 150}
-                          color={theme.global.colors.darkYellow}
-                        />
-                      </Box>
-                    )}
-                    {showCharts && <Line id={id} isMobile={isMobile} />}
-                  </Box>
-                </>
-              )}
-            </Overlay>
-          </>
-        )
-      }}
-    </ResponsiveContext.Consumer>
+                {id && <Content />}
+              </>
+            )}
+          </Box>
+        </ClickNHold>
+      </Box>
+      <Overlay open={data !== undefined && show} closeDialog={() => setShow(false)}>
+        {show && <Chart />}
+      </Overlay>
+    </>
   )
 }
 
