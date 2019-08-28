@@ -2,7 +2,7 @@
   "name": "homekit",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://homekit.tinkeringaround.de",
   "dependencies": {
     "@nivo/line": "^0.59.3",
     "firebase": "^6.3.3",

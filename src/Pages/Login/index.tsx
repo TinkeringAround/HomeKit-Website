@@ -41,9 +41,10 @@ const Login: FC = () => {
             .signInWithEmailAndPassword(credentials.email, credentials.password)
             .catch((error: FirebaseError) => {
               console.log(error)
+              setLoading(false)
             })
         })
-    }, 2000)
+    }, 1000)
     setLoading(true)
   }
 
