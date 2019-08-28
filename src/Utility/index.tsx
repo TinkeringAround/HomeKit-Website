@@ -128,10 +128,9 @@ export const timestampToTime = (timestamp: string) => {
 
   const format = 'HH.mm DD.MM.YYYY'
 
-  moment.locale('de')
   return moment
     .unix(parseInt(timestamp))
-    .subtract(1, 'hour')
+    .subtract(2, 'hour')
     .format(format)
 }
 
