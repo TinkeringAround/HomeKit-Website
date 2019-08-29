@@ -26,31 +26,37 @@ const App: FC = () => {
 
   useEffect(() => {
     if (!token && authenticated) {
-      askForNotificationPermission()
-        .then(async () => {
-          const token = await getToken()
-          console.log('Token: ', token)
-          setToken(token)
+      try {
+        askForNotificationPermission()
+          .then(async () => {
+            const token = await getToken()
+            console.log('Token: ', token)
+            setToken(token)
 
-          // Update token in database
-          firebase
-            .database()
-            .ref('/token')
-            .once('value')
-            .then(snapshot => {
-              const oldToken = snapshot.val()
-              if (oldToken !== token) snapshot.ref.set(token)
-            })
-
-          firebase.messaging().onTokenRefresh(() => {
+            // Update token in database
             firebase
-              .messaging()
-              .getToken()
-              .then(token => setToken(token))
-              .catch(error => console.log('An error occured retriving the refreshed token.', error))
+              .database()
+              .ref('/token')
+              .once('value')
+              .then(snapshot => {
+                const oldToken = snapshot.val()
+                if (oldToken !== token) snapshot.ref.set(token)
+              })
+
+            firebase.messaging().onTokenRefresh(() => {
+              firebase
+                .messaging()
+                .getToken()
+                .then(token => setToken(token))
+                .catch(error =>
+                  console.log('An error occured retriving the refreshed token.', error)
+                )
+            })
           })
-        })
-        .catch(error => console.log('No Notification permission granted.', error))
+          .catch(error => console.log('No Notification permission granted.', error))
+      } catch (error) {
+        console.log('No supported browser.')
+      }
     }
   })
 
