@@ -22,10 +22,7 @@ const Signout: FC<Props> = ({ onClick = null }) => {
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
-        const wrapperSize = isMobile ? 40 : 50
         const iconSize = isMobile ? 25 : 30
-        const top = isMobile ? 20 : 30
-        const right = isMobile ? 30 + 2 * wrapperSize : 50 + 2 * wrapperSize
         return (
           <Box
             className="clickable"
@@ -33,16 +30,16 @@ const Signout: FC<Props> = ({ onClick = null }) => {
             justify="center"
             align="center"
             style={{
-              top: top,
-              right: right,
-              width: wrapperSize,
-              height: wrapperSize,
+              top: -10,
+              right: isMobile ? 0 : -10,
+              width: 40,
+              height: 40,
               position: 'absolute',
               borderRadius: 10,
               transition: '0.2s all',
               transform: hover ? 'scale(1.01)' : 'scale(1)',
               boxShadow: hover
-                ? '0px 0px 5px 1px ' + hexToRGBA(theme.global.colors.iconWrapperInactive, '0.2')
+                ? '0px 0px 5px 0px ' + hexToRGBA(theme.global.colors.iconWrapperInactive, '0.2')
                 : 'none'
             }}
             onMouseEnter={() => setHover(true)}

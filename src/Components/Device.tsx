@@ -128,7 +128,7 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
             <>
               {deviceData !== undefined && (
                 <>
-                  <Heading level="2" margin="0px" size="3em" color="headingInactive">
+                  <Heading level="2" margin="0px" size="2em" color="headingInactive">
                     {deviceData.name}
                   </Heading>
                   <Box

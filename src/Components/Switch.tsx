@@ -30,7 +30,7 @@ const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
               className="animated"
               direction="row"
               align="center"
-              style={{ position: 'absolute', top: '0.2em', right: isMobile ? 50 : 40 }}
+              style={{ position: 'absolute', top: '0.2em', right: isMobile ? 100 : 90 }}
             >
               <Text size="0.8em" color="headingInactive" margin="0px 5px">
                 {'Zu den ' + text}
@@ -44,7 +44,7 @@ const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
               align="center"
               style={{
                 top: -10,
-                right: isMobile ? 0 : -10,
+                right: isMobile ? 50 : 40,
                 width: 40,
                 height: 40,
                 position: 'absolute',

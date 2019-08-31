@@ -258,7 +258,6 @@ const Home: FC = () => {
         </Box>
       ) : (
         <>
-          <Signout onClick={() => firebase.auth().signOut()} />
           <Reload onClick={fetchData} />
           <Settings onClick={() => setOpen(true)} />
           <Box height="100%" width="100%" justify="end">
@@ -287,6 +286,7 @@ const Home: FC = () => {
               <>
                 {mode === 'room' ? (
                   <>
+                    <Signout onClick={() => firebase.auth().signOut()} />
                     <Switch icon="circleEmpty" text="Geräten" onClick={() => setMode('device')} />
                     <RoomManagement
                       addRoom={addRoom}
@@ -298,6 +298,7 @@ const Home: FC = () => {
                   </>
                 ) : (
                   <>
+                    <Signout onClick={() => firebase.auth().signOut()} />
                     <Switch icon="circleFull" text="Räumen" onClick={() => setMode('room')} />
                     <DeviceManagement
                       updateDeviceName={updateDeviceName}

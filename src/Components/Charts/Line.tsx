@@ -163,7 +163,7 @@ const LineChart: FC<Props> = ({ id, isMobile }) => {
                 }}
                 lineWidth={3}
                 colors={{ scheme: line.color, size: 9 }}
-                pointSize={isMobile ? 1 : 6}
+                pointSize={1}
                 useMesh={true}
                 theme={chartTheme}
               />
