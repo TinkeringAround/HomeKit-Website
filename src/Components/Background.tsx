@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Box } from 'grommet'
 
-const Background: React.FC = ({ children }) => {
+const Background: FC = ({ children }) => {
   return (
     <Box
       background="background"
-      width="100vw"
+      width={window.innerWidth + 'px'}
       height={window.innerHeight + 'px'}
       margin="0"
       style={{ position: 'relative' }}

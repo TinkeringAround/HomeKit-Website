@@ -19,7 +19,6 @@
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-beautiful-dnd": "^11.0.2",
@@ -29,13 +28,8 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:docker": "docker run --rm -d -p 8080:80 --name HomeKit homekit",
-    "stop:docker": "docker container rm -f HomeKit",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
-    "build:docker": "docker build -t homekit .",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "deploy": "npm run build && firebase deploy"
   },
   "eslintConfig": {

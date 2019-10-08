@@ -44,7 +44,7 @@ const Login: FC = () => {
               setLoading(false)
             })
         })
-    }, 1000)
+    }, 500)
     setLoading(true)
   }
 
