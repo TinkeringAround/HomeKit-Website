@@ -6,17 +6,17 @@ import ClickNHold from 'react-click-n-hold'
 import Line from './Charts/Line'
 
 // Theme
-import { theme } from '../theme'
+import { theme } from '../Styles'
 
 // Types
 import { TVariable, TDevice } from '../Types'
 
 // Atoms
-import { Icon } from '../Atoms/Icons'
+import Icon from '../Atoms/icon'
 
 // Custom Components
 import Variable from './Variable'
-import Overlay from './Overlay'
+import Overlay from './Dialog/mobile'
 
 // Utility
 import { deviceIsActive, hexToRGBA, deviceHasLowBattery } from '../Utility'
@@ -28,13 +28,14 @@ interface Props {
   onClick?: any
 }
 
+//--------------------------------------------
 const Device: FC<Props> = ({ id, data, onClick = null }) => {
   const [hover, setHover] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(false)
   const [showCharts, setShowCharts] = useState<boolean>(false)
   const [deviceData, setDeviceData] = useState<TDevice | undefined>(data)
 
-  // Life Cycle
+  //--------------------------------------------
   useEffect(() => {
     if (id && deviceData === undefined) {
       firebase
@@ -214,12 +215,7 @@ const Device: FC<Props> = ({ id, data, onClick = null }) => {
                   background={id && active ? 'iconWrapperActive' : 'iconWrapperInactive'}
                   style={{ borderRadius: 10, marginTop: id ? '20%' : '0' }}
                 >
-                  <Icon
-                    type={type}
-                    active={active}
-                    width={type ? '80%' : '40%'}
-                    height={type ? '80%' : '40%'}
-                  />
+                  <Icon type={type} active={active} size={type ? '80%' : '40%'} />
                 </Box>
                 {id && <Content />}
               </>

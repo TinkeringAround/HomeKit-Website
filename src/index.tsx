@@ -1,29 +1,33 @@
 // IMPORTS
 import React, { FC, useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import * as serviceWorker from './serviceWorker'
+import * as serviceWorker from './Driver/serviceWorker'
 import firebase, { User } from 'firebase/app'
 import { Grommet } from 'grommet'
-import { initializeFirebaseApp, askForNotificationPermission, getToken } from './firebase'
+import { initializeFirebaseApp, askForNotificationPermission, getToken } from './Driver/firebase'
 
 // Styles
-import './index.css'
+import './Styles/global.css'
 
 // Theme
-import { theme } from './theme'
+import { theme } from './Styles'
 
 // Pages
 import Login from './Pages/Login/'
-import Home from './Pages/Home/'
+import Dashboard from './Pages/Dashboard'
 
-//----------------------------------------------------------
+// Components
+import Layout from './Components/Layout'
+
+// ===============================================
 initializeFirebaseApp()
 
-//----------------------------------------------------------
+// ===============================================
 const App: FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
   const [token, setToken] = useState<string | null>(null)
 
+  // ===============================================
   useEffect(() => {
     if (!token && authenticated) {
       try {
@@ -61,18 +65,14 @@ const App: FC = () => {
   })
 
   firebase.auth().onAuthStateChanged((user: User | null) => {
-    if (user && !authenticated) {
-      console.log('Authenticated User: ', user)
-      setAuthenticated(true)
-    } else if (!user && authenticated) {
-      console.log('User logout!')
-      setAuthenticated(false)
-    }
+    if (user && !authenticated) setAuthenticated(true)
+    else if (!user && authenticated) setAuthenticated(false)
   })
 
+  // ===============================================
   return (
     <Grommet theme={theme} full>
-      {!authenticated ? <Login /> : <Home />}
+      <Layout>{!authenticated ? <Login /> : <Dashboard />}</Layout>
     </Grommet>
   )
 }

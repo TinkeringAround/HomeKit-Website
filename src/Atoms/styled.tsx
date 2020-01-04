@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 // Types
-import { TStyled } from '../Types/'
+import { TStyled } from '../Types'
 
 // Theme
-import { theme } from '../theme'
+import { theme } from '../Styles'
 
-// Components
+// ===============================================
 export const Input = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.25em')};
@@ -29,6 +29,7 @@ export const Input = styled.input`
   }
 `
 
+// ===============================================
 export const NameInput = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.5em')};
@@ -49,13 +50,15 @@ export const NameInput = styled.input`
   }
 `
 
+// ===============================================
 export const Column = styled.div`
   width: 100%;
   height: auto;
   overflow-y: auto;
 `
 
-export const Container = styled.div`
+// ===============================================
+export const SRow = styled.div`
   height: 60px;
   margin: ${(props: TStyled) => (props.margin ? props.margin : '20px 0px')};
   padding: 10px 20px;

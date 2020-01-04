@@ -1,22 +1,26 @@
 import React, { FC, useState } from 'react'
 import { Box, ResponsiveContext, Text } from 'grommet'
 
+// Types
+import { TIconType } from '../Types'
+
 // Atoms
-import { Icon } from '../Atoms/Icons'
+import Icon from '../Atoms/icon'
 
 // Theme
-import { theme } from '../theme'
+import { theme } from '../Styles'
 
 // Utility
 import { hexToRGBA } from '../Utility/'
 
-//--------------------------------------
+// ===============================================
 interface Props {
   onClick: any
-  icon: string
+  icon: TIconType
   text: string
 }
 
+// ===============================================
 const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
   const [hover, setHover] = useState(false)
 
@@ -35,7 +39,7 @@ const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
               <Text size="0.8em" color="headingInactive" margin="0px 5px">
                 {'Zu den ' + text}
               </Text>
-              <Icon type="arrowRight" active={false} height="0.8em" width="1em" />
+              <Icon type="arrowRight" active={false} size="1em" />
             </Box>
             <Box
               className="clickable"
@@ -61,7 +65,7 @@ const Switch: FC<Props> = ({ onClick = null, icon, text }) => {
               onTouchEnd={() => setHover(false)}
               onClick={onClick}
             >
-              <Icon type={icon} active={false} width="60%" height="60%" />
+              <Icon type={icon} active={false} size="60%" />
             </Box>
           </>
         )

@@ -1,6 +1,7 @@
 const hours = new Date().getHours()
 const isDayTime = hours > 7 && hours < 20
 
+//----------------------------------------------------------
 export const colors = {
   // Background Colors
   white: '#fff',
@@ -19,6 +20,7 @@ export const colors = {
   darkElement: '#333844'
 }
 
+//----------------------------------------------------------
 export const theme = {
   global: {
     breakpoints: {
@@ -79,10 +81,6 @@ export const theme = {
     color: isDayTime ? colors.headingDark : colors.darkYellow,
     primary: {
       color: isDayTime ? colors.lightElement : colors.yellow
-    },
-    border: {
-      radius: '25px',
-      color: 'transparent'
     }
   }
 }

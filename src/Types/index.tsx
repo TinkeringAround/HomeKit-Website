@@ -1,12 +1,30 @@
 import { ColorSchemeId } from '@nivo/colors'
 
-// Login
+// ===============================================
+export type TIconType =
+  | 'ac'
+  | 'humidity'
+  | 'light'
+  | 'sensor'
+  | 'temperature'
+  | 'window'
+  | 'settings'
+  | 'reload'
+  | 'circleEmpty'
+  | 'circleFull'
+  | 'signout'
+  | 'arrowRight'
+  | 'battery'
+  | 'plus'
+  | 'minus'
+
+// ===============================================
 export type TCredential = {
   email: string
   password: string
 }
 
-// Home
+// ===============================================
 export type TDatabase = {
   rooms: Array<TRoom>
   devices: Array<TDevice>
@@ -22,7 +40,7 @@ export type TDevice = {
   name: string
   lastUpdated: string
   battery: number
-  type: string
+  type: TIconType
   values: Array<TVariable>
 }
 
@@ -31,14 +49,14 @@ export type TVariable = {
   value: string
 }
 
-// Styled Atoms
+// ===============================================
 export type TStyled = {
   margin?: string
   active?: boolean
   fontSize?: string
 }
 
-// Charts
+// ===============================================
 export type TDataStream = {
   lines: Array<TLine>
   steps: string

@@ -85,6 +85,13 @@ export const hexToRGBA = (hexColor: string, opacity: string) => {
 }
 
 //-----------------------------------------------
+export const deviceTypeToName = (type: string) => {
+  switch (type) {
+    case 'sensor':
+      return 'Sensor'
+  }
+}
+
 export const deviceIsActive = (type: string, timestamp: string) => {
   if (type === '' || timestamp === '') return false
 

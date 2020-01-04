@@ -7,7 +7,7 @@ import { Box, Heading } from 'grommet'
 import { TMeasurement, TChartData, TDataStream, TLine } from '../../Types'
 
 // Theme
-import { theme } from '../../theme'
+import { theme } from '../../Styles'
 
 // Utility
 import {
@@ -51,15 +51,17 @@ const chartTheme = {
   }
 }
 
-//--------------------------------------------------------------
-export interface Props {
+// ===============================================
+interface Props {
   id: string | null
   isMobile: boolean
 }
 
+// ===============================================
 const LineChart: FC<Props> = ({ id, isMobile }) => {
   const [data, setData] = useState<TDataStream | null>(null)
 
+  // ===============================================
   useEffect(() => {
     if (!data) {
       firebase
@@ -117,6 +119,7 @@ const LineChart: FC<Props> = ({ id, isMobile }) => {
     }
   })
 
+  // ===============================================
   return (
     <>
       {data !== null ? (

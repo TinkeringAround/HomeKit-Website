@@ -1,13 +1,16 @@
 import React, { FC } from 'react'
 import { Box, Text } from 'grommet'
 
+// Types
+import { TIconType } from '../Types'
+
 // Atoms
-import { Icon } from '../Atoms/Icons'
+import Icon from '../Atoms/icon'
 
 // Utility
 import { typeToUnit } from '../Utility'
 
-//---------------------------------------
+// ===============================================
 interface Props {
   type: string
   active: boolean
@@ -16,9 +19,10 @@ interface Props {
   index: number
 }
 
+// ===============================================
 const Variable: FC<Props> = ({ type, active, value, count, index }) => (
   <Box direction="row" justify={index % 2 !== 0 ? 'start' : 'center'} align="center">
-    <Icon type={type} active={active} mini width={count > 1 ? '40%' : '15%'} height="50%" />
+    <Icon type={type as TIconType} active={active} mini size={count > 1 ? '40%' : '15%'} />
     <Text size="xsmall" color={active ? 'headingActive' : 'headingInactive'}>
       {value + typeToUnit(type)}
     </Text>

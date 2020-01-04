@@ -2,19 +2,20 @@ import React, { FC, useState } from 'react'
 import { Box, ResponsiveContext } from 'grommet'
 
 // Atoms
-import { Icon } from '../Atoms/Icons'
+import Icon from '../Atoms/icon'
 
 // Theme
-import { theme } from '../theme'
+import { theme } from '../Styles'
 
 // Utility
 import { hexToRGBA } from '../Utility/'
 
-//--------------------------------------
+// ===============================================
 interface Props {
   onClick?: any
 }
 
+// ===============================================
 const Signout: FC<Props> = ({ onClick = null }) => {
   const [hover, setHover] = useState(false)
 
@@ -48,7 +49,7 @@ const Signout: FC<Props> = ({ onClick = null }) => {
             onTouchEnd={() => setHover(false)}
             onClick={onClick}
           >
-            <Icon type="signout" active={false} width={iconSize + 'px'} height={iconSize + 'px'} />
+            <Icon type="signout" active={false} size={iconSize + 'px'} />
           </Box>
         )
       }}

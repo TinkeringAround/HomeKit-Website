@@ -1,24 +1,21 @@
 import React, { FC } from 'react'
 
-// Theme
-import { theme } from '../theme'
+// Styles
+import { theme } from '../Styles'
 
-//--------------------------------------------
+// Types
+import { TIconType } from '../Types'
+
+// ===============================================
 type IconProps = {
-  type: string | null
+  type: TIconType | null
   active: boolean
   mini?: boolean
-  width?: string
-  height?: string
+  size?: string
 }
 
-export const Icon: FC<IconProps> = ({
-  type,
-  active,
-  mini = false,
-  width = '80%',
-  height = '80%'
-}) => {
+// ===============================================
+const Icon: FC<IconProps> = ({ type, active, mini = false, size = '60%' }) => {
   const colorMini = active ? theme.global.colors.headingActive : theme.global.colors.headingInactive
   const colorNormal = active ? theme.global.colors.iconActive : theme.global.colors.iconInactive
   const color = mini ? colorMini : colorNormal
@@ -26,47 +23,51 @@ export const Icon: FC<IconProps> = ({
   if (type) {
     switch (type) {
       case 'ac':
-        return <AC color={color} width={width} height={height} />
+        return <AC color={color} size={size} />
       case 'humidity':
-        return <Humidity color={color} width={width} height={height} />
+        return <Humidity color={color} size={size} />
       case 'light':
-        return <Light color={color} width={width} height={height} />
+        return <Light color={color} size={size} />
       case 'sensor':
-        return <Sensor color={color} width={width} height={height} />
+        return <Sensor color={color} size={size} />
       case 'temperature':
-        return <Temperature color={color} width={width} height={height} />
+        return <Temperature color={color} size={size} />
       case 'window':
-        return <Window color={color} width={width} height={height} />
+        return <Window color={color} size={size} />
       case 'settings':
-        return <Settings color={color} width={width} height={height} />
+        return <Settings color={color} size={size} />
       case 'reload':
-        return <Reload color={color} width={width} height={height} />
+        return <Reload color={color} size={size} />
       case 'circleEmpty':
-        return <CircleEmpty color={color} width={width} height={height} />
+        return <CircleEmpty color={color} size={size} />
       case 'circleFull':
-        return <CircleFull color={color} width={width} height={height} />
+        return <CircleFull color={color} size={size} />
       case 'signout':
-        return <Signout color={color} width={width} height={height} />
+        return <Signout color={color} size={size} />
       case 'arrowRight':
-        return <ArrowRight color={color} width={width} height={height} />
+        return <ArrowRight color={color} size={size} />
       case 'battery':
-        return <Battery color={color} width={width} height={height} />
-      default:
-        return <Plus color={color} width={width} height={height} />
+        return <Battery color={color} size={size} />
+      case 'plus':
+        return <Plus color={color} size={size} />
+      case 'minus':
+        return <Minus color={color} size={size} />
     }
   }
-  return <Plus color={color} width={width} height={height} />
+  return <Plus color={color} size={size} />
 }
 
-//--------------------------------------------
+export default Icon
+
+// ===============================================
 type Props = {
   color: string
-  width?: string
-  height?: string
+  size?: string
 }
 
-const AC: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg viewBox="0 0 39 32" height={height} width={width}>
+// ===============================================
+const AC: FC<Props> = ({ color, size = '80%' }) => (
+  <svg viewBox="0 0 39 32" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Ventilator</title>
     <path
       fill={color}
@@ -80,8 +81,14 @@ const AC: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Humidity: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg id="icon-humidity" viewBox="0 0 39 32" width={width} height={height}>
+const Humidity: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    id="icon-humidity"
+    viewBox="0 0 39 32"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Luftfeuchtigkeit</title>
     <path
       fill={color}
@@ -91,8 +98,14 @@ const Humidity: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Light: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg id="icon-light" viewBox="0 0 39 32" width={width} height={height}>
+const Light: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    id="icon-light"
+    viewBox="0 0 39 32"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Licht</title>
     <path
       fill={color}
@@ -105,8 +118,14 @@ const Light: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Sensor: FC<Props> = ({ color, width = '65%', height = '65%' }) => (
-  <svg id="icon-sensor" viewBox="0 0 39 32" width={width} height={height}>
+const Sensor: FC<Props> = ({ color, size = '65%' }) => (
+  <svg
+    id="icon-sensor"
+    viewBox="0 0 39 32"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Sensor</title>
     <path
       fill={color}
@@ -145,8 +164,14 @@ const Sensor: FC<Props> = ({ color, width = '65%', height = '65%' }) => (
   </svg>
 )
 
-const Temperature: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg id="icon-temp" viewBox="0 0 39 32" width={width} height={height}>
+const Temperature: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    id="icon-temp"
+    viewBox="0 0 39 32"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Temperatur</title>
     <path
       fill={color}
@@ -167,8 +192,14 @@ const Temperature: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Window: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg id="icon-window" viewBox="0 0 39 32" width={width} height={height}>
+const Window: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    id="icon-window"
+    viewBox="0 0 39 32"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Fenster</title>
     <path
       fill={color}
@@ -180,11 +211,17 @@ const Window: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Plus: FC<Props> = ({ width = '40%', height = '40%' }) => {
+const Plus: FC<Props> = ({ size = '40%' }) => {
   const color = theme.global.colors.iconInactive
 
   return (
-    <svg id="icon-plus" viewBox="0 0 448 512" width={width} height={height}>
+    <svg
+      id="icon-plus"
+      viewBox="0 0 448 512"
+      width={size}
+      height={size}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <title>Plus</title>
       <path
         fill={color}
@@ -194,8 +231,30 @@ const Plus: FC<Props> = ({ width = '40%', height = '40%' }) => {
   )
 }
 
-const Settings: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg className="rotate" viewBox="0 0 512 512" height={height} width={width}>
+const Minus: FC<Props> = ({ color, size = '60%' }) => (
+  <svg
+    id="icon-minus"
+    viewBox="0 0 448 512"
+    width={size}
+    height={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title>Plus</title>
+    <path
+      fill={color}
+      d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+    />
+  </svg>
+)
+
+const Settings: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    className="rotate"
+    viewBox="0 0 512 512"
+    height={size}
+    width={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Einstellungen</title>
     <path
       fill={color}
@@ -204,8 +263,14 @@ const Settings: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Reload: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg className="rotate" viewBox="0 0 512 512" height={height} width={width}>
+const Reload: FC<Props> = ({ color, size = '80%' }) => (
+  <svg
+    className="rotate"
+    viewBox="0 0 512 512"
+    height={size}
+    width={size}
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <title>Aktualisieren</title>
     <path
       fill={color}
@@ -214,8 +279,8 @@ const Reload: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const CircleEmpty: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg viewBox="0 0 512 512" height={height} width={width}>
+const CircleEmpty: FC<Props> = ({ color, size = '80%' }) => (
+  <svg viewBox="0 0 512 512" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Räume</title>
     <path
       fill={color}
@@ -224,15 +289,15 @@ const CircleEmpty: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const CircleFull: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg viewBox="0 0 512 512" height={height} width={width}>
+const CircleFull: FC<Props> = ({ color, size = '80%' }) => (
+  <svg viewBox="0 0 512 512" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Geräte</title>
     <path fill={color} d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z" />
   </svg>
 )
 
-const Signout: FC<Props> = ({ color }) => (
-  <svg viewBox="0 0 512 512" height="60%" width="60%">
+const Signout: FC<Props> = ({ color, size = '60%' }) => (
+  <svg viewBox="0 0 512 512" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Abmelden</title>
     <path
       fill={color}
@@ -241,8 +306,8 @@ const Signout: FC<Props> = ({ color }) => (
   </svg>
 )
 
-const ArrowRight: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg viewBox="0 0 448 512" height={height} width={width}>
+const ArrowRight: FC<Props> = ({ color, size = '80%' }) => (
+  <svg viewBox="0 0 448 512" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Pfeil Rechts</title>
     <path
       fill={color}
@@ -251,8 +316,8 @@ const ArrowRight: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
   </svg>
 )
 
-const Battery: FC<Props> = ({ color, width = '80%', height = '80%' }) => (
-  <svg viewBox="0 0 512 512" height={height} width={width}>
+const Battery: FC<Props> = ({ color, size = '80%' }) => (
+  <svg viewBox="0 0 512 512" height={size} width={size} xmlns="http://www.w3.org/2000/svg">
     <title>Batterie</title>
     <path
       fill={color}

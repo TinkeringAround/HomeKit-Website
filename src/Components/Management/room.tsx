@@ -1,73 +1,65 @@
 import React, { FC } from 'react'
-import { Heading, ResponsiveContext, Text } from 'grommet'
+import { Text, Heading, ResponsiveContext } from 'grommet'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 
 // Types
-import { TDevice } from '../Types'
+import { TRoom } from '../../Types'
 
-// Custom Components
-import { Column, Container, NameInput } from '../Atoms/StyledComponents'
+// Atoms
+import { Input, Column, SRow, NameInput } from '../../Atoms/styled'
 
-// Utilities
-import { deviceLastActiveTime, isToday, deviceLastActiveDate } from '../Utility'
-
-//----------------------------------------------
+// ===============================================
 interface Props {
-  devices: Array<TDevice>
-  updateDeviceName: any
-  deleteDevice: any
-  reorderDevices: any
+  rooms: Array<TRoom>
+  addRoom: any
+  renameRoom: (old: string, name: string) => void
+  deleteRoom: (index: number) => void
 }
 
-const DeviceManagement: FC<Props> = ({
-  devices,
-  updateDeviceName,
-  deleteDevice,
-  reorderDevices
-}) => {
-  // Handler Methods
+// ===============================================
+const RoomManagement: FC<Props> = ({ rooms, addRoom, renameRoom, deleteRoom }) => {
   const onDragEnd = (result: DropResult) => {
-    if (devices.length === 0) deleteDevice(result.source.index)
+    if (rooms.length === 0) deleteRoom(result.source.index)
     else {
       if (!result.destination) {
-        deleteDevice(result.source.index)
-      } else {
-        if (result.destination.index !== result.source.index)
-          reorderDevices(result.source.index, result.destination.index)
+        deleteRoom(result.source.index)
       }
     }
   }
-  const onDeviceNameChanged = (event: any) => {
+
+  const onRoomNameChanged = (event: any) => {
     const oldName = event.target.placeholder
     const newName = event.target.value
     if (event.key === 'Enter' && newName !== '') {
       event.target.placeholder = newName
       event.target.value = ''
-      updateDeviceName(oldName, newName)
+      renameRoom(oldName, newName)
     }
   }
 
+  // ===============================================
   return (
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
         return (
           <>
-            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 20px 0px">
-              Geräte und Sensoren
+            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
+              Räume
             </Heading>
+            <Input type="text" placeholder="Raum hinzufügen..." onKeyPress={addRoom} />
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="Column">
                 {provided => (
                   <Column {...provided.droppableProps} ref={provided.innerRef}>
-                    {devices.map((device: TDevice, index: number) => (
+                    {rooms.map((room: TRoom, index: number) => (
                       <Draggable
-                        key={'DraggableDevice-' + index}
-                        draggableId={device.name}
+                        key={'DraggableRoom-' + index}
+                        draggableId={room.name}
                         index={index}
                       >
                         {provided => (
-                          <Container
+                          <SRow
                             margin="0px 0px 10px 0px"
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -76,24 +68,17 @@ const DeviceManagement: FC<Props> = ({
                             <NameInput
                               type="text"
                               fontSize={isMobile ? '0.9em' : '1.2em'}
-                              placeholder={device.name}
-                              onKeyPress={onDeviceNameChanged}
+                              placeholder={room.name}
+                              onKeyPress={onRoomNameChanged}
                             />
                             <Text
                               size={isMobile ? '0.5em' : '0.65em'}
                               color="iconInactive"
                               textAlign="end"
                             >
-                              {'Letzte Aktivität'}
-                              <br />
-                              {isToday(device.lastUpdated) &&
-                                'heute, ' + deviceLastActiveTime(device.lastUpdated)}
-                              {!isToday(device.lastUpdated) &&
-                                deviceLastActiveDate(device.lastUpdated) +
-                                  ', ' +
-                                  deviceLastActiveTime(device.lastUpdated)}
+                              {'Devices: ' + room.devices.length}
                             </Text>
-                          </Container>
+                          </SRow>
                         )}
                       </Draggable>
                     ))}
@@ -109,4 +94,4 @@ const DeviceManagement: FC<Props> = ({
   )
 }
 
-export default DeviceManagement
+export default RoomManagement

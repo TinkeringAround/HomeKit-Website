@@ -1,17 +1,21 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, Fragment } from 'react'
 import { Box, Heading, Text } from 'grommet'
-
-// Custom Components
-import Device from './Device'
 
 // Types
 import { TDevice } from '../Types'
 
-// Custom Components
-import { Container } from '../Atoms/StyledComponents'
-import ResponsiveDialog from './ResponsiveDialog'
+// Atoms
+import { SRow } from '../Atoms/styled'
+import IconButton from '../Atoms/iconButton'
 
-//-------------------------------------------
+// Components
+import Device from './Device'
+import Dialog from './Dialog'
+
+// Utility
+import { deviceTypeToName } from '../Utility'
+
+// ===============================================
 interface Props {
   name: string
   index: number
@@ -20,88 +24,24 @@ interface Props {
   updateRoomDevices: any
 }
 
+// ===============================================
 const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices }) => {
   const [open, setOpen] = useState(false)
 
-  const selectDevice = (deviceIndex: number, status: boolean) => {
+  // ===============================================
+  const updateDeviceInRoom = (deviceID: string, isRoomDevice: boolean) => {
     var newRoomDevices = Array.from(roomDevices)
-    if (status) newRoomDevices.splice(deviceIndex, 1)
-    else newRoomDevices.push(devices[deviceIndex].id)
+    if (isRoomDevice) {
+      const i = roomDevices.findIndex(roomDeviceID => roomDeviceID === deviceID)
+      if (i >= 0) newRoomDevices.splice(i, 1)
+    } else newRoomDevices.push(deviceID)
 
-    setOpen(false)
     updateRoomDevices(index, newRoomDevices)
   }
 
-  const Content = () => (
-    <>
-      <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
-        {name}
-      </Heading>
-      {roomDevices.length > 0 && (
-        <Box margin="0px 0px 40px 0px">
-          <Text size="0.75em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
-            Geräte entfernen:
-          </Text>
-          <Box style={{ overflowY: roomDevices.length > 3 ? 'auto' : 'visible' }}>
-            {roomDevices.map((deviceID: string, index: number) => {
-              const device: TDevice | undefined = devices.find(
-                (device: TDevice) => device.id === deviceID
-              )
-              return (
-                device && (
-                  <Container
-                    key={'RoomDevice-Dialog-' + index}
-                    className="clickable"
-                    margin="0px 0px 10px 0px"
-                    onClick={() => selectDevice(index, true)}
-                    active={false}
-                  >
-                    <Text size="1em" weight="bold" color="headingInactive">
-                      {device.name}
-                    </Text>
-                  </Container>
-                )
-              )
-            })}
-          </Box>
-        </Box>
-      )}
-
-      {devices.length > roomDevices.length && (
-        <Box>
-          <Text size="0.75em" color="headingInactive" margin="10px 0px" style={{ paddingLeft: 5 }}>
-            Geräte hinzufügen:
-          </Text>
-
-          <Box style={{ overflowY: devices.length - roomDevices.length > 3 ? 'auto' : 'visible' }}>
-            {devices.map((device: TDevice, index: number) => {
-              const isRoomDevice = roomDevices.find(roomDeviceID => roomDeviceID === device.id)
-                ? true
-                : false
-              return (
-                !isRoomDevice && (
-                  <Container
-                    key={'RoomDevice-Dialog-' + index}
-                    className="clickable"
-                    margin="0px 0px 10px 0px"
-                    onClick={() => selectDevice(index, isRoomDevice)}
-                    active={false}
-                  >
-                    <Text size="1em" weight="bold" color="headingInactive">
-                      {device.name}
-                    </Text>
-                  </Container>
-                )
-              )
-            })}
-          </Box>
-        </Box>
-      )}
-    </>
-  )
-
+  // ===============================================
   return (
-    <>
+    <Fragment>
       <Box width="400px" height="100%" margin="0px 0px 0px 30px" style={{ flex: '0 0 auto' }}>
         <Heading level="2" responsive size="large" truncate color="heading">
           {name}
@@ -114,10 +54,57 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
           <Device id={null} data={undefined} onClick={() => setOpen(true)} />
         </Box>
       </Box>
-      <ResponsiveDialog open={open} closeDialog={() => setOpen(false)}>
-        <Content />
-      </ResponsiveDialog>
-    </>
+
+      {/* Dialog */}
+      <Dialog open={open} closeDialog={() => setOpen(false)}>
+        <Heading level="3" size="2em" color="heading" margin="50px 0px 10px 0px">
+          {name}
+        </Heading>
+
+        {/* Devices */}
+        {devices.length > 0 && (
+          <Box margin="0px 0px 40px 0px">
+            <Box margin="10px 0px" style={{ overflowY: devices.length > 7 ? 'auto' : 'visible' }}>
+              {devices.map((device: TDevice, index: number) => {
+                const isRoomDevice = roomDevices.includes(device.id) ? true : false
+
+                return (
+                  <SRow
+                    key={'Room-Devices-Dialog-' + index}
+                    margin="0px 0px 10px 0px"
+                    active={isRoomDevice}
+                  >
+                    <Box
+                      width="100%"
+                      height="100%"
+                      align="center"
+                      justify="between"
+                      direction="row"
+                    >
+                      <Box width="80%" height="100%" direction="row" align="center">
+                        <Text
+                          size="1em"
+                          weight="bold"
+                          color={isRoomDevice ? 'headingActive' : 'headingInactive'}
+                        >
+                          {`${device.name} (${deviceTypeToName(device.type)})`}
+                        </Text>
+                      </Box>
+                      <IconButton
+                        active={isRoomDevice}
+                        wrapper="3rem"
+                        iconType={isRoomDevice ? 'minus' : 'plus'}
+                        onClick={() => updateDeviceInRoom(device.id, isRoomDevice)}
+                      />
+                    </Box>
+                  </SRow>
+                )
+              })}
+            </Box>
+          </Box>
+        )}
+      </Dialog>
+    </Fragment>
   )
 }
 
