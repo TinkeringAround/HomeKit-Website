@@ -35,12 +35,14 @@ export type TRoom = {
   devices: Array<string>
 }
 
+export type TDeviceType = 'sensor'
+
 export type TDevice = {
   id: string
   name: string
   lastUpdated: string
   battery: number
-  type: TIconType
+  type: TDeviceType
   values: Array<TVariable>
 }
 

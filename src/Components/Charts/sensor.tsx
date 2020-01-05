@@ -58,7 +58,7 @@ interface Props {
 }
 
 // ===============================================
-const LineChart: FC<Props> = ({ id, isMobile }) => {
+const Sensor: FC<Props> = ({ id, isMobile }) => {
   const [data, setData] = useState<TDataStream | null>(null)
 
   // ===============================================
@@ -180,4 +180,4 @@ const LineChart: FC<Props> = ({ id, isMobile }) => {
   )
 }
 
-export default LineChart
+export default Sensor

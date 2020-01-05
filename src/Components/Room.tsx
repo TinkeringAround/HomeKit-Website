@@ -49,9 +49,9 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
         <Box wrap direction="row">
           {roomDevices.map((deviceID, index) => {
             const device = devices.find(device => device.id === deviceID)
-            return device && <Device key={'RoomDevice-' + index} id={deviceID} data={device} />
+            return device && <Device key={'RoomDevice-' + index} device={device} />
           })}
-          <Device id={null} data={undefined} onClick={() => setOpen(true)} />
+          <Device device={undefined} onClick={() => setOpen(true)} />
         </Box>
       </Box>
 
@@ -87,7 +87,7 @@ const Room: FC<Props> = ({ name, index, devices, roomDevices, updateRoomDevices 
                           weight="bold"
                           color={isRoomDevice ? 'headingActive' : 'headingInactive'}
                         >
-                          {`${device.name} (${deviceTypeToName(device.type)})`}
+                          {`${deviceTypeToName(device.type)}: ${device.name}`}
                         </Text>
                       </Box>
                       <IconButton

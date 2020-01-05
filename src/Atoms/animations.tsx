@@ -17,7 +17,7 @@ const SBackground = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.7);
 `
 
 export const ASimple = posed(SBackground)({
@@ -28,14 +28,14 @@ export const ASimple = posed(SBackground)({
 // ===============================================
 const SDialogMobile = styled.div`
   position: absolute;
-  zindex: 701;
+  z-index: 701;
 
   width: 100%;
   height: 90%;
 
   background: ${hexToRGBA(theme.global.colors['background'], '1')};
-  border-top-left-radius: 15px;
-  border-top-right.radius: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 
   display: flex;
   justify-content: center;
@@ -57,7 +57,7 @@ export const SDialogDesktop = styled.div`
   position: absolute;
   z-index: 701;
 
-  border-radius: 15px;
+  border-radius: 10px;
   background: ${hexToRGBA(theme.global.colors['background'], '1')};
 
   display: flex;

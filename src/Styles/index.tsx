@@ -64,6 +64,9 @@ export const theme = {
       headingActive: isDayTime ? colors.darkYellow : colors.middleDark,
       headingInactive: isDayTime ? colors.paragraph : colors.white,
 
+      // Hover
+      hoverBlack: 'rgba(0,0,0,0.05)',
+
       // TODO: Bis hierher richtige Farben....
       paragraph: isDayTime ? colors.darkYellow : colors.headingDark,
 

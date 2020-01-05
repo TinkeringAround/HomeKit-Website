@@ -2,27 +2,28 @@ import React, { FC } from 'react'
 import { ResponsiveContext } from 'grommet'
 
 // Partials
-import Desktop from './desktop'
-import Mobile from './mobile'
+import Window from './window'
+import Overlay from './overlay'
 
 // ===============================================
 interface Props {
   open: boolean
   closeDialog: any
+  stagger?: boolean
 }
 
 // ===============================================
-const Dialog: FC<Props> = ({ open, closeDialog, children }) => (
+const Dialog: FC<Props> = ({ open, closeDialog, children, stagger = false }) => (
   <ResponsiveContext.Consumer>
     {size =>
       size.includes('small') ? (
-        <Mobile open={open} closeDialog={closeDialog}>
+        <Overlay open={open} closeDialog={closeDialog} stagger={stagger}>
           {children}
-        </Mobile>
+        </Overlay>
       ) : (
-        <Desktop open={open} closeDialog={closeDialog}>
+        <Window open={open} closeDialog={closeDialog} stagger={stagger}>
           {children}
-        </Desktop>
+        </Window>
       )
     }
   </ResponsiveContext.Consumer>
