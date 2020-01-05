@@ -16,8 +16,10 @@ type IconProps = {
 
 // ===============================================
 const Icon: FC<IconProps> = ({ type, active, mini = false, size = '60%' }) => {
-  const colorMini = active ? theme.global.colors.headingActive : theme.global.colors.headingInactive
-  const colorNormal = active ? theme.global.colors.iconActive : theme.global.colors.iconInactive
+  const colorMini = active ? theme.global.colors['heading'] : theme.global.colors['paragraph']
+  const colorNormal = active
+    ? theme.global.colors['darkYellow']
+    : theme.global.colors['lightElement']
   const color = mini ? colorMini : colorNormal
 
   if (type) {
@@ -212,7 +214,7 @@ const Window: FC<Props> = ({ color, size = '80%' }) => (
 )
 
 const Plus: FC<Props> = ({ size = '40%' }) => {
-  const color = theme.global.colors.iconInactive
+  const color = theme.global.colors['darkElement']
 
   return (
     <svg

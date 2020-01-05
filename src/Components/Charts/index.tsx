@@ -38,8 +38,8 @@ const Chart: FC<Props> = ({ device }) => {
           device !== undefined ? device.lastUpdated : ''
         )
         const color = active
-          ? theme.global.colors['deviceActive']
-          : theme.global.colors['deviceInactive']
+          ? theme.global.colors['darkYellow']
+          : theme.global.colors['lightElement']
 
         return (
           <Fragment>

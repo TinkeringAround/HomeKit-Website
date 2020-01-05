@@ -35,7 +35,7 @@ const SDevice = styled(Box)<{ color: string }>`
 
   background: ${({ color }) => color};
   border: none;
-  border-radius: 25px;
+  border-radius: 15px;
   box-shadow: none;
 
   outline: 0;
@@ -108,8 +108,10 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
     deviceData !== undefined ? deviceData.type : '',
     deviceData !== undefined ? deviceData.lastUpdated : ''
   )
-  const color = active ? theme.global.colors['deviceActive'] : theme.global.colors['deviceInactive']
-  const spinnerColor = active ? theme.global.colors.iconActive : theme.global.colors.iconInactive
+  const color = active ? theme.global.colors['yellow'] : theme.global.colors['lightElement']
+  const spinnerColor = active
+    ? theme.global.colors['darkYellow']
+    : theme.global.colors['darkElement']
 
   // ===============================================
   return (

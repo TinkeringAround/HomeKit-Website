@@ -62,7 +62,7 @@ const Login: FC = () => {
             height={isMobile ? '100%' : '500px'}
             justify="center"
             align="center"
-            background="bgInverse"
+            background="dark"
             margin="auto"
             style={{
               borderRadius: isMobile ? 0 : 15,
@@ -73,9 +73,12 @@ const Login: FC = () => {
               <Heading level="1" responsive size="medium" textAlign="center" color="headingInverse">
                 HomeKit
               </Heading>
+
+              {/* Formular */}
               <Box flex="grow" justify="center" align="center">
                 {!loading ? (
                   <Form onSubmit={login} style={{ width: '100%' }}>
+                    {/* Inputs */}
                     <FormField type="email" name="email" className="Formfield">
                       <TextInput
                         type="text"
@@ -92,12 +95,12 @@ const Login: FC = () => {
                         onChange={(event: any) => updateCredentials(event.target)}
                       />
                     </FormField>
-                    <Box justify="center" align="center">
-                      <Button props={{ type: 'submit', label: 'Anmelden' }} />
-                    </Box>
+
+                    {/* Button */}
+                    <Button props={{ type: 'submit', label: 'Anmelden' }} />
                   </Form>
                 ) : (
-                  <CircleSpinner size={75} color={theme.global.colors['darkYellow']} />
+                  <CircleSpinner size={75} color={theme.global.colors['darkElement']} />
                 )}
               </Box>
             </Box>

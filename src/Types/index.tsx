@@ -87,3 +87,6 @@ export type TChartData = {
   x: string
   y: string
 }
+
+// ===============================================
+export type TTab = 'Räume' | 'Geräte'

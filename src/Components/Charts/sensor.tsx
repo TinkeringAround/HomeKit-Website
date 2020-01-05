@@ -26,21 +26,21 @@ const chartTheme = {
   axis: {
     domain: {
       line: {
-        stroke: theme.global.colors.headingInactive
+        stroke: theme.global.colors['paragraph']
       }
     },
     ticks: {
       line: {
-        stroke: theme.global.colors.headingInactive
+        stroke: theme.global.colors['paragraph']
       },
       text: {
-        fill: theme.global.colors.headingInactive
+        fill: theme.global.colors['paragraph']
       }
     }
   },
   grid: {
     line: {
-      stroke: theme.global.colors.iconWrapperInactive,
+      stroke: theme.global.colors['paragraph'],
       strokeWidth: 1
     }
   },

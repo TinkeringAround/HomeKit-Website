@@ -7,21 +7,24 @@ import { TStyled } from '../Types'
 import { theme } from '../Styles'
 
 // ===============================================
-export const Input = styled.input`
-  font-family: 'Roboto', sans-serif;
-  font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.25em')};
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 10px;
+export const SInput = styled.input`
   width: 100%;
   height: 50px;
+  margin: 2rem 0;
   padding: 0px;
-  color: ${theme.global.colors.headingInactive};
-  background-color: ${theme.global.colors.background};
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '3rem')};
   text-overflow: ellipsis;
 
+  border: none;
+  border-radius: 10px;
+  color: ${theme.global.colors['heading']};
+  background-color: ${theme.global.colors['white']};
+
   ::placeholder {
-    color: ${theme.global.colors.iconWrapperInactive};
+    color: ${theme.global.colors['paragraph']};
   }
 
   :focus {
@@ -30,19 +33,19 @@ export const Input = styled.input`
 `
 
 // ===============================================
-export const NameInput = styled.input`
+export const SNameInput = styled.input`
   font-family: 'Roboto', sans-serif;
   font-size: ${(props: TStyled) => (props.fontSize ? props.fontSize : '1.5em')};
   font-weight: bold;
   border: none;
-  width: 65%;
+  width: 50%;
   padding: 0px;
-  color: ${theme.global.colors.iconInactive};
-  background-color: ${theme.global.colors.deviceInactive};
+  color: ${theme.global.colors['heading']};
+  background-color: ${theme.global.colors['white']};
   text-overflow: ellipsis;
 
   ::placeholder {
-    color: ${theme.global.colors.iconInactive};
+    color: ${theme.global.colors['paragraph']};
   }
 
   :focus {
@@ -51,10 +54,12 @@ export const NameInput = styled.input`
 `
 
 // ===============================================
-export const Column = styled.div`
+export const SColumn = styled.div<TStyled>`
   width: 100%;
   height: auto;
   overflow-y: auto;
+
+  margin: ${({ margin }) => (margin ? margin : '0')};
 `
 
 // ===============================================
@@ -64,7 +69,7 @@ export const SRow = styled.div`
   padding: 10px 20px;
   border-radius: 10px;
   background-color: ${props =>
-    props.active ? theme.global.colors.deviceActive : theme.global.colors.deviceInactive};
+    props.active ? theme.global.colors['yellow'] : theme.global.colors['lightElement']};
 
   display: flex;
   justify-content: space-between;

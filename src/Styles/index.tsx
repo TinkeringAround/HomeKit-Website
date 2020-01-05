@@ -1,18 +1,15 @@
-const hours = new Date().getHours()
-const isDayTime = hours > 7 && hours < 20
-
-//----------------------------------------------------------
+// ===============================================
 export const colors = {
   // Background Colors
-  white: '#fff',
+  white: '#FFF',
   dark: '#3E4555',
   light: '#DFE2EA',
-  middleDark: '#606777',
+  medium: '#606777',
 
-  // Text Colors
-  headingDark: '#343842',
-  darkYellow: '#F3AC07',
+  // TODO: Text Colors
+  heading: '#343842',
   paragraph: '#B0B8CE',
+  darkYellow: '#F3AC07',
 
   // Element Colors
   yellow: '#FFEBC0',
@@ -20,7 +17,7 @@ export const colors = {
   darkElement: '#333844'
 }
 
-//----------------------------------------------------------
+// ===============================================
 export const theme = {
   global: {
     breakpoints: {
@@ -43,47 +40,14 @@ export const theme = {
     colors: {
       // All Colors
       ...colors,
-      // Background Colors
-      background: isDayTime ? colors.white : colors.dark,
-      bgInverse: isDayTime ? colors.dark : colors.white,
 
-      // Text Colors
-      heading: isDayTime ? colors.headingDark : colors.white,
-      headingInverse: isDayTime ? colors.white : colors.headingDark,
-
-      // IoT
-      deviceActive: isDayTime ? colors.yellow : colors.white,
-      deviceInactive: isDayTime ? colors.lightElement : colors.darkElement,
-
-      iconWrapperActive: isDayTime ? colors.darkYellow : colors.yellow,
-      iconWrapperInactive: isDayTime ? colors.light : colors.middleDark,
-
-      iconActive: isDayTime ? colors.white : colors.darkYellow,
-      iconInactive: colors.paragraph,
-
-      headingActive: isDayTime ? colors.darkYellow : colors.middleDark,
-      headingInactive: isDayTime ? colors.paragraph : colors.white,
-
-      // Hover
-      hoverBlack: 'rgba(0,0,0,0.05)',
-
-      // TODO: Bis hierher richtige Farben....
-      paragraph: isDayTime ? colors.darkYellow : colors.headingDark,
-
-      // Element Colors
-      active: isDayTime ? colors.yellow : colors.white,
-      inactive: isDayTime ? colors.lightElement : colors.darkElement
+      // Special Colors
+      hoverBlack: 'rgba(0,0,0,0.05)'
     },
     font: {
       family: 'Roboto',
       size: '18px',
       height: '20px'
-    }
-  },
-  button: {
-    color: isDayTime ? colors.headingDark : colors.darkYellow,
-    primary: {
-      color: isDayTime ? colors.lightElement : colors.yellow
     }
   }
 }

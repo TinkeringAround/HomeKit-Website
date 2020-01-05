@@ -1,35 +1,24 @@
-import React, { FC } from 'react'
-import { Text, Heading, ResponsiveContext } from 'grommet'
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
+import React, { FC, Fragment, useContext } from 'react'
+import { Text, ResponsiveContext } from 'grommet'
 
 // Types
 import { TRoom } from '../../Types'
 
+// const
+import { DatabaseContext } from '../../Contexts'
+
 // Atoms
-import { Input, Column, SRow, NameInput } from '../../Atoms/styled'
+import { SColumn, SRow, SNameInput } from '../../Atoms/styled'
+import IconButton from '../../Atoms/iconButton'
 
 // ===============================================
-interface Props {
-  rooms: Array<TRoom>
-  addRoom: any
-  renameRoom: (old: string, name: string) => void
-  deleteRoom: (index: number) => void
-}
+const RoomManagement: FC = () => {
+  const { rooms, renameRoom, deleteRoom } = useContext(DatabaseContext)
 
-// ===============================================
-const RoomManagement: FC<Props> = ({ rooms, addRoom, renameRoom, deleteRoom }) => {
-  const onDragEnd = (result: DropResult) => {
-    if (rooms.length === 0) deleteRoom(result.source.index)
-    else {
-      if (!result.destination) {
-        deleteRoom(result.source.index)
-      }
-    }
-  }
-
-  const onRoomNameChanged = (event: any) => {
+  const onRenameRoom = (event: any) => {
     const oldName = event.target.placeholder
     const newName = event.target.value
+
     if (event.key === 'Enter' && newName !== '') {
       event.target.placeholder = newName
       event.target.value = ''
@@ -42,52 +31,31 @@ const RoomManagement: FC<Props> = ({ rooms, addRoom, renameRoom, deleteRoom }) =
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
+
         return (
-          <>
-            <Heading level="3" size="2em" color="headingInactive" margin="50px 0px 10px 0px">
-              Räume
-            </Heading>
-            <Input type="text" placeholder="Raum hinzufügen..." onKeyPress={addRoom} />
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="Column">
-                {provided => (
-                  <Column {...provided.droppableProps} ref={provided.innerRef}>
-                    {rooms.map((room: TRoom, index: number) => (
-                      <Draggable
-                        key={'DraggableRoom-' + index}
-                        draggableId={room.name}
-                        index={index}
-                      >
-                        {provided => (
-                          <SRow
-                            margin="0px 0px 10px 0px"
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <NameInput
-                              type="text"
-                              fontSize={isMobile ? '0.9em' : '1.2em'}
-                              placeholder={room.name}
-                              onKeyPress={onRoomNameChanged}
-                            />
-                            <Text
-                              size={isMobile ? '0.5em' : '0.65em'}
-                              color="iconInactive"
-                              textAlign="end"
-                            >
-                              {'Devices: ' + room.devices.length}
-                            </Text>
-                          </SRow>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </Column>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </>
+          <Fragment>
+            <SColumn margin="1.5rem 0 0">
+              {rooms.map((room: TRoom, index: number) => (
+                <SRow key={'RoomManagement-' + index} margin="0px 0px 10px 0px">
+                  <SNameInput
+                    type="text"
+                    fontSize={isMobile ? '0.9em' : '1.2em'}
+                    placeholder={room.name}
+                    onKeyPress={onRenameRoom}
+                  />
+                  <Text
+                    size={isMobile ? '0.5em' : '0.65em'}
+                    color="iconInactive"
+                    textAlign="end"
+                    style={{ width: '40%' }}
+                  >
+                    {'Devices: ' + room.devices.length}
+                  </Text>
+                  <IconButton wrapper="3rem" iconType="minus" onClick={() => deleteRoom(index)} />
+                </SRow>
+              ))}
+            </SColumn>
+          </Fragment>
         )
       }}
     </ResponsiveContext.Consumer>

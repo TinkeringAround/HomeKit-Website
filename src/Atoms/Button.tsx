@@ -37,9 +37,8 @@ const Button: React.FC<Props> = ({
         borderColor: 'transparent',
         fontWeight: 'bold',
         transition: '0.2s all',
-        transform: hover ? 'scale(1.01)' : 'scale(1)',
         boxShadow: hover
-          ? '0px 0px 5px 1px ' + hexToRGBA(theme.global.colors['iconActive'], '0.2')
+          ? '0px 0px 5px 1px ' + hexToRGBA(theme.global.colors['dark'], '0.2')
           : 'none'
       }}
       onMouseEnter={() => setHover(true)}

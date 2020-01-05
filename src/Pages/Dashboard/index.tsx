@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect, useCallback } from 'react'
-import { Box } from 'grommet'
+import { Box, ResponsiveContext } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 
 // Types
-import { TRoom, TDevice, TDatabase, TVariable } from '../../Types'
+import { TRoom, TDevice, TVariable } from '../../Types'
 
 // Theme
 import { theme } from '../../Styles'
@@ -12,18 +12,22 @@ import { theme } from '../../Styles'
 // Context
 import { DatabaseContext } from '../../Contexts'
 
-// Custom Components
+// Components
 import Room from '../../Components/Room'
 import Navigation from '../../Components/Navigation/'
+import DeviceDialog from '../../Components/Dialog/devices'
 
 // ===============================================
 const Dashboard: FC = () => {
-  const [loading, setLoading] = useState<boolean>(true)
-  const [data, setData] = useState<TDatabase>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [rooms, setRooms] = useState<Array<TRoom> | null>(null)
+  const [devices, setDevices] = useState<Array<TDevice> | null>(null)
+  const [selectedRoom, setSelectedRoom] = useState<TRoom | null>(null)
 
   // ===============================================
-  const reload = useCallback(() => {
-    setLoading(true)
+  const reload = useCallback((silent: boolean = true) => {
+    if (!silent) setLoading(true)
+
     firebase
       .database()
       .ref('/')
@@ -34,8 +38,8 @@ const Dashboard: FC = () => {
           var rooms: Array<TRoom> = []
           var devices: Array<TDevice> = []
 
+          // Rooms
           if (tmpDatabase.hasOwnProperty('rooms')) {
-            console.log('Rooms: ', tmpDatabase.rooms)
             const roomKeys = Object.keys(tmpDatabase.rooms)
             roomKeys.forEach(key => {
               rooms = [
@@ -48,8 +52,8 @@ const Dashboard: FC = () => {
             })
           }
 
+          // Devices
           if (tmpDatabase.hasOwnProperty('devices')) {
-            console.log('Devices: ', tmpDatabase.devices)
             const deviceKeys = Object.keys(tmpDatabase.devices)
             deviceKeys.forEach(key => {
               var values: Array<TVariable> = []
@@ -77,12 +81,14 @@ const Dashboard: FC = () => {
             })
           }
 
-          const data: TDatabase = {
+          console.log('New Database Update: ', {
             rooms: rooms,
             devices: devices
-          }
+          })
 
-          setData(data)
+          if (!silent) setTimeout(() => setLoading(false), 1000)
+          setRooms(rooms)
+          setDevices(devices)
         }
       })
   }, [])
@@ -90,11 +96,12 @@ const Dashboard: FC = () => {
   // #region Rooms
   const updateRooms = useCallback(
     (newRooms: Array<TRoom>) => {
-      if (data) {
+      if (rooms) {
         var updates: any = {}
         newRooms.forEach(room => {
           updates['rooms/' + room.name] = { devices: room.devices }
         })
+
         firebase
           .database()
           .ref()
@@ -105,51 +112,47 @@ const Dashboard: FC = () => {
               .database()
               .ref()
               .update(updates)
-              .then(() => {
-                setData({
-                  devices: data.devices,
-                  rooms: newRooms
-                })
-              })
+              .then(() => setRooms(newRooms))
           })
       }
     },
-    [data]
+    [rooms]
   )
 
   const renameRoom = useCallback(
     (oldName: string, newName: string) => {
-      if (data) {
-        const index = data.rooms.findIndex((room: TRoom) => room.name === oldName)
+      if (rooms) {
+        const index = rooms.findIndex((room: TRoom) => room.name === oldName)
         if (index >= 0) {
-          var newRooms = Array.from(data.rooms)
+          var newRooms = Array.from(rooms)
           newRooms[index].name = newName
           updateRooms(newRooms)
         }
       }
     },
-    [data, updateRooms]
+    [rooms, updateRooms]
   )
 
   const updateRoomDevices = useCallback(
     (index: number, newDevices: Array<string>) => {
-      if (data) {
-        const newRooms = Array.from(data.rooms)
+      if (rooms) {
+        const newRooms = Array.from(rooms)
         newRooms[index].devices = newDevices
+
         updateRooms(newRooms)
       }
     },
-    [data, updateRooms]
+    [rooms, updateRooms]
   )
 
   const addRoom = useCallback(
     (event: any) => {
-      if (data && event && event.key === 'Enter') {
+      if (rooms && event && event.key === 'Enter') {
         if (event.target.value !== '') {
           const name = event.target.value
           event.target.value = ''
           updateRooms([
-            ...data.rooms,
+            ...rooms,
             {
               name: name,
               devices: []
@@ -158,26 +161,27 @@ const Dashboard: FC = () => {
         }
       }
     },
-    [data, updateRooms]
+    [rooms, updateRooms]
   )
 
   const deleteRoom = useCallback(
     (index: number) => {
-      if (data) {
-        const newRooms = Array.from(data.rooms)
+      if (rooms) {
+        const newRooms = Array.from(rooms)
         newRooms.splice(index, 1)
         updateRooms(newRooms)
       }
     },
-    [data, updateRooms]
+    [rooms, updateRooms]
   )
   // #endregion
 
   // #region Devices
   const updateDevices = useCallback(
     (newDevices: Array<TDevice>) => {
-      if (data) {
+      if (devices) {
         var updates: any = {}
+
         newDevices.forEach(device => {
           var values = {}
           device.values.forEach((variable: TVariable) => {
@@ -195,7 +199,7 @@ const Dashboard: FC = () => {
             values: values
           }
         })
-        console.log('Device Updates: ', updates)
+
         firebase
           .database()
           .ref()
@@ -206,99 +210,109 @@ const Dashboard: FC = () => {
               .database()
               .ref()
               .update(updates)
-              .then(() => {
-                setData({
-                  devices: newDevices,
-                  rooms: data.rooms
-                })
-              })
+              .then(() => setDevices(newDevices))
           })
       }
     },
-    [data]
+    [devices, setDevices]
   )
 
   const renameDevice = useCallback(
     (oldName: string, newName: string) => {
-      if (data) {
-        const index = data.devices.findIndex((device: TDevice) => device.name === oldName)
+      if (devices) {
+        const index = devices.findIndex((device: TDevice) => device.name === oldName)
         if (index >= 0) {
-          var newDevices = Array.from(data.devices)
+          var newDevices = Array.from(devices)
           newDevices[index].name = newName
           updateDevices(newDevices)
         }
       }
     },
-    [data, updateDevices]
+    [devices, updateDevices]
   )
 
   const deleteDevice = useCallback(
     (index: number) => {
-      if (data) {
-        const newDevices = Array.from(data.devices)
+      if (devices) {
+        const newDevices = Array.from(devices)
         newDevices.splice(index, 1)
         updateDevices(newDevices)
       }
     },
-    [data, updateDevices]
+    [devices, updateDevices]
   )
   // #endregion
 
   useEffect(() => {
-    if (!data) reload()
-  }, [data, reload])
-
-  useEffect(() => {
-    if (loading && data) {
-      console.log('Data: ', data)
-      setLoading(false)
-    }
-  }, [loading, data])
+    if (!rooms && !devices) reload(false)
+  }, [rooms, devices, reload])
 
   // ===============================================
   return (
-    <Box
-      height="100%"
-      width="100%"
-      justify={loading ? 'center' : 'end'}
-      align={loading ? 'center' : 'start'}
-    >
-      {loading && <CircleSpinner size={150} color={theme.global.colors['darkYellow']} />}
+    <ResponsiveContext.Consumer>
+      {size => {
+        const isMobile = size.includes('small')
 
-      {!loading && data && (
-        <DatabaseContext.Provider
-          value={{
-            reload: reload,
+        return (
+          <Box height="100%" width="100%" justify="end">
+            <DatabaseContext.Provider
+              value={{
+                reload: reload,
 
-            // Rooms
-            rooms: data.rooms,
-            addRoom: addRoom,
-            deleteRoom: deleteRoom,
-            renameRoom: renameRoom,
+                // Rooms
+                rooms: rooms ? rooms : [],
+                addRoom: addRoom,
+                deleteRoom: deleteRoom,
+                renameRoom: renameRoom,
 
-            // Devices
-            devices: data.devices,
-            deleteDevice: deleteDevice,
-            renameDevice: renameDevice
-          }}
-        >
-          <Navigation />
-          <Box width="100%" height="90%" direction="row" wrap={false} style={{ overflowX: 'auto' }}>
-            {data &&
-              data.rooms.map((room: TRoom, index: number) => (
-                <Room
-                  key={'Room-' + index}
-                  name={room.name}
-                  index={index}
-                  roomDevices={room.devices}
-                  devices={data.devices}
-                  updateRoomDevices={updateRoomDevices}
-                />
-              ))}
+                // Devices
+                devices: devices ? devices : [],
+                deleteDevice: deleteDevice,
+                renameDevice: renameDevice
+              }}
+            >
+              <Navigation />
+              <Box
+                width="100%"
+                height="90%"
+                direction="row"
+                wrap={false}
+                style={{ overflowX: 'auto' }}
+              >
+                {!loading &&
+                  rooms &&
+                  devices &&
+                  rooms.map((room: TRoom, index: number) => (
+                    <Room
+                      key={'Room-' + index + '-' + Date.now().toString()}
+                      room={room}
+                      selectRoom={() => setSelectedRoom(room)}
+                    />
+                  ))}
+                {!loading && rooms && devices && <Room room={null} selectRoom={null} />}
+
+                {loading && (
+                  <Box height="100%" width="100%" justify="center" align="center">
+                    <CircleSpinner
+                      size={isMobile ? 75 : 150}
+                      color={theme.global.colors['darkElement']}
+                    />
+                  </Box>
+                )}
+              </Box>
+
+              {/* Dialog */}
+              <DeviceDialog
+                open={selectedRoom !== null}
+                close={() => setSelectedRoom(null)}
+                room={selectedRoom}
+                updateRoomDevices={updateRoomDevices}
+              />
+            </DatabaseContext.Provider>
           </Box>
-        </DatabaseContext.Provider>
-      )}
-    </Box>
+        )
+      }}
+    </ResponsiveContext.Consumer>
   )
 }
 

@@ -21,7 +21,7 @@ const SIcon = styled(Box)`
   cursor: pointer;
 
   :hover {
-    box-shadow: 0px 0px 5px 1px ${hexToRGBA(theme.global.colors['iconWrapperInactive'], '0.2')};
+    box-shadow: 0px 0px 5px 1px ${hexToRGBA(theme.global.colors['lightElement'], '0.2')};
   }
 `
 

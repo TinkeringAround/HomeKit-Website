@@ -5,7 +5,7 @@ import { ColorSchemeId } from '@nivo/colors'
 // Types
 import { TScale } from '../Types'
 
-//-----------------------------------------------
+// ===============================================
 export const typeToLegend = (type: string): string => {
   switch (type) {
     case 'temperature':
@@ -63,7 +63,7 @@ export const typeToColor = (type: string): ColorSchemeId => {
   }
 }
 
-//-----------------------------------------------
+// ===============================================
 export const hexToRGBA = (hexColor: string, opacity: string) => {
   if (hexColor === '#fff' || hexColor === '#FFF') return 'rgba(255, 255, 255, ' + opacity + ')'
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor)
@@ -84,14 +84,7 @@ export const hexToRGBA = (hexColor: string, opacity: string) => {
   return rgba
 }
 
-//-----------------------------------------------
-export const deviceTypeToName = (type: string) => {
-  switch (type) {
-    case 'sensor':
-      return 'Sensor'
-  }
-}
-
+// ===============================================
 export const deviceIsActive = (type: string, timestamp: string) => {
   if (type === '' || timestamp === '') return false
 
@@ -114,7 +107,7 @@ export const isToday = (timestamp: string) => {
 
 export const deviceHasLowBattery = (battery: number) => battery < 2400
 
-//-------------------------------------------------------------
+// ===============================================
 export const deviceLastActiveTime = (timestamp: string) => {
   if (timestamp === '') return ''
 
@@ -129,7 +122,7 @@ export const deviceLastActiveDate = (timestamp: string) => {
   return moment.unix(parseInt(timestamp)).format('Do MMMM')
 }
 
-//-------------------------------------------------------------
+// ===============================================
 export const timestampToTime = (timestamp: string) => {
   if (timestamp === '') return ''
 

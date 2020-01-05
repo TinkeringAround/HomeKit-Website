@@ -1,6 +1,9 @@
 import React, { Fragment, useState, useContext, FC } from 'react'
 import firebase from 'firebase'
-import { Box, ResponsiveContext } from 'grommet'
+import { Box, ResponsiveContext, Heading } from 'grommet'
+
+// Types
+import { TTab } from '../../Types'
 
 // Context
 import { DatabaseContext } from '../../Contexts'
@@ -12,63 +15,59 @@ import IconButton from '../../Atoms/iconButton'
 import Dialog from '../Dialog'
 import RoomManagement from '../Management/room'
 import DeviceManagement from '../Management/device'
-import Switch from '../Switch'
-import Signout from '../Signout'
+
+// Consts
+const tabs: Array<TTab> = ['Räume', 'Geräte']
 
 // ===============================================
 const Navigation: FC = () => {
-  const {
-    reload,
-    rooms,
-    addRoom,
-    deleteRoom,
-    renameRoom,
-    devices,
-    deleteDevice,
-    renameDevice
-  } = useContext(DatabaseContext)
+  const { reload } = useContext(DatabaseContext)
   const [open, setOpen] = useState<boolean>(false)
-  const [mode, setMode] = useState<'room' | 'device'>('room')
+  const [mode, setMode] = useState<TTab>('Räume')
 
   return (
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
         const wrapperSize = (isMobile ? 40 : 50) + 'px'
-        const top = isMobile ? 15 : 30
-        const right = isMobile ? 20 : 40
+        const position = '1rem'
 
         return (
           <Fragment>
-            <Box direction="row" style={{ position: 'absolute', top: top, right: right }}>
-              <IconButton iconType="reload" wrapper={wrapperSize} onClick={reload} />
+            <Box direction="row" style={{ position: 'absolute', top: position, right: position }}>
+              <IconButton iconType="reload" wrapper={wrapperSize} onClick={() => reload(false)} />
               <IconButton iconType="settings" wrapper={wrapperSize} onClick={() => setOpen(true)} />
+              <IconButton
+                iconType="signout"
+                wrapper={wrapperSize}
+                onClick={() => firebase.auth().signOut()}
+              />
             </Box>
 
             {/* Dialog */}
             <Dialog open={open} closeDialog={() => setOpen(false)}>
-              {mode === 'room' ? (
-                <>
-                  <Signout onClick={() => firebase.auth().signOut()} />
-                  <Switch icon="circleEmpty" text="Geräten" onClick={() => setMode('device')} />
-                  <RoomManagement
-                    addRoom={addRoom}
-                    renameRoom={renameRoom}
-                    deleteRoom={deleteRoom}
-                    rooms={rooms}
-                  />
-                </>
-              ) : (
-                <>
-                  <Signout onClick={() => firebase.auth().signOut()} />
-                  <Switch icon="circleFull" text="Räumen" onClick={() => setMode('room')} />
-                  <DeviceManagement
-                    deleteDevice={deleteDevice}
-                    renameDevice={renameDevice}
-                    devices={devices}
-                  />
-                </>
-              )}
+              {/* Heading */}
+              <Box width="100%" direction="row" align="baseline" margin={{ bottom: '1rem' }}>
+                {tabs.map((tab: TTab) => (
+                  <Heading
+                    key={'Tab-' + tab}
+                    level="3"
+                    size={
+                      isMobile ? (tab === mode ? '2rem' : '.75rem') : tab === mode ? '3rem' : '1rem'
+                    }
+                    color="headingInactive"
+                    margin="0 .5rem 0 0"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setMode(tab)}
+                  >
+                    {tab}
+                  </Heading>
+                ))}
+              </Box>
+
+              {/* Content */}
+              {mode === 'Räume' && <RoomManagement />}
+              {mode === 'Geräte' && <DeviceManagement />}
             </Dialog>
           </Fragment>
         )

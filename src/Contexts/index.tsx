@@ -5,7 +5,7 @@ import { TRoom, TDevice } from '../Types'
 
 // ===============================================
 type DatabaseContextProps = {
-  reload: () => void
+  reload: (silent: boolean) => void
 
   // Rooms
   rooms: Array<TRoom>
@@ -20,7 +20,7 @@ type DatabaseContextProps = {
 }
 
 export const DatabaseContext = React.createContext<DatabaseContextProps>({
-  reload: () => {},
+  reload: (silent: boolean) => {},
 
   // Rooms
   rooms: [],
