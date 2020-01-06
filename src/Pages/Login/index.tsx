@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Box, ResponsiveContext, Form, FormField, Heading, TextInput } from 'grommet'
+import { Box, ResponsiveContext, Form, FormField, Heading, TextInput, Image } from 'grommet'
 import { auth, FirebaseError } from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 import styled from 'styled-components'
@@ -12,6 +12,9 @@ import { TCredential } from '../../Types'
 
 // Atoms
 import Button from '../../Atoms/button'
+
+// Assets
+import Logo from '../../Assets/logo.png'
 
 // ===============================================
 const SFormField = styled(FormField)`
@@ -85,20 +88,33 @@ const Login: FC = () => {
             align="center"
             margin={isMobile ? '5rem 0 0' : 'auto'}
           >
-            <Box width={isMobile ? '85%' : '80%'} height="90%" justify="center">
-              <Heading
-                level="1"
-                size="4rem"
-                margin="0 0 2rem"
-                textAlign="center"
-                color="dark"
-                responsive
+            <Box
+              width={isMobile ? '85%' : '80%'}
+              height="90%"
+              justify={isMobile ? 'evenly' : 'center'}
+            >
+              <Box
+                width="100%"
+                height={isMobile ? '5rem' : '6rem'}
+                align="center"
+                direction="row"
+                margin={isMobile ? '0' : '0 0 2rem'}
               >
-                HomeKit
-              </Heading>
+                <Image height="100%" alt="HomeKit Logo" src={Logo} />
+                <Heading
+                  level="1"
+                  size={isMobile ? '3.5rem' : '4.5rem'}
+                  margin="0 0 0 1rem"
+                  textAlign="center"
+                  color="dark"
+                  responsive
+                >
+                  HomeKit
+                </Heading>
+              </Box>
 
               {/* Formular */}
-              <Box flex="grow" justify="center" align="center">
+              <Box flex={isMobile ? undefined : 'grow'} justify="center" align="center">
                 {!loading ? (
                   <Form onSubmit={login} style={{ width: '100%' }}>
                     {/* Inputs */}

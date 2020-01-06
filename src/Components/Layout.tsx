@@ -15,7 +15,8 @@ const Layout: FC = ({ children }) => (
       width="100%"
       background="yellow"
       style={{ position: 'fixed', zIndex: 0, top: 0 }}
-    ></Box>
+    />
+
     {children}
   </Box>
 )
