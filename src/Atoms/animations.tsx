@@ -26,7 +26,7 @@ export const ASimple = posed(SBackground)({
 })
 
 // ===============================================
-const SDialogMobile = styled.div`
+const SOverlay = styled.div`
   position: absolute;
   z-index: 701;
 
@@ -42,7 +42,7 @@ const SDialogMobile = styled.div`
   align-items: center;
 `
 
-export const ADialogMobile = posed(SDialogMobile)({
+export const AOverlay = posed(SOverlay)({
   exit: {
     opacity: 0,
     bottom: '-15%'
@@ -53,7 +53,7 @@ export const ADialogMobile = posed(SDialogMobile)({
   }
 })
 
-export const SDialogDesktop = styled.div`
+export const SWindow = styled.div`
   position: absolute;
   z-index: 701;
 
@@ -65,7 +65,7 @@ export const SDialogDesktop = styled.div`
   align-items: center;
 `
 
-export const ADialogDesktop = posed(SDialogDesktop)({
+export const AWindow = posed(SWindow)({
   exit: {
     opacity: 0,
     top: '5%'

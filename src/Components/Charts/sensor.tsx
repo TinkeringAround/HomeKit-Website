@@ -1,13 +1,13 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState, useEffect, Fragment } from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import firebase from 'firebase'
-import { Box, Heading } from 'grommet'
+import { Box, Heading, Text } from 'grommet'
 
 // Types
 import { TMeasurement, TChartData, TDataStream, TLine } from '../../Types'
 
-// Theme
-import { theme } from '../../Styles'
+// Styles
+import { colors } from '../../Styles'
 
 // Utility
 import {
@@ -26,27 +26,27 @@ const chartTheme = {
   axis: {
     domain: {
       line: {
-        stroke: theme.global.colors['light']
+        stroke: colors['light']
       }
     },
     ticks: {
       line: {
-        stroke: theme.global.colors['light']
+        stroke: colors['light']
       },
       text: {
-        fill: theme.global.colors['medium']
+        fill: colors['medium']
       }
     }
   },
   grid: {
     line: {
-      stroke: theme.global.colors['light'],
+      stroke: colors['light'],
       strokeWidth: 1
     }
   },
   tooltip: {
     basic: {
-      color: theme.global.colors['medium']
+      color: colors['medium']
     }
   }
 }
@@ -60,6 +60,7 @@ interface Props {
 // ===============================================
 const Sensor: FC<Props> = ({ id, isMobile }) => {
   const [data, setData] = useState<TDataStream | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   // ===============================================
   useEffect(() => {
@@ -69,63 +70,69 @@ const Sensor: FC<Props> = ({ id, isMobile }) => {
         .ref('/data/' + id)
         .once('value')
         .then(snapshot => {
-          const measurements = snapshot.val()
+          try {
+            const measurements = snapshot.val()
 
-          let newData: TDataStream = {
-            steps: '',
-            lines: [],
-            format: '',
-            axisBottom: ''
-          }
+            let newData: TDataStream = {
+              steps: '',
+              lines: [],
+              format: '',
+              axisBottom: ''
+            }
 
-          // Parse Data
-          const keys = Object.keys(measurements)
-          keys.forEach((key: string) => {
-            const data: Array<TChartData> = []
-            const measurementsForKey: Array<TMeasurement> = measurements[key]
+            // Parse Data
+            const keys = Object.keys(measurements)
+            keys.forEach((key: string) => {
+              const data: Array<TChartData> = []
+              const measurementsForKey: Array<TMeasurement> = measurements[key]
 
-            if (isMobile && measurementsForKey.length > MAX_MEASUREMENTS_MOBILE) {
-              measurementsForKey.splice(0, measurementsForKey.length - MAX_MEASUREMENTS_MOBILE)
-            } else if (!isMobile && measurementsForKey.length > MAX_MEASUREMENTS)
-              measurementsForKey.splice(0, measurementsForKey.length - MAX_MEASUREMENTS)
+              if (isMobile && measurementsForKey.length > MAX_MEASUREMENTS_MOBILE) {
+                measurementsForKey.splice(0, measurementsForKey.length - MAX_MEASUREMENTS_MOBILE)
+              } else if (!isMobile && measurementsForKey.length > MAX_MEASUREMENTS)
+                measurementsForKey.splice(0, measurementsForKey.length - MAX_MEASUREMENTS)
 
-            measurementsForKey.forEach((measurement: TMeasurement) => {
-              data.push({
-                x: timestampToTime(measurement.timestamp),
-                y: typeToMeasurement(key, measurement.value)
+              measurementsForKey.forEach((measurement: TMeasurement) => {
+                data.push({
+                  x: timestampToTime(measurement.timestamp),
+                  y: typeToMeasurement(key, measurement.value)
+                })
+              })
+
+              newData.lines.push({
+                id: typeToLegend(key),
+                color: typeToColor(key),
+                scale: typeToScale(key),
+                data: data
               })
             })
 
-            newData.lines.push({
-              id: typeToLegend(key),
-              color: typeToColor(key),
-              scale: typeToScale(key),
-              data: data
-            })
-          })
+            // Adjust Steps
+            newData = {
+              ...newData,
+              steps: valueCountToSteps(measurements[keys[0]].length, isMobile),
+              format: '%H.%M %d.%m.%Y',
+              axisBottom: '%H.%M Uhr, %d.%m.%Y'
+            }
 
-          // Adjust Steps
-          newData = {
-            ...newData,
-            steps: valueCountToSteps(measurements[keys[0]].length, isMobile),
-            format: '%H.%M %d.%m.%Y',
-            axisBottom: '%H.%M Uhr, %d.%m.%Y'
+            console.log('Count: ', measurements[keys[0]].length)
+            console.log('Lines: ', newData)
+            setData(newData)
+          } catch (error) {
+            setError('Keine Daten für dieses Gerät gefunden.')
+            console.error('No Data for this Device found.', error)
           }
-
-          console.log('Count: ', measurements[keys[0]].length)
-          console.log('Lines: ', newData)
-          setData(newData)
         })
     }
   })
 
   // ===============================================
   return (
-    <>
-      {data !== null ? (
+    <Fragment>
+      {/* Data */}
+      {data !== null &&
         data.lines.map((line: TLine, index: number) => {
           const height = 100 / data.lines.length
-          const headingMargin = isMobile ? '20px 0px -20px 30px' : '30px 0px -40px 50px'
+          const headingMargin = isMobile ? '1rem 0px -1rem 2rem' : '2rem 0px -2.5rem 3rem'
           const margin = isMobile ? 30 : 50
 
           return (
@@ -172,11 +179,17 @@ const Sensor: FC<Props> = ({ id, isMobile }) => {
               />
             </Box>
           )
-        })
-      ) : (
-        <></>
+        })}
+
+      {/* Error */}
+      {error && (
+        <Box height="100%" pad="1rem">
+          <Text size="1.5rem" color="medium">
+            {error}
+          </Text>
+        </Box>
       )}
-    </>
+    </Fragment>
   )
 }
 

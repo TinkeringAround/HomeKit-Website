@@ -7,7 +7,7 @@ import { Portal } from 'react-portal'
 import { theme } from '../../Styles'
 
 // Atoms
-import { ASimple, ADialogDesktop } from '../../Atoms/animations'
+import { ASimple, AWindow } from '../../Atoms/animations'
 
 // ===============================================
 interface Props {
@@ -40,7 +40,7 @@ const Window: FC<Props> = ({ open, closeDialog, children, stagger = false }) => 
             return (
               <PoseGroup preEnterPose="exit">
                 {showContent && (
-                  <ADialogDesktop
+                  <AWindow
                     key="Dialog-Window"
                     style={{
                       width: width,
@@ -53,7 +53,7 @@ const Window: FC<Props> = ({ open, closeDialog, children, stagger = false }) => 
                     <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
                       {children}
                     </Box>
-                  </ADialogDesktop>
+                  </AWindow>
                 )}
                 {showContent && <ASimple key="Dialog-Window-Background" onClick={closeDialog} />}
               </PoseGroup>

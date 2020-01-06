@@ -7,7 +7,7 @@ import { Portal } from 'react-portal'
 import { theme } from '../../Styles'
 
 // Atoms
-import { ASimple, ADialogMobile } from '../../Atoms/animations'
+import { ASimple, AOverlay } from '../../Atoms/animations'
 
 // ===============================================
 interface Props {
@@ -33,13 +33,13 @@ const Overlay: FC<Props> = ({ open, closeDialog, children, stagger = false }) =>
       <Grommet theme={theme}>
         <PoseGroup preEnterPose="exit">
           {showContent && (
-            <ADialogMobile key="Dialog-Overlay">
+            <AOverlay key="Dialog-Overlay">
               {open && (
                 <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
                   {children}
                 </Box>
               )}
-            </ADialogMobile>
+            </AOverlay>
           )}
           {showContent && <ASimple key="Dialog-Overlay-Background" onClick={closeDialog} />}
         </PoseGroup>

@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import { Heading, Box, Text } from 'grommet'
+import { Heading, Box, Text, ResponsiveContext } from 'grommet'
 
 // Types
 import { TRoom, TDevice } from '../../Types'
@@ -49,9 +49,18 @@ const DeviceDialog: React.FC<Props> = ({ open, close, room, updateRoomDevices })
   // ===============================================
   return (
     <Dialog open={open} closeDialog={close}>
-      <Heading level="3" size="2em" color="heading" margin="0 0 1rem">
-        {room ? room.name : ''}
-      </Heading>
+      <ResponsiveContext.Consumer>
+        {size => (
+          <Heading
+            level="3"
+            size={size.includes('small') ? '2.5rem' : '3rem'}
+            color="medium"
+            margin="0 0 1rem"
+          >
+            {room ? room.name : ''}
+          </Heading>
+        )}
+      </ResponsiveContext.Consumer>
 
       {/* Devices */}
       {devices && devices.length > 0 && room && (
