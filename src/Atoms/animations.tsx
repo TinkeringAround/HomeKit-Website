@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import posed from 'react-pose'
 
 // Styles
-import { theme } from '../Styles'
+import { colors } from '../Styles'
 
 // Utility
 import { hexToRGBA } from '../Utility'
@@ -33,7 +33,7 @@ const SDialogMobile = styled.div`
   width: 100%;
   height: 90%;
 
-  background: ${hexToRGBA(theme.global.colors['white'], '1')};
+  background: ${hexToRGBA(colors['white'], '1')};
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 
@@ -58,7 +58,7 @@ export const SDialogDesktop = styled.div`
   z-index: 701;
 
   border-radius: 10px;
-  background: ${hexToRGBA(theme.global.colors['white'], '1')};
+  background: ${hexToRGBA(colors['white'], '1')};
 
   display: flex;
   justify-content: center;

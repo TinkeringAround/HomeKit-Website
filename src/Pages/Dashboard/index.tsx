@@ -6,8 +6,8 @@ import { CircleSpinner } from 'react-spinners-kit'
 // Types
 import { TRoom, TDevice, TVariable } from '../../Types'
 
-// Theme
-import { theme } from '../../Styles'
+// Styles
+import { colors } from '../../Styles'
 
 // Context
 import { DatabaseContext } from '../../Contexts'
@@ -58,6 +58,7 @@ const Dashboard: FC = () => {
             deviceKeys.forEach(key => {
               var values: Array<TVariable> = []
               Object.keys(tmpDatabase.devices[key].values).forEach(deviceKey => {
+                // @ts-ignore
                 values = [
                   ...values,
                   {
@@ -293,10 +294,7 @@ const Dashboard: FC = () => {
 
                 {loading && (
                   <Box height="100%" width="100%" justify="center" align="center">
-                    <CircleSpinner
-                      size={isMobile ? 75 : 150}
-                      color={theme.global.colors['darkElement']}
-                    />
+                    <CircleSpinner size={isMobile ? 75 : 100} color={colors['yellow']} />
                   </Box>
                 )}
               </Box>

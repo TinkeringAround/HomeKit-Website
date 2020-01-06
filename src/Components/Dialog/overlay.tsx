@@ -3,7 +3,7 @@ import { Grommet, Box } from 'grommet'
 import { PoseGroup } from 'react-pose'
 import { Portal } from 'react-portal'
 
-// Theme
+// Styles
 import { theme } from '../../Styles'
 
 // Atoms
@@ -33,7 +33,7 @@ const Overlay: FC<Props> = ({ open, closeDialog, children, stagger = false }) =>
       <Grommet theme={theme}>
         <PoseGroup preEnterPose="exit">
           {showContent && (
-            <ADialogMobile key="Dialog-Mobile">
+            <ADialogMobile key="Dialog-Overlay">
               {open && (
                 <Box width="90%" height="90%" margin="0" style={{ position: 'relative' }}>
                   {children}
@@ -41,7 +41,7 @@ const Overlay: FC<Props> = ({ open, closeDialog, children, stagger = false }) =>
               )}
             </ADialogMobile>
           )}
-          {showContent && <ASimple key="Dialog-Mobile-Background" onClick={closeDialog} />}
+          {showContent && <ASimple key="Dialog-Overlay-Background" onClick={closeDialog} />}
         </PoseGroup>
       </Grommet>
     </Portal>

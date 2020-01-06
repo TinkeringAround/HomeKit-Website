@@ -1,17 +1,17 @@
-import React, { FC, useState, useEffect, Fragment, useCallback } from 'react'
+import React, { FC, useState, useEffect, useCallback } from 'react'
 import { Box } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
 import styled from 'styled-components'
 
-// Theme
-import { theme } from '../../Styles'
+// Styles
+import { colors } from '../../Styles'
 
 // Types
 import { TVariable, TDevice } from '../../Types'
 
 // Atoms
-import Icon from '../../Atoms/icon'
+import IconBox from '../../Atoms/iconBox'
 
 // Components
 import Overlay from '../Dialog/overlay'
@@ -25,33 +25,29 @@ import Content from './content'
 import { deviceIsActive, deviceHasLowBattery } from '../../Utility'
 
 // ===============================================
-const SDevice = styled(Box)<{ color: string }>`
+const SDevice = styled(Box)`
   position: relative;
   width: 40%;
   height: 0px;
 
-  margin: 0px 15px 15px 0px;
+  margin: 0px 1rem 1rem 0px;
   padding-bottom: 40%;
 
-  background: ${({ color }) => color};
   border: none;
-  border-radius: 15px;
   box-shadow: none;
-
   outline: 0;
 
-  transition: 0.2s all;
   cursor: pointer;
-
-  :hover {
-    box-shadow: 0px 0px 5px 1px ${theme.global.colors.hoverBlack};
-  }
 `
 
-const SDeviceContent = styled(Box)`
+const SDeviceContent = styled(Box)<{ color: string }>`
   position: absolute;
   width: 100%;
   height: 100%;
+
+  background: ${colors['white']};
+  border-radius: 20px;
+  border: 0.5rem solid ${({ color }) => color};
 `
 
 // ===============================================
@@ -68,7 +64,6 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
   // ===============================================
   const showDetails = useCallback(() => setShow(true), [setShow])
 
-  // ===============================================
   useEffect(() => {
     if (device && deviceData === undefined) {
       firebase
@@ -79,10 +74,12 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
           if (snapshot.hasChildren()) {
             const tmpDatabase = snapshot.val()
             var values: Array<TVariable> = []
-            Object.keys(tmpDatabase.values).forEach(key => {
+            Object.keys(tmpDatabase.values).forEach((key: string) => {
+              // @ts-ignore
               values = [
                 ...values,
                 {
+                  // @ts-ignore
                   variable: key,
                   value: tmpDatabase.values[key]
                 }
@@ -103,22 +100,18 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
     }
   }, [device, deviceData, setDeviceData])
 
-  const type = deviceData !== undefined ? deviceData.type : null
-  const active = deviceIsActive(
-    deviceData !== undefined ? deviceData.type : '',
-    deviceData !== undefined ? deviceData.lastUpdated : ''
-  )
-  const color = active ? theme.global.colors['yellow'] : theme.global.colors['lightElement']
-  const spinnerColor = active
-    ? theme.global.colors['darkYellow']
-    : theme.global.colors['darkElement']
+  const active =
+    deviceData === undefined ? false : deviceIsActive(deviceData.type, deviceData.lastUpdated)
+  const color = active ? colors['yellow'] : colors['light']
+  const spinnerColor = active ? colors['lightYellow'] : colors['medium']
 
   // ===============================================
   return (
-    <SDevice color={color}>
+    <SDevice>
       <SDeviceContent
+        color={color}
         align="center"
-        justify={device ? 'start' : 'center'}
+        justify="center"
         onClick={onClick ? onClick : showDetails}
         focusIndicator={false}
       >
@@ -135,19 +128,11 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
         )}
 
         {/* Content */}
-        <Fragment>
-          <Box
-            width="30%"
-            height="30%"
-            justify="center"
-            align="center"
-            background={active ? 'iconWrapperActive' : 'iconWrapperInactive'}
-            style={{ borderRadius: 10, marginTop: device ? '20%' : '0' }}
-          >
-            <Icon type={type} active={active} size={type ? '80%' : '40%'} />
-          </Box>
-          {device !== undefined && deviceData && <Content active={active} device={deviceData} />}
-        </Fragment>
+        {device !== undefined && deviceData ? (
+          <Content active={active} device={deviceData} />
+        ) : (
+          <IconBox active={false} />
+        )}
       </SDeviceContent>
 
       {/* Dialog */}

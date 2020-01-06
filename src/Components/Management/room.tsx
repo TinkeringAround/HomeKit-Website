@@ -36,7 +36,7 @@ const RoomManagement: FC = () => {
           <Fragment>
             <SColumn margin="1.5rem 0 0">
               {rooms.map((room: TRoom, index: number) => (
-                <SRow key={'RoomManagement-' + index} margin="0px 0px 10px 0px">
+                <SRow key={'RoomManagement-' + index} margin="0 0 1rem">
                   <SNameInput
                     type="text"
                     fontSize={isMobile ? '0.9em' : '1.2em'}
@@ -45,13 +45,13 @@ const RoomManagement: FC = () => {
                   />
                   <Text
                     size={isMobile ? '0.5em' : '0.65em'}
-                    color="iconInactive"
+                    color="medium"
                     textAlign="end"
                     style={{ width: '40%' }}
                   >
                     {'Devices: ' + room.devices.length}
                   </Text>
-                  <IconButton wrapper="3rem" iconType="minus" onClick={() => deleteRoom(index)} />
+                  <IconButton iconType="minus" onClick={() => deleteRoom(index)} />
                 </SRow>
               ))}
             </SColumn>

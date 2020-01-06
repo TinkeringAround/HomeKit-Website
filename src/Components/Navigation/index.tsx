@@ -29,18 +29,25 @@ const Navigation: FC = () => {
     <ResponsiveContext.Consumer>
       {size => {
         const isMobile = size.includes('small')
-        const wrapperSize = (isMobile ? 40 : 50) + 'px'
         const position = '1rem'
 
         return (
           <Fragment>
             <Box direction="row" style={{ position: 'absolute', top: position, right: position }}>
-              <IconButton iconType="reload" wrapper={wrapperSize} onClick={() => reload(false)} />
-              <IconButton iconType="settings" wrapper={wrapperSize} onClick={() => setOpen(true)} />
+              <IconButton
+                iconType="reload"
+                onClick={() => reload(false)}
+                tooltip={!isMobile ? 'Neu Laden' : null}
+              />
+              <IconButton
+                iconType="settings"
+                onClick={() => setOpen(true)}
+                tooltip={!isMobile ? 'Einstellungen' : null}
+              />
               <IconButton
                 iconType="signout"
-                wrapper={wrapperSize}
                 onClick={() => firebase.auth().signOut()}
+                tooltip={!isMobile ? 'Abmelden' : null}
               />
             </Box>
 
@@ -53,10 +60,10 @@ const Navigation: FC = () => {
                     key={'Tab-' + tab}
                     level="3"
                     size={
-                      isMobile ? (tab === mode ? '2rem' : '.75rem') : tab === mode ? '3rem' : '1rem'
+                      isMobile ? (tab === mode ? '2.5rem' : '1rem') : tab === mode ? '3rem' : '1rem'
                     }
-                    color="headingInactive"
-                    margin="0 .5rem 0 0"
+                    color="medium"
+                    margin="0 .75rem 0 0"
                     style={{ cursor: 'pointer' }}
                     onClick={() => setMode(tab)}
                   >

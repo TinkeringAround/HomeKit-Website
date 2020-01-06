@@ -40,7 +40,7 @@ const DeviceManagement: FC = () => {
         return (
           <SColumn margin="1.5rem 0 0">
             {devices.map((device: TDevice, index: number) => (
-              <SRow key={'DeviceManagement-' + index} margin="0px 0px 10px 0px">
+              <SRow key={'DeviceManagement-' + index} margin="0 0 1rem">
                 <SNameInput
                   type="text"
                   fontSize={isMobile ? '0.9em' : '1.2em'}
@@ -49,7 +49,7 @@ const DeviceManagement: FC = () => {
                 />
                 <Text
                   size={isMobile ? '0.5em' : '0.65em'}
-                  color="iconInactive"
+                  color="medium"
                   textAlign="end"
                   style={{ width: '40%' }}
                 >
@@ -62,7 +62,7 @@ const DeviceManagement: FC = () => {
                       ', ' +
                       deviceLastActiveTime(device.lastUpdated)}
                 </Text>
-                <IconButton wrapper="3rem" iconType="minus" onClick={() => deleteDevice(index)} />
+                <IconButton iconType="minus" onClick={() => deleteDevice(index)} />
               </SRow>
             ))}
           </SColumn>

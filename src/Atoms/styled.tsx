@@ -3,8 +3,8 @@ import styled from 'styled-components'
 // Types
 import { TStyled } from '../Types'
 
-// Theme
-import { theme } from '../Styles'
+// Styles
+import { colors } from '../Styles'
 
 // ===============================================
 export const SInput = styled.input`
@@ -19,12 +19,11 @@ export const SInput = styled.input`
   text-overflow: ellipsis;
 
   border: none;
-  border-radius: 10px;
-  color: ${theme.global.colors['heading']};
-  background-color: ${theme.global.colors['white']};
+  color: ${colors['dark']};
+  background-color: transparent;
 
   ::placeholder {
-    color: ${theme.global.colors['paragraph']};
+    color: ${colors['light']};
   }
 
   :focus {
@@ -40,12 +39,12 @@ export const SNameInput = styled.input`
   border: none;
   width: 50%;
   padding: 0px;
-  color: ${theme.global.colors['heading']};
-  background-color: ${theme.global.colors['white']};
+  color: ${colors['medium']};
+  background-color: transparent;
   text-overflow: ellipsis;
 
   ::placeholder {
-    color: ${theme.global.colors['paragraph']};
+    color: ${colors['medium']};
   }
 
   :focus {
@@ -68,8 +67,7 @@ export const SRow = styled.div`
   margin: ${(props: TStyled) => (props.margin ? props.margin : '20px 0px')};
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: ${props =>
-    props.active ? theme.global.colors['yellow'] : theme.global.colors['lightElement']};
+  background-color: ${props => (props.active ? colors['yellow'] : colors['light'])};
 
   display: flex;
   justify-content: space-between;

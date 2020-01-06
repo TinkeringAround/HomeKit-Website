@@ -9,7 +9,6 @@
     "grommet": "^2.9.0",
     "moment": "^2.24.0",
     "react": "^16.12.0",
-    "react-beautiful-dnd": "^12.2.0",
     "react-dom": "^16.12.0",
     "react-portal": "^4.2.0",
     "react-pose": "^4.0.10",
@@ -20,7 +19,6 @@
   "devDependencies": {
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
-    "@types/react-beautiful-dnd": "^11.0.2",
     "@types/react-dom": "^16.8.5",
     "@types/react-portal": "^4.0.2",
     "@types/styled-components": "^4.1.18",

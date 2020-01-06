@@ -3,7 +3,7 @@ import { Grommet, Box, ResponsiveContext } from 'grommet'
 import { PoseGroup } from 'react-pose'
 import { Portal } from 'react-portal'
 
-// Theme
+// Styles
 import { theme } from '../../Styles'
 
 // Atoms
@@ -41,7 +41,7 @@ const Window: FC<Props> = ({ open, closeDialog, children, stagger = false }) => 
               <PoseGroup preEnterPose="exit">
                 {showContent && (
                   <ADialogDesktop
-                    key="Dialog"
+                    key="Dialog-Window"
                     style={{
                       width: width,
                       height: height,
@@ -55,7 +55,7 @@ const Window: FC<Props> = ({ open, closeDialog, children, stagger = false }) => 
                     </Box>
                   </ADialogDesktop>
                 )}
-                {showContent && <ASimple key="Dialog-Desktop-Background" onClick={closeDialog} />}
+                {showContent && <ASimple key="Dialog-Window-Background" onClick={closeDialog} />}
               </PoseGroup>
             )
           }}

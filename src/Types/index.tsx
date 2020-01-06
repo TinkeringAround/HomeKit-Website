@@ -10,10 +10,7 @@ export type TIconType =
   | 'window'
   | 'settings'
   | 'reload'
-  | 'circleEmpty'
-  | 'circleFull'
   | 'signout'
-  | 'arrowRight'
   | 'battery'
   | 'plus'
   | 'minus'
@@ -46,8 +43,10 @@ export type TDevice = {
   values: Array<TVariable>
 }
 
+export type TVariableType = 'humidity' | 'temperature' | 'battery'
+
 export type TVariable = {
-  variable: string
+  variable: TVariableType
   value: string
 }
 

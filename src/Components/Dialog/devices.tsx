@@ -12,8 +12,11 @@ import Dialog from '.'
 
 // Atoms
 import { SRow } from '../../Atoms/styled'
-import Icon from '../../Atoms/icon'
 import IconButton from '../../Atoms/iconButton'
+import IconBox from '../../Atoms/iconBox'
+
+// Utility
+import { deviceTypeToName } from '../../Utility'
 
 // ===============================================
 interface Props {
@@ -46,49 +49,41 @@ const DeviceDialog: React.FC<Props> = ({ open, close, room, updateRoomDevices })
   // ===============================================
   return (
     <Dialog open={open} closeDialog={close}>
-      <Heading level="3" size="2em" color="heading" margin="0px 0px 10px 0px">
+      <Heading level="3" size="2em" color="heading" margin="0 0 1rem">
         {room ? room.name : ''}
       </Heading>
 
       {/* Devices */}
       {devices && devices.length > 0 && room && (
         <Box
-          margin="10px 0px"
+          margin="1rem 0"
           style={{ overflowY: devices.length > 5 ? 'auto' : 'visible', minHeight: '85%' }}
         >
           {devices.map((device: TDevice, index: number) => {
             const isRoomDevice = room.devices.includes(device.id) ? true : false
 
             return (
-              <SRow
-                key={'Room-Devices-Dialog-' + index}
-                margin="0px 0px 10px 0px"
-                active={isRoomDevice}
-              >
+              <SRow key={'Room-Devices-Dialog-' + index} margin="0 0 1rem 0" active={isRoomDevice}>
                 <Box width="100%" height="100%" align="center" justify="between" direction="row">
-                  <Box width="80%" height="100%" direction="row" align="center">
-                    <Box
-                      width="3rem"
-                      height="3rem"
-                      align="center"
-                      justify="center"
-                      round="10px"
-                      background={isRoomDevice ? 'iconWrapperActive' : 'iconWrapperInactive'}
-                    >
-                      <Icon type={device.type} active={isRoomDevice} size="2.5rem" />
-                    </Box>
+                  <Box flex="grow" height="100%" direction="row" align="center">
                     <Text
                       size="1em"
                       weight="bold"
-                      color={isRoomDevice ? 'headingActive' : 'headingInactive'}
+                      color={isRoomDevice ? 'white' : 'medium'}
                       style={{ marginLeft: '.5rem' }}
                     >
                       {device.name}
                     </Text>
                   </Box>
+                  <IconBox
+                    type={device.type}
+                    active={isRoomDevice}
+                    color={!isRoomDevice ? 'rgba(255,255,255,0.65)' : undefined}
+                    size="3rem"
+                    tooltip={deviceTypeToName(device.type)}
+                  />
                   <IconButton
                     active={isRoomDevice}
-                    wrapper="3rem"
                     iconType={isRoomDevice ? 'minus' : 'plus'}
                     onClick={() => updateDeviceInRoom(device.id, isRoomDevice)}
                   />

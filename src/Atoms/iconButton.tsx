@@ -5,24 +5,16 @@ import styled from 'styled-components'
 // Types
 import { TIconType } from '../Types'
 
-// Style
-import { theme } from '../Styles'
-
-// Utility
-import { hexToRGBA } from '../Utility/'
-
 // Atoms
 import Icon from './icon'
+
+// ===============================================
 const SIcon = styled(Box)`
   border-radius: 10px;
   box-shadow: none;
 
   transition: 0.2s all;
   cursor: pointer;
-
-  :hover {
-    box-shadow: 0px 0px 5px 1px ${hexToRGBA(theme.global.colors['lightElement'], '0.2')};
-  }
 `
 
 // ===============================================
@@ -33,25 +25,28 @@ interface Props {
   margin?: string
   onClick?: any
   active?: boolean
+  tooltip?: string | null
 }
 
 // ===============================================
 const IconButton: React.FC<Props> = ({
-  wrapper = '50px',
-  icon = undefined,
+  wrapper = '3rem',
+  icon = '50%',
   iconType,
   margin = '0 0 0 .5rem',
   onClick = null,
-  active = false
+  active = false,
+  tooltip = null
 }) => (
   <SIcon
-    background={active ? 'iconWrapperActive' : 'iconWrapperInactive'}
+    background="white"
     justify="center"
     align="center"
     width={wrapper}
     height={wrapper}
     onClick={onClick}
     style={{ margin: margin }}
+    data-tip={tooltip}
   >
     <Icon type={iconType} active={active} size={icon} />
   </SIcon>

@@ -6,7 +6,7 @@ import { CircleSpinner } from 'react-spinners-kit'
 import { TDevice } from '../../Types'
 
 // Styles
-import { theme } from '../../Styles'
+import { colors } from '../../Styles'
 
 // Partials
 import Sensor from './sensor'
@@ -37,13 +37,11 @@ const Chart: FC<Props> = ({ device }) => {
           device !== undefined ? device.type : '',
           device !== undefined ? device.lastUpdated : ''
         )
-        const color = active
-          ? theme.global.colors['darkYellow']
-          : theme.global.colors['lightElement']
+        const color = active ? colors['yellow'] : colors['medium']
 
         return (
           <Fragment>
-            <Heading level="2" margin="0px" size="2em" color="headingInactive">
+            <Heading level="2" margin="0px" size="2em" color="medium">
               {device.name}
             </Heading>
             <Box width="100%" height="90%" justify="center" align={loading ? 'center' : 'start'}>

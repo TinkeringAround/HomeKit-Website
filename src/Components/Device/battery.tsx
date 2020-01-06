@@ -15,14 +15,14 @@ const Battery: FC<Props> = ({ active }) => (
     justify="center"
     align="center"
     style={{
-      width: 20,
-      height: 20,
+      width: '2rem',
+      height: '2rem',
       position: 'absolute',
-      top: 10,
-      left: 15
+      top: '.5rem',
+      left: '1rem'
     }}
   >
-    <Icon type="battery" active={active} mini />
+    <Icon type="battery" active={active} activeColor="white" />
   </Box>
 )
 

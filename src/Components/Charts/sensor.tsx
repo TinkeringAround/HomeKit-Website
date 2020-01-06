@@ -26,27 +26,27 @@ const chartTheme = {
   axis: {
     domain: {
       line: {
-        stroke: theme.global.colors['paragraph']
+        stroke: theme.global.colors['light']
       }
     },
     ticks: {
       line: {
-        stroke: theme.global.colors['paragraph']
+        stroke: theme.global.colors['light']
       },
       text: {
-        fill: theme.global.colors['paragraph']
+        fill: theme.global.colors['medium']
       }
     }
   },
   grid: {
     line: {
-      stroke: theme.global.colors['paragraph'],
+      stroke: theme.global.colors['light'],
       strokeWidth: 1
     }
   },
   tooltip: {
     basic: {
-      color: theme.global.colors.dark
+      color: theme.global.colors['medium']
     }
   }
 }
@@ -134,7 +134,7 @@ const Sensor: FC<Props> = ({ id, isMobile }) => {
               width="100%"
               height={height.toString() + '%'}
             >
-              <Heading level="3" margin={headingMargin} size="1em" color="headingInactive">
+              <Heading level="3" margin={headingMargin} size="1em" color="medium">
                 {line.id}
               </Heading>
               <ResponsiveLine

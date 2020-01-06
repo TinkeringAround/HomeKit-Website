@@ -3,7 +3,7 @@ import 'moment/locale/de'
 import { ColorSchemeId } from '@nivo/colors'
 
 // Types
-import { TScale } from '../Types'
+import { TScale, TDeviceType } from '../Types'
 
 // ===============================================
 export const typeToLegend = (type: string): string => {
@@ -85,6 +85,13 @@ export const hexToRGBA = (hexColor: string, opacity: string) => {
 }
 
 // ===============================================
+export const deviceTypeToName: (type: TDeviceType) => string = (type: TDeviceType) => {
+  switch (type) {
+    case 'sensor':
+      return 'Sensor'
+  }
+}
+
 export const deviceIsActive = (type: string, timestamp: string) => {
   if (type === '' || timestamp === '') return false
 

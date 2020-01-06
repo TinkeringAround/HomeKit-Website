@@ -2,16 +2,37 @@ import React, { FC, useState } from 'react'
 import { Box, ResponsiveContext, Form, FormField, Heading, TextInput } from 'grommet'
 import { auth, FirebaseError } from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
+import styled from 'styled-components'
 
 // Styles
-import './login.css'
-import { theme } from '../../Styles'
+import { colors } from '../../Styles'
 
 // Types
 import { TCredential } from '../../Types'
 
 // Atoms
 import Button from '../../Atoms/button'
+
+// ===============================================
+const SFormField = styled(FormField)`
+  margin-bottom: 2rem;
+
+  div {
+    border-bottom-color: ${colors['white']};
+
+    input {
+      font-size: 1rem;
+      color: ${colors['dark']};
+      background: ${colors['light']}
+      padding: 1rem;
+      border-radius: 10px;
+
+      ::placeholder {
+        color: ${colors['medium']};
+      }
+    }
+  }
+`
 
 // ===============================================
 const Login: FC = () => {
@@ -59,18 +80,20 @@ const Login: FC = () => {
         return (
           <Box
             width={isMobile ? '100%' : '500px'}
-            height={isMobile ? '100%' : '500px'}
+            height={isMobile ? 'calc(100% - 5rem)' : '450px'}
             justify="center"
             align="center"
-            background="dark"
-            margin="auto"
-            style={{
-              borderRadius: isMobile ? 0 : 15,
-              boxShadow: '0px 0px 15px 5px rgba(0,0,0,0.2)'
-            }}
+            margin={isMobile ? '5rem 0 0' : 'auto'}
           >
-            <Box width="80%" height="90%" justify="between">
-              <Heading level="1" responsive size="medium" textAlign="center" color="headingInverse">
+            <Box width={isMobile ? '85%' : '80%'} height="90%" justify="center">
+              <Heading
+                level="1"
+                size="4rem"
+                margin="0 0 2rem"
+                textAlign="center"
+                color="dark"
+                responsive
+              >
                 HomeKit
               </Heading>
 
@@ -79,28 +102,28 @@ const Login: FC = () => {
                 {!loading ? (
                   <Form onSubmit={login} style={{ width: '100%' }}>
                     {/* Inputs */}
-                    <FormField type="email" name="email" className="Formfield">
+                    <SFormField type="email" name="email">
                       <TextInput
                         type="text"
                         placeholder="Email"
                         value={credentials.email}
                         onChange={(event: any) => updateCredentials(event.target)}
                       />
-                    </FormField>
-                    <FormField type="password" name="password" className="Formfield">
+                    </SFormField>
+                    <SFormField type="password" name="password">
                       <TextInput
                         type="password"
                         placeholder="Passwort"
                         value={credentials.password}
                         onChange={(event: any) => updateCredentials(event.target)}
                       />
-                    </FormField>
+                    </SFormField>
 
                     {/* Button */}
-                    <Button props={{ type: 'submit', label: 'Anmelden' }} />
+                    <Button props={{ type: 'submit' }}>Anmelden</Button>
                   </Form>
                 ) : (
-                  <CircleSpinner size={75} color={theme.global.colors['darkElement']} />
+                  <CircleSpinner size={75} color={colors['yellow']} />
                 )}
               </Box>
             </Box>
