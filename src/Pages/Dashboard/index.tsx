@@ -248,6 +248,10 @@ const Dashboard: FC = () => {
     if (!rooms && !devices) reload(false)
   }, [rooms, devices, reload])
 
+  useEffect(() => {
+    setInterval(() => reload(true), 10000)
+  }, [reload])
+
   // ===============================================
   return (
     <ResponsiveContext.Consumer>
