@@ -1,15 +1,15 @@
 // IMPORTS
 import React, { FC, useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import * as serviceWorker from './Driver/serviceWorker'
 import firebase, { User } from 'firebase/app'
 import { Grommet } from 'grommet'
+
+// Driver
 import { initializeFirebaseApp, askForNotificationPermission, getToken } from './Driver/firebase'
+import * as serviceWorker from './Driver/serviceWorker'
 
 // Styles
 import './Styles/global.css'
-
-// Theme
 import { theme } from './Styles'
 
 // Pages
@@ -25,9 +25,16 @@ initializeFirebaseApp()
 // ===============================================
 const App: FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
+  const [loading, setLoading] = useState(true)
   const [token, setToken] = useState<string | null>(null)
 
   // ===============================================
+  firebase.auth().onAuthStateChanged((user: User | null) => {
+    setLoading(false)
+    if (user && !authenticated) setAuthenticated(true)
+    else if (!user && authenticated) setAuthenticated(false)
+  })
+
   useEffect(() => {
     if (!token && authenticated) {
       try {
@@ -63,16 +70,10 @@ const App: FC = () => {
       }
     }
   })
-
-  firebase.auth().onAuthStateChanged((user: User | null) => {
-    if (user && !authenticated) setAuthenticated(true)
-    else if (!user && authenticated) setAuthenticated(false)
-  })
-
   // ===============================================
   return (
     <Grommet theme={theme} full>
-      <Layout>{!authenticated ? <Login /> : <Dashboard />}</Layout>
+      <Layout>{!loading && <>{!authenticated ? <Login /> : <Dashboard />}</>}</Layout>
     </Grommet>
   )
 }

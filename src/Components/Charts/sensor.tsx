@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, Fragment } from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import firebase from 'firebase'
-import { Box, Heading, Text } from 'grommet'
+import { Box, Heading, Text, ResponsiveContext } from 'grommet'
 
 // Types
 import { TMeasurement, TChartData, TDataStream, TLine } from '../../Types'
@@ -183,10 +183,14 @@ const Sensor: FC<Props> = ({ id, isMobile }) => {
 
       {/* Error */}
       {error && (
-        <Box height="100%" pad="1rem">
-          <Text size="1.5rem" color="medium">
-            {error}
-          </Text>
+        <Box height="100%" pad="1.5rem .25rem" style={{ cursor: 'default' }}>
+          <ResponsiveContext.Consumer>
+            {size => (
+              <Text size={size.includes('small') ? '1rem' : '1.5rem'} color="medium">
+                {error}
+              </Text>
+            )}
+          </ResponsiveContext.Consumer>
         </Box>
       )}
     </Fragment>

@@ -55,9 +55,10 @@ const Chart: FC<Props> = ({ device }) => {
               direction="row"
               align="center"
               pad="1rem"
-              background={active ? 'yellow' : 'white'}
+              background={active ? 'yellow' : 'medium'}
               round="10px"
               justify="between"
+              style={{ cursor: 'default' }}
             >
               <Box direction="row" align="center">
                 <IconBox
@@ -67,13 +68,13 @@ const Chart: FC<Props> = ({ device }) => {
                   margin="0 1rem 0 0"
                   tooltip={deviceTypeToName(device.type)}
                 />
-                <Heading level="2" margin="0px" size="2em" color={active ? 'white' : 'medium'}>
+                <Heading level="2" margin="0px" size="2em" color="white">
                   {device.name}
                 </Heading>
               </Box>
               {!isMobile && (
                 <Box>
-                  <Text size="1rem" color={active ? 'white' : 'medium'} textAlign="end">
+                  <Text size="1rem" color="white" textAlign="end">
                     <strong>Letzte Aktivität</strong>
                     <br />
                     {isToday(device.lastUpdated) &&
