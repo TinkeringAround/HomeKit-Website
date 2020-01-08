@@ -15,6 +15,7 @@ type DatabaseContextProps = {
 
   // Devices
   devices: Array<TDevice>
+  selectDevice: (device: TDevice) => void
   deleteDevice: (index: number) => void
   renameDevice: (old: string, name: string) => void
 }
@@ -30,6 +31,7 @@ export const DatabaseContext = React.createContext<DatabaseContextProps>({
 
   // Devices
   devices: [],
+  selectDevice: (device: TDevice) => {},
   deleteDevice: (index: number) => {},
   renameDevice: (old: string, name: string) => {}
 })

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react'
+import React, { FC, useState, useEffect, useCallback, useContext } from 'react'
 import { Box } from 'grommet'
 import firebase from 'firebase'
 import { CircleSpinner } from 'react-spinners-kit'
@@ -10,12 +10,11 @@ import { colors } from '../../Styles'
 // Types
 import { TVariable, TDevice } from '../../Types'
 
+// Context
+import { DatabaseContext } from '../../Contexts'
+
 // Atoms
 import IconBox from '../../Atoms/iconBox'
-
-// Components
-import Overlay from '../Dialog/overlay'
-import Charts from '../Charts'
 
 // Partials
 import Battery from './battery'
@@ -58,11 +57,13 @@ interface Props {
 
 // ===============================================
 const Device: FC<Props> = ({ device, onClick = null }) => {
-  const [show, setShow] = useState<boolean>(false)
+  const { selectDevice } = useContext(DatabaseContext)
   const [deviceData, setDeviceData] = useState<TDevice | undefined>(device)
 
   // ===============================================
-  const showDetails = useCallback(() => setShow(true), [setShow])
+  const showDetails = useCallback(() => {
+    if (deviceData !== undefined) selectDevice(deviceData)
+  }, [deviceData, selectDevice])
 
   useEffect(() => {
     if (device && deviceData === undefined) {
@@ -134,11 +135,6 @@ const Device: FC<Props> = ({ device, onClick = null }) => {
           <IconBox active={false} />
         )}
       </SDeviceContent>
-
-      {/* Dialog */}
-      <Overlay open={device !== undefined && show} closeDialog={() => setShow(false)} stagger>
-        {deviceData && <Charts device={deviceData} />}
-      </Overlay>
     </SDevice>
   )
 }

@@ -49,7 +49,7 @@ const RoomManagement: FC = () => {
                     textAlign="end"
                     style={{ width: '40%' }}
                   >
-                    {'Devices: ' + room.devices.length}
+                    {'Geräte: ' + room.devices.length}
                   </Text>
                   <IconButton iconType="minus" onClick={() => deleteRoom(index)} />
                 </SRow>

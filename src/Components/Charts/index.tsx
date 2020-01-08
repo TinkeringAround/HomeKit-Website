@@ -29,7 +29,7 @@ interface Props {
 }
 
 // ===============================================
-const Chart: FC<Props> = ({ device }) => {
+const Charts: FC<Props> = ({ device }) => {
   const [loading, setLoading] = useState(true)
 
   // ===============================================
@@ -108,4 +108,4 @@ const Chart: FC<Props> = ({ device }) => {
   )
 }
 
-export default Chart
+export default Charts

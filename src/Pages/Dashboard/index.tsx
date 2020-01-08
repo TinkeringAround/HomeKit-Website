@@ -16,13 +16,17 @@ import { DatabaseContext } from '../../Contexts'
 import Room from '../../Components/Room'
 import Navigation from '../../Components/Navigation/'
 import DeviceDialog from '../../Components/Dialog/devices'
+import Overlay from '../../Components/Dialog/overlay'
+import Charts from '../../Components/Charts'
 
 // ===============================================
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [rooms, setRooms] = useState<Array<TRoom> | null>(null)
   const [devices, setDevices] = useState<Array<TDevice> | null>(null)
+
   const [selectedRoom, setSelectedRoom] = useState<TRoom | null>(null)
+  const [selectedDevice, setSelectedDevice] = useState<TDevice | null>(null)
 
   // ===============================================
   const reload = useCallback((silent: boolean = true) => {
@@ -249,8 +253,17 @@ const Dashboard: FC = () => {
   }, [rooms, devices, reload])
 
   useEffect(() => {
-    setInterval(() => reload(true), 10000)
-  }, [reload])
+    if (selectedRoom && rooms) {
+      const room = rooms.find(r => r.name === selectedRoom.name)
+      if (room && room.devices.length !== selectedRoom.devices.length) {
+        const newSelectedRoom = {
+          name: room.name,
+          devices: room.devices
+        }
+        setSelectedRoom(newSelectedRoom)
+      }
+    }
+  }, [rooms, selectedRoom, setSelectedRoom])
 
   // ===============================================
   return (
@@ -272,6 +285,7 @@ const Dashboard: FC = () => {
 
                 // Devices
                 devices: devices ? devices : [],
+                selectDevice: setSelectedDevice,
                 deleteDevice: deleteDevice,
                 renameDevice: renameDevice
               }}
@@ -303,13 +317,21 @@ const Dashboard: FC = () => {
                 )}
               </Box>
 
-              {/* Dialog */}
+              {/* Dialogs */}
               <DeviceDialog
                 open={selectedRoom !== null}
                 close={() => setSelectedRoom(null)}
                 room={selectedRoom}
                 updateRoomDevices={updateRoomDevices}
               />
+
+              <Overlay
+                open={selectedDevice !== null}
+                closeDialog={() => setSelectedDevice(null)}
+                stagger
+              >
+                {selectedDevice && <Charts device={selectedDevice} />}
+              </Overlay>
             </DatabaseContext.Provider>
           </Box>
         )
